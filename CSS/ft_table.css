@@ -1,0 +1,68 @@
+@charset "utf-8";
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+th, td {
+    padding: 8px;
+    text-align: center; /* Center align the content */
+    border: 1px solid #ddd;
+    word-wrap: break-word;
+    white-space: normal;
+    vertical-align: middle; 
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+tr:hover {
+    background-color: #ddd;
+    cursor: pointer;
+}
+.flight-school-table img {
+  width: 80px; /* or whatever size you want for table icons */
+  height: auto;
+  object-fit: contain;
+}
+
+.table-container {
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    position: relative;
+}
+
+@media (max-width: 600px) {
+    th, td {
+        white-space: normal; 
+    }
+}
+
+/* Tooltip styles */
+.img-container {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip {
+    visibility: hidden;
+    background-color: black;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    transition: visibility 0.2s, opacity 0.2s ease-in-out;
+    opacity: 0;
+}
+
+.img-container:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+    margin-bottom: 5px;
+}
