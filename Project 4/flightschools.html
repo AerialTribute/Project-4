@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flight Schools | The Aerial Tribute Project</title>
+  <link rel="stylesheet" href="CSS/style.css" />
+  <link rel="stylesheet" href="CSS/ft_table.css" />
+</head>
+
+<body>
+  <!-- Navigation -->
+  <header>
+    <div class="nav-container">
+      <img src="Images/logo.jpg" alt="Logo" class="logo">
+      <nav>
+        <ul>
+          <li><a href="ATPIndex.html">Home</a></li>
+          <li><a href="scholarships.html">Scholarships</a></li>
+          <li><a href="flightschools.html">Flight Schools</a></li>
+          <li><a href="impact.html">Our Impact</a></li>
+          <li><a href="about.html" class="active">About Us</a></li>
+          <li><a href="login.html">Log In</a></li>
+          <li><a class="donate-btn" href="donate.html">Donate</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<!-- Flight School Hero Section -->
+<section class="flight-school-hero">
+  <div class="hero-text">
+    <h1>Flight School Partnerships</h1>
+    <p>Expand real-world mission access for your students and CFIs. Explore time-building and volunteer-based opportunities with partner organizations nationwide.</p>
+  </div>
+</section>
+
+<!-- Main Content -->
+<main class="flight-school-main">
+
+
+    <label for="typeFilter"><strong>Filter by Opportunity Type:</strong></label>
+    <select id="typeFilter">
+      <option value="all">All</option>
+      <option value="Volunteer">Volunteer</option>
+      <option value="Share Time">Share Time</option>
+    </select>
+
+    <div class="table-wrapper">
+      <table id="opportunityTable" class="flight-school-table">
+        <thead>
+          <tr>
+            <th>Organization</th>
+            <th>Logo</th>
+            <th>Opportunity</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- Populated dynamically by scripts.js -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 The Aerial Tribute Project • Tax-Exempt 501(c)(3)</p>
+    <p>Contact: <a href="mailto:Getflying@aerialtributeproject.org">Getflying@aerialtributeproject.org</a> | MA</p>
+    <div class="social-icons">
+      <a href="https://facebook.com" target="_blank">
+        <img src="Images/facebook.png" alt="Facebook" />
+      </a>
+      <a href="https://instagram.com" target="_blank">
+        <img src="Images/instagram.png" alt="Instagram" />
+      </a>
+    </div>
+  </footer>
+
+  <script src="scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Our Impact | The Aerial Tribute Project</title>
+  <link rel="stylesheet" href="CSS/style.css" />
+  <style>
+    .banner {
+      background: url('Images/ImpactHeadBackground.png') center/cover no-repeat;
+      padding: 6rem 2rem;
+      color: white;
+      font-size: 2rem;
+      text-align: center;
+      font-weight: bold;
+      text-shadow: 1px 1px 3px #000;
+    }
+
+    .impact-wrapper {
+      position: relative;
+      background: #f9f9f9;
+      padding-top: 6rem;
+      padding-bottom: 2rem;
+    }
+
+    .impact-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2rem;
+      padding: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .impact-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .impact-column h3 {
+      background: white;
+      padding: 0.5rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .impact-column img {
+      width: 100%;
+      max-width: 240px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 1.2rem;
+    }
+
+    .impact-center {
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #dfffe4;
+      color: #000;
+      font-weight: bold;
+      padding: 1.8rem 2rem;
+      border-radius: 10px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      line-height: 1.5;
+      max-width: 460px;
+      z-index: 10;
+    }
+
+    footer {
+      background: #111;
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    footer a {
+      color: #ffcccb;
+      text-decoration: underline;
+    }
+
+    .social-icons {
+      margin-top: 1rem;
+    }
+
+    .social-icons img {
+      width: 28px;
+      margin: 0 10px;
+      vertical-align: middle;
+    }
+
+    @media (max-width: 768px) {
+      .impact-section {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .impact-center {
+        position: static;
+        transform: none;
+        margin: 1.5rem auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header>
+    <div class="nav-container">
+      <img src="Images/logo.jpg" alt="Logo" class="logo">
+      <nav>
+        <ul>
+          <li><a href="ATPIndex.html">Home</a></li>
+          <li><a href="scholarships.html">Scholarships</a></li>
+          <li><a href="flightschools.html">Flight Schools</a></li>
+          <li><a href="impact.html">Our Impact</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a class="donate-btn" href="donate.html">Donate</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Banner -->
+  <div class="banner">
+    Growing Pilots. Connecting Missions. Advocating for Aviation.
+  </div>
+
+  <!-- Impact Content -->
+  <div class="impact-wrapper">
+    <!-- Center Message -->
+    <div class="impact-center">
+      <div>
+        We’re helping the public see the large impact of backyard airports and local pilots.
+      </div>
+    </div>
+
+    <section class="impact-section">
+      <!-- Perception Column -->
+      <div class="impact-column">
+        <h3>Perception</h3>
+        <img src="Images/Perception1.png" alt="Protest Sign 1">
+        <img src="Images/Perception2.png" alt="X on runway">
+        <img src="Images/Perception3.png" alt="No Jet Expansion">
+      </div>
+
+      <!-- How We Help Column -->
+      <div class="impact-column">
+        <h3>How We Help</h3>
+        <a href="https://thebedfordcitizen.org/2024/06/opinion-setting-the-record-straight-on-business-aviation/" target="_blank">
+          <img src="Images/HWH1.png" alt="Bedford Opinion Article">
+        </a>
+        <img src="Images/HWH2.png" alt="Pilot Interview">
+        <a href="https://nbaa.org/press-releases/" target="_blank">
+          <img src="Images/HWH3.png" alt="YoPro Newsletter">
+        </a>
+      </div>
+    </section>
+  </div> <!-- ✅ This closing div was missing -->
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 The Aerial Tribute Project • Tax-Exempt 501(c)(3)</p>
+    <p>Contact: <a href="mailto:Getflying@aerialtributeproject.org">Getflying@aerialtributeproject.org</a> | MA</p>
+    <div class="social-icons">
+      <a href="https://facebook.com" target="_blank"><img src="Images/facebook.png" alt="Facebook"></a>
+      <a href="https://instagram.com" target="_blank"><img src="Images/instagram.png" alt="Instagram"></a>
+    </div>
+  </footer>
+
+</body>
+</html>
