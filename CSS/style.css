@@ -19,6 +19,7 @@ body {
   background: white;
   padding: 1rem 2rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  position: relative;
 }
 
 .logo {
@@ -50,9 +51,21 @@ nav ul li a:hover {
   font-weight: bold;
 }
 
+/* Mobile Menu Toggle (hidden on desktop) */
+.menu-toggle {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding: 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
 /* Hero */
 .hero {
-  background-image: url('../Images/Plane.jpg'); /* <-- fix extension */
+  background-image: url('../Images/Plane.jpg');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -77,28 +90,7 @@ nav ul li a:hover {
   margin-bottom: 1rem;
 }
 
-.cta-btn {
-  background: #007BFF;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 30px;
-  text-decoration: none;
-  display: inline-block;
-  margin-top: 1rem;
-  font-weight: bold;
-  transition: 0.3s ease;
-}
-
-.cta-btn:hover {
-  background: #0056b3;
-}
-
 /* Features */
-.features a {
-  text-decoration: none;
-  color: inherit;
-}
-
 .features {
   display: flex;
   flex-wrap: wrap;
@@ -108,34 +100,9 @@ nav ul li a:hover {
   background: #fff;
 }
 
-.feature {
-  text-align: center;
-  max-width: 180px;
-}
-
-.feature img {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 0.75rem;
-}
-
-.feature h3 {
-  font-size: 1.1rem;
-  color: #333;
-}
-
-/* Footer */
-footer {
-  background: #2c3e50;
-  color: #fff;
-  text-align: center;
-  padding: 2rem 1rem;
-  font-size: 0.9rem;
-}
-
-footer a {
-  color: #66bfff;
+.features a {
   text-decoration: none;
+  color: inherit;
 }
 
 .feature {
@@ -170,6 +137,20 @@ footer a {
   color: #007BFF;
 }
 
+/* Footer */
+footer {
+  background: #2c3e50;
+  color: #fff;
+  text-align: center;
+  padding: 2rem 1rem;
+  font-size: 0.9rem;
+}
+
+footer a {
+  color: #66bfff;
+  text-decoration: none;
+}
+
 .social-icons {
   margin-top: 1rem;
 }
@@ -192,28 +173,247 @@ footer a {
   transform: scale(1.1);
 }
 
-.flight-school-hero {
-  background-color: #f8f9fa;
-  padding: 60px 20px 40px 20px;
+/* ========== MOBILE OPTIMIZATION ========== */
+@media (max-width: 768px) {
+  /* Hide desktop nav, show mobile menu */
+  nav ul {
+    display: none;
+    flex-direction: column;
+    padding: 1rem;
+    width: 100%;
+  }
+
+  nav ul.open {
+    display: flex;
+  }
+
+  .nav-container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  .menu-toggle {
+    display: flex;
+    width: 100%;
+  }
+
+  nav ul li {
+    width: 100%;
+  }
+
+  nav ul li a {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0;
+  }
+
+  .donate-btn {
+    background: #e5f0ff;
+    color: red;
+    font-weight: bold;
+    border-radius: 999px;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+  }
+
+  .hero {
+    height: auto;
+    padding: 2rem 1rem;
+    text-align: center;
+  }
+
+  .hero-content {
+    padding: 1.5rem;
+  }
+
+  .hero h1 {
+    font-size: 1.75rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .announcement {
+    font-size: 0.95rem;
+    padding: 1rem;
+  }
+
+  .features {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem 1rem;
+  }
+
+  .feature {
+    max-width: 100%;
+    width: 90%;
+  }
+
+  .feature img {
+    width: 64px;
+    height: 64px;
+  }
+
+  .feature h3 {
+    font-size: 1rem;
+  }
+
+  footer {
+    padding: 1.5rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .social-icons {
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+
+  .social-icons img {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* 🎓 Scholarship Winner Section */
+.winners-section {
+  padding: 3rem 1rem;
+  background: #f7f7f7;
   text-align: center;
-  border-bottom: 1px solid #ddd;
 }
 
-.flight-school-hero h1 {
-  font-size: 2.8rem;
-  font-weight: 700;
+.winners-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: #222;
+}
+
+.winner-cards {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.winner-card {
+  background: #333;
+  color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  max-width: 360px;
+  text-align: left;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+.winner-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.winner-details {
+  padding: 1.2rem;
+  line-height: 1.5;
+}
+
+.winner-details h3 {
+  margin-top: 0;
+  font-size: 1.4rem;
+  color: #fff;
+}
+
+/* 📱 Mobile View */
+@media (max-width: 768px) {
+  .winner-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .winner-card {
+    width: 90%;
+  }
+
+  .winners-section h2 {
+    font-size: 1.5rem;
+  }
+}
+
+.scholarship-section {
+  padding: 3rem 1rem;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.scholarship-section h2 {
+  font-size: 2rem;
   margin-bottom: 1rem;
-  color: #333;
+  color: #222;
 }
 
-.flight-school-hero p {
-  font-size: 1.25rem;
-  max-width: 800px;
-  margin: 0 auto;
-  color: #555;
+.carousel {
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 1rem 0;
 }
 
-.flight-school-main {
-  padding: 2rem;
-  background-color: white;
+.carousel-track {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 0 2rem;
 }
+
+.carousel-track img {
+  height: auto;
+  max-width: 100%;
+  width: 300px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 10;
+  padding: 0 0.5rem;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.carousel-btn.prev {
+  left: 0.5rem;
+}
+
+.carousel-btn.next {
+  right: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .carousel-track {
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+
+  .carousel-track img {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .carousel-btn {
+    font-size: 1.5rem;
+  }
+}
+

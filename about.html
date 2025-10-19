@@ -86,17 +86,24 @@
 </head>
 <body>
 
-  <!-- Navigation -->
+ <!-- Header + Navigation -->
   <header>
     <div class="nav-container">
       <img src="Images/logo.jpg" alt="Logo" class="logo">
+
+      <!-- Dropdown Toggle for Mobile -->
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <span>Menu</span>
+        <span id="caret">▾</span>
+      </div>
+
       <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
+        <ul class="nav-links" id="mobileNav">
+          <li><a href="index.html" class="active">Home</a></li>
           <li><a href="scholarships.html">Scholarships</a></li>
           <li><a href="flightschools.html">Flight Schools</a></li>
           <li><a href="impact.html">Our Impact</a></li>
-          <li><a href="about.html" class="active">About Us</a></li>
+          <li><a href="about.html">About Us</a></li>
           <li><a class="donate-btn" href="donate.html">Donate</a></li>
         </ul>
       </nav>
@@ -131,7 +138,16 @@
     </div>
 
   </main>
-
+  
+  <!-- Dropdown JavaScript -->
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('mobileNav');
+      const caret = document.getElementById('caret');
+      menu.classList.toggle('open');
+      caret.textContent = menu.classList.contains('open') ? '▴' : '▾';
+    }
+  </script>
   <footer>
     <p>© 2025 The Aerial Tribute Project • Tax-Exempt 501(c)(3)</p>
     <p>Contact: <a href="mailto:Getflying@aerialtributeproject.org">Getflying@aerialtributeproject.org</a> | MA</p>

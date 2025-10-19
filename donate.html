@@ -29,7 +29,7 @@
       line-height: 1.6;
     }
 
-    givebutter-widget {
+    .givebutter-widget {
       display: block;
       margin: 0 auto;
       max-width: 100%;
@@ -56,10 +56,10 @@
 </head>
 <body>
 
-  <!-- Navigation -->
+  <!-- Header Navigation -->
   <header>
     <div class="nav-container">
-      <img src="Images/logo.jpg" alt="Logo" class="logo">
+      <img src="Images/logo.jpg" alt="Aerial Tribute Project Logo" class="logo">
       <nav>
         <ul>
           <li><a href="index.html">Home</a></li>
@@ -73,7 +73,7 @@
     </div>
   </header>
 
-  <!-- Hero Section -->
+  <!-- Hero -->
   <div class="donate-hero">
     Your Support Fuels Humanitarian Aviation
   </div>
@@ -81,15 +81,22 @@
   <!-- Main Content -->
   <main class="donate-container">
     <div class="donate-message">
-      Every dollar you contribute goes directly toward scholarships, mission logistics, and expanding access to community aviation. Join us in reshaping the skies.
+      Every dollar you contribute goes directly toward scholarships, mission logistics, and expanding access to community aviation. Thank you for your support!
     </div>
 
-    <givebutter-widget id="Lv1VOj"></givebutter-widget>
+    <!-- Givebutter Embed -->
+    <div
+      class="givebutter-widget"
+      data-campaign="Lv1VOj"
+      data-widget="donation-form"
+      style="max-width:100%;"
+    ></div>
 
+    <!-- Fallback Link -->
     <div class="fallback-link">
       <p>
         Having trouble viewing the form?
-        <a href="https://givebutter.com/Lv1VOj" target="_blank">Click here to donate directly.</a>
+        <a href="https://givebutter.com/ispcEx" target="_blank">Click here to donate directly.</a>
       </p>
     </div>
   </main>
@@ -99,15 +106,26 @@
     <p>© 2025 The Aerial Tribute Project • Tax-Exempt 501(c)(3)</p>
     <p>Contact: <a href="mailto:Getflying@aerialtributeproject.org">Getflying@aerialtributeproject.org</a> | MA</p>
     <div class="social-icons">
-      <a href="https://facebook.com" target="_blank"><img src="Images/facebook.png" alt="Facebook"></a>
-      <a href="https://instagram.com" target="_blank"><img src="Images/instagram.png" alt="Instagram"></a>
+      <a href="https://facebook.com" target="_blank">
+        <img src="Images/facebook.png" alt="Facebook">
+      </a>
+      <a href="https://instagram.com" target="_blank">
+        <img src="Images/instagram.png" alt="Instagram">
+      </a>
     </div>
   </footer>
 
-  <!-- Givebutter Script (must be at the bottom) -->
+  <!-- Givebutter Script -->
   <script src="https://givebutter.com/embed-widget.js" defer></script>
+
+  <!-- Manual Trigger Fallback (if Givebutter doesn't auto-load) -->
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      if (window.Givebutter && typeof window.Givebutter.init === 'function') {
+        window.Givebutter.init();
+      }
+    });
+  </script>
 
 </body>
 </html>
-
-

@@ -171,17 +171,24 @@
 </head>
 <body>
 
-  <!-- Navigation -->
+  <!-- Header + Navigation -->
   <header>
     <div class="nav-container">
       <img src="Images/logo.jpg" alt="Logo" class="logo">
+
+      <!-- Dropdown Toggle for Mobile -->
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <span>Menu</span>
+        <span id="caret">▾</span>
+      </div>
+
       <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
+        <ul class="nav-links" id="mobileNav">
+          <li><a href="index.html" class="active">Home</a></li>
           <li><a href="scholarships.html">Scholarships</a></li>
           <li><a href="flightschools.html">Flight Schools</a></li>
           <li><a href="impact.html">Our Impact</a></li>
-          <li><a href="about.html" class="active">About Us</a></li>
+          <li><a href="about.html">About Us</a></li>
           <li><a class="donate-btn" href="donate.html">Donate</a></li>
         </ul>
       </nav>
@@ -201,7 +208,7 @@
         <ul>
           <li>✅ Be a U.S. citizen and permanent resident</li>
           <li>✅ Meet all TSA requirements to legally hold an aviation student certificate</li>
-          <li>✅ Be enrolled in part 141 flight training and have an assigned CFI</li>
+          <li>✅ Be enrolled in part 141 or 61 flight training and have an assigned CFI</li>
           <li>✅ Have at least 10 hours of flight time</li>
         </ul>
       </div>
@@ -253,7 +260,7 @@
       </div>
 
       <div class="custom-responsive-map">
-        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=114wWfM8uQ4Q4Ye-8TY_I0s2W6pfwU5k&ehbc=2E312F&noprof=1" allowfullscreen></iframe>
+        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=114wWfM8uQ4Q4Ye-8TY_I0s2W6pfwU5k&ehbc=2E312F" allowfullscreen></iframe>
       </div>
     </div>
   </div>
@@ -310,6 +317,16 @@
 
     function closeModal() {
       document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
+    }
+  </script>
+
+    <!-- Dropdown JavaScript -->
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('mobileNav');
+      const caret = document.getElementById('caret');
+      menu.classList.toggle('open');
+      caret.textContent = menu.classList.contains('open') ? '▴' : '▾';
     }
   </script>
 </body>

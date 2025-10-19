@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -108,17 +109,54 @@
         margin: 1.5rem auto;
       }
     }
+    .hover-box {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+
+    .hover-box img {
+      transition: 0.3s ease;
+    }
+
+    .hover-box .hover-text {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.65);
+      color: white;
+      font-size: 0.9rem;
+      padding: 0.5rem;
+      text-align: center;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .hover-box:hover .hover-text {
+      opacity: 1;
+    }
+
+    .hover-box:hover img {
+      filter: brightness(0.4);
+    }
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
   <header>
     <div class="nav-container">
       <img src="Images/logo.jpg" alt="Logo" class="logo">
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <span>Menu</span>
+        <span id="caret">▾</span>
+      </div>
       <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
+        <ul class="nav-links" id="mobileNav">
+          <li><a href="index.html" class="active">Home</a></li>
           <li><a href="scholarships.html">Scholarships</a></li>
           <li><a href="flightschools.html">Flight Schools</a></li>
           <li><a href="impact.html">Our Impact</a></li>
@@ -129,22 +167,29 @@
     </div>
   </header>
 
-  <!-- Banner -->
   <div class="banner">
     Growing Pilots. Connecting Missions. Advocating for Aviation.
   </div>
 
-  <!-- Impact Content -->
   <div class="impact-wrapper">
-    <!-- Center Message -->
     <div class="impact-center">
-      <div>
-        We’re helping the public see the large impact of backyard airports and local pilots.
-      </div>
+      We’re helping the public see the large impact of backyard airports and local pilots.
     </div>
 
+    <section class="scholarship-section">
+      <h2>Our Scholarship Winners</h2>
+      <div class="carousel">
+        <button class="carousel-btn prev" onclick="scrollCarousel(-1)">&#10094;</button>
+        <div class="carousel-track">
+          <img src="Images/2024 Scholarship Award Winner Brook W. (1).png" alt="Brook W. Scholarship Winner">
+          <img src="Images/2024 Scholarship Award Winner Grace B..png" alt="Grace B. Scholarship Winner">
+          <img src="Images/2025 Scholarship Award Winner Placeholder.png" alt="Award Winner Placeholder">
+        </div>
+        <button class="carousel-btn next" onclick="scrollCarousel(1)">&#10095;</button>
+      </div>
+    </section>
+
     <section class="impact-section">
-      <!-- Perception Column -->
       <div class="impact-column">
         <h3>Perception</h3>
         <img src="Images/Perception1.png" alt="Protest Sign 1">
@@ -152,21 +197,59 @@
         <img src="Images/Perception3.png" alt="No Jet Expansion">
       </div>
 
-      <!-- How We Help Column -->
       <div class="impact-column">
         <h3>How We Help</h3>
-        <a href="https://thebedfordcitizen.org/2024/06/opinion-setting-the-record-straight-on-business-aviation/" target="_blank">
-          <img src="Images/HWH1.png" alt="Bedford Opinion Article">
-        </a>
-        <img src="Images/HWH2.png" alt="Pilot Interview">
-        <a href="https://nbaa.org/press-releases/" target="_blank">
-          <img src="Images/HWH3.png" alt="YoPro Newsletter">
-        </a>
+
+        <div class="hover-box">
+          <a href="https://thebedfordcitizen.org/2024/06/opinion-setting-the-record-straight-on-business-aviation/" target="_blank">
+            <img src="Images/HWH1.png" alt="Bedford Opinion Article">
+            <div class="hover-text">
+              Small-to-mid-sized airports are at risk! We assist local communities by advocating for their continued operations with powerful testimonies and facts.
+            </div>
+          </a>
+        </div>
+
+        <div class="hover-box">
+          <a href="https://nbaa.org/press-releases/" target="_blank">
+            <img src="Images/HWH3.png" alt="YoPro Newsletter">
+            <div class="hover-text">
+              We’ve been publicly featured and continue to build aviation credibility in national outlets and nonprofit press.
+            </div>
+          </a>
+        </div>
+
+        <div class="hover-box">
+          <img src="Images/mission.png" alt="Nonprofit Mission">
+          <div class="hover-text">
+            We assist in mission coordination. Whether you need help or want to fly, our platform simplifies the process.
+          </div>
+        </div>
+
+        <div class="hover-box">
+          <img src="Images/IMG_3021.png" alt="Scholarships">
+          <div class="hover-text">
+            We build strong relationships with schools and students to help future pilots preview training options firsthand.
+          </div>
+        </div>
       </div>
     </section>
-  </div> <!-- ✅ This closing div was missing -->
+  </div>
 
-  <!-- Footer -->
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('mobileNav');
+      const caret = document.getElementById('caret');
+      menu.classList.toggle('open');
+      caret.textContent = menu.classList.contains('open') ? '▴' : '▾';
+    }
+
+    function scrollCarousel(direction) {
+      const track = document.querySelector('.carousel-track');
+      const scrollAmount = 320;
+      track.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+    }
+  </script>
+
   <footer>
     <p>© 2025 The Aerial Tribute Project • Tax-Exempt 501(c)(3)</p>
     <p>Contact: <a href="mailto:Getflying@aerialtributeproject.org">Getflying@aerialtributeproject.org</a> | MA</p>
@@ -175,7 +258,5 @@
       <a href="https://instagram.com" target="_blank"><img src="Images/instagram.png" alt="Instagram"></a>
     </div>
   </footer>
-
 </body>
 </html>
-
