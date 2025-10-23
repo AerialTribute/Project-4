@@ -65,7 +65,7 @@ nav ul li a:hover {
 
 /* Hero */
 .hero {
-  background-image: url('../Images/Plane.jpg');
+  background-image: url('../images/Plane.jpg');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
