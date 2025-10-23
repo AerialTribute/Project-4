@@ -2,7 +2,7 @@
 const organizations = [
     {
         name: "Stick Monkey",
-        logo: "https://aerialtributeproject.org/wp-content/uploads/2024/05/Stick-Monkey.jpg",
+        logo: <img src="images/Stick_Monkey.jpg" alt="Stick Monkey" />,
         opportunity: "Share Time",
         link: "https://www.flystickmonkey.com",
         description: "A mobile app that connects you with other pilots looking to build time together."
