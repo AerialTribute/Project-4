@@ -160,6 +160,24 @@
     }
   });
 
+  // Reimbursement calculation
+const rateField = document.getElementById('rate');
+const hoursField = document.getElementById('hours');
+const amountField = document.getElementById('amount');
+
+function updateAmount() {
+  const rate = parseFloat(rateField.value);
+  const hours = parseFloat(hoursField.value);
+  if (!isNaN(rate) && !isNaN(hours)) {
+    amountField.value = (rate * hours).toFixed(2);
+  } else {
+    amountField.value = '';
+  }
+}
+
+rateField.addEventListener('input', updateAmount);
+hoursField.addEventListener('input', updateAmount);
+
     // Mobile nav toggle
   function toggleMenu() {
     const nav = document.getElementById('mobileNav');
