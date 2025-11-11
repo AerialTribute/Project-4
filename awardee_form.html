@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Awardee Reimbursement Form</title>
+  <link rel="stylesheet" href="CSS/style.css" />
+</head>
+<body>
+
+<script>
+  const password = prompt("Please enter the password to access this form:");
+  if (password !== "avi2025") {
+    alert("Incorrect password. Redirecting to home.");
+    window.location.href = "index.html";
+  }
+</script>
+
+<header>
+  <div class="nav-container">
+    <img src="images/logo.jpg" alt="Logo" class="logo">
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <span>Menu</span>
+      <span id="caret">▾</span>
+    </div>
+    <nav>
+      <ul class="nav-links" id="mobileNav">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="scholarships.html">Scholarships</a></li>
+        <li><a href="impact.html">Our Impact</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a class="donate-btn" href="donate.html">Donate</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <form id="reimbursementForm" style="background: #fff; padding: 2rem; max-width: 600px; margin: 3rem auto; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.08);">
+    <h2 style="text-align:center; margin-bottom: 2rem;">Scholarship: Reimbursement Form</h2>
+
+  <div class="form-group">
+    <label for="name">Full Name</label>
+    <input type="text" id="name" name="name" class="form-field" required>
+  </div>
+
+  <div class="form-group">
+    <label for="certificate">Pilot Certificate Number</label>
+    <input type="text" id="certificate" name="certificate" class="form-field" required>
+  </div>
+
+  <div class="form-group">
+    <label for="date">Date of Lesson</label>
+    <input type="date" id="date" name="date" class="form-field" required>
+  </div>
+
+  <div class="form-group">
+    <label for="rate">CFI Rate (per hour)</label>
+    <input type="number" id="rate" name="rate" step="0.01" class="form-field" required>
+  </div>
+
+  <div class="form-group">
+    <label for="hours">Total CFI Hours Charged</label>
+    <input type="number" id="hours" name="hours" step="0.1" class="form-field" required>
+  </div>
+
+  <div class="form-group">
+    <label for="amount">Reimbursement Amount ($)</label>
+    <input type="text" id="amount" name="amount" readonly class="form-field">
+    <div class="calc-note">Automatically calculated based on rate × hours</div>
+  </div>
+
+  <div class="form-group">
+    <label for="logbook">Upload Logbook Photo</label>
+    <input type="file" id="logbook" name="logbook" accept="image/*,application/pdf" class="form-field" required>
+  </div>
+
+  <div class="form-group">
+    <label for="receipt">Upload Receipt</label>
+    <input type="file" id="receipt" name="receipt" accept="image/*,application/pdf" class="form-field" required>
+  </div>
+
+  <div style="text-align:center;">
+    <button type="submit" class="form-button">Submit</button>
+  </div>
+</form>
+
+  </form>
+</main>
+
+<footer>
+  <p>© 2025 The Aerial Tribute Project • Tax-Exempt 501(c)(3)</p>
+  <p>Contact: <a href="mailto:connect@aerialtributeproject.org">connect@aerialtributeproject.org</a> | MA</p>
+  <div class="social-icons">
+    <a href="https://facebook.com" target="_blank"><img src="images/facebook.png" alt="Facebook"></a>
+    <a href="https://instagram.com" target="_blank"><img src="images/instagram.png" alt="Instagram"></a>
+  </div>
+</footer>
+
+
+<script>
+  // Auto-calculate reimbursement
+  const rateField = document.getElementById('rate');
+  const hoursField = document.getElementById('hours');
+  const amountField = document.getElementById('amount');
+
+  function updateAmount() {
+    const rate = parseFloat(rateField.value);
+    const hours = parseFloat(hoursField.value);
+    if (!isNaN(rate) && !isNaN(hours)) {
+      amountField.value = (rate * hours).toFixed(2);
+    } else {
+      amountField.value = '';
+    }
+  }
+
+  rateField.addEventListener('input', updateAmount);
+  hoursField.addEventListener('input', updateAmount);
+
+  // Submit to Google Sheets via Apps Script
+  const form = document.getElementById('reimbursementForm');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    fetch("https://script.google.com/macros/s/AKfycbxnUZZBQmvpPOyf9AMilwaHhyPPJtMrEw-4tHWGNvHIZEUTWpYa_ibEXjBwmT9acAtbkw/exec", {
+      method: "POST",
+      body: formData
+    })
+    .then(response => {
+      if (response.ok) {
+        form.reset();
+        form.style.display = 'none';
+
+        const successBox = document.createElement('div');
+        successBox.style.maxWidth = '600px';
+        successBox.style.margin = '3rem auto';
+        successBox.style.padding = '2rem';
+        successBox.style.backgroundColor = '#e8f5e9';
+        successBox.style.border = '1px solid #c8e6c9';
+        successBox.style.borderRadius = '12px';
+        successBox.style.boxShadow = '0 0 8px rgba(0,0,0,0.05)';
+        successBox.style.textAlign = 'center';
+        successBox.style.fontSize = '1.1rem';
+        successBox.innerHTML = `
+          <h3 style="color: #2e7d32;">✅ Submission Received</h3>
+          <p>Thank you for your submission!<br>We will process your reimbursement within <strong>3–5 business days</strong>.</p>
+          <p>If you have questions, email <a href="mailto:connect@aerialtributeproject.org">connect@aerialtributeproject.org</a>.</p>
+        `;
+
+        document.querySelector('main').appendChild(successBox);
+      } else {
+        alert("There was an issue submitting your form. Please try again later.");
+      }
+    })
+    .catch(error => {
+      console.error("Submission error:", error);
+      alert("Submission failed. Please check your internet connection or try again later.");
+    });
+  });
+
+  // Mobile nav toggle
+  function toggleMenu() {
+    const nav = document.getElementById('mobileNav');
+    nav.classList.toggle('open');
+  }
+</script>
+
+
+</body>
+</html>
