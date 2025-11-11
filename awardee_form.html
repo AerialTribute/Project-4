@@ -99,73 +99,74 @@
 
 
 <script>
-  // Auto-calculate reimbursement
-  const rateField = document.getElementById('rate');
-  const hoursField = document.getElementById('hours');
-  const amountField = document.getElementById('amount');
-
-  function updateAmount() {
-    const rate = parseFloat(rateField.value);
-    const hours = parseFloat(hoursField.value);
-    if (!isNaN(rate) && !isNaN(hours)) {
-      amountField.value = (rate * hours).toFixed(2);
-    } else {
-      amountField.value = '';
-    }
+  function encodeFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
   }
 
-  rateField.addEventListener('input', updateAmount);
-  hoursField.addEventListener('input', updateAmount);
-
-  // Submit to Google Sheets via Apps Script
-  const form = document.getElementById('reimbursementForm');
-  form.addEventListener('submit', function (e) {
+  document.getElementById("reimbursementForm").addEventListener("submit", async function(e) {
     e.preventDefault();
+    const form = e.target;
 
-    const formData = new FormData(form);
+    const name = form.name.value;
+    const certificate = form.certificate.value;
+    const date = form.date.value;
+    const rate = form.rate.value;
+    const hours = form.hours.value;
+    const amount = form.amount.value;
+    const logbookFile = form.logbook.files[0];
+    const receiptFile = form.receipt.files[0];
 
-    fetch("https://script.google.com/macros/s/AKfycbxnUZZBQmvpPOyf9AMilwaHhyPPJtMrEw-4tHWGNvHIZEUTWpYa_ibEXjBwmT9acAtbkw/exec", {
-      method: "POST",
-      body: formData
-    })
-    .then(response => {
+    try {
+      const logbookBase64 = await encodeFileAsBase64(logbookFile);
+      const receiptBase64 = await encodeFileAsBase64(receiptFile);
+
+      const response = await fetch("https://script.google.com/macros/s/AKfycbxnUZZBQmvpPOyf9AMilwaHhyPPJtMrEw-4tHWGNvHIZEUTWpYa_ibEXjBwmT9acAtbkw/exec", {
+        method: "POST",
+        body: JSON.stringify({
+          name,
+          certificate,
+          date,
+          rate,
+          hours,
+          amount,
+          logbook: logbookBase64,
+          receipt: receiptBase64
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
       if (response.ok) {
-        form.reset();
-        form.style.display = 'none';
-
-        const successBox = document.createElement('div');
-        successBox.style.maxWidth = '600px';
-        successBox.style.margin = '3rem auto';
-        successBox.style.padding = '2rem';
-        successBox.style.backgroundColor = '#e8f5e9';
-        successBox.style.border = '1px solid #c8e6c9';
-        successBox.style.borderRadius = '12px';
-        successBox.style.boxShadow = '0 0 8px rgba(0,0,0,0.05)';
-        successBox.style.textAlign = 'center';
-        successBox.style.fontSize = '1.1rem';
-        successBox.innerHTML = `
-          <h3 style="color: #2e7d32;">✅ Submission Received</h3>
-          <p>Thank you for your submission!<br>We will process your reimbursement within <strong>3–5 business days</strong>.</p>
-          <p>If you have questions, email <a href="mailto:connect@aerialtributeproject.org">connect@aerialtributeproject.org</a>.</p>
+        document.querySelector("main").innerHTML = `
+          <div style="max-width: 600px; margin: 3rem auto; background: #eaf8ec; padding: 2rem; border-radius: 10px; border: 1px solid #c5ebca;">
+            <h2 style="color: green;"><span style="font-size: 1.5rem;">✅ Submission Received</span></h2>
+            <p>Thank you for your submission!</p>
+            <p>We will process your reimbursement within <strong>3–5 business days</strong>.</p>
+            <p>If you have questions, email <a href="mailto:connect@aerialtributeproject.org">connect@aerialtributeproject.org</a>.</p>
+          </div>
         `;
-
-        document.querySelector('main').appendChild(successBox);
       } else {
-        alert("There was an issue submitting your form. Please try again later.");
+        alert("Submission failed. Please try again later.");
       }
-    })
-    .catch(error => {
-      console.error("Submission error:", error);
-      alert("Submission failed. Please check your internet connection or try again later.");
-    });
+    } catch (err) {
+      console.error("Error during submission:", err);
+      alert("There was an issue with your submission.");
+    }
   });
 
-  // Mobile nav toggle
+    // Mobile nav toggle
   function toggleMenu() {
     const nav = document.getElementById('mobileNav');
     nav.classList.toggle('open');
   }
 </script>
+
 
 
 </body>
