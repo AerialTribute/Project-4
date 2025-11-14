@@ -87,26 +87,70 @@
   </div>
 </footer>
 
-  <script>
-    let submitted = false;
+<script>
+  function updateAmount() {
+    const rate = parseFloat(document.getElementById('rate').value);
+    const hours = parseFloat(document.getElementById('hours').value);
+    if (!isNaN(rate) && !isNaN(hours)) {
+      document.getElementById('amount').value = (rate * hours).toFixed(2);
+    } else {
+      document.getElementById('amount').value = '';
+    }
+  }
 
-    function updateAmount() {
-      const rate = parseFloat(document.getElementById('rate').value);
-      const hours = parseFloat(document.getElementById('hours').value);
-      if (!isNaN(rate) && !isNaN(hours)) {
-        document.getElementById('amount').value = (rate * hours).toFixed(2);
-      } else {
+  document.getElementById('rate').addEventListener('input', updateAmount);
+  document.getElementById('hours').addEventListener('input', updateAmount);
+
+  document.getElementById('reimbursementForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    const toBase64 = file => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = error => reject(error);
+    });
+
+    const logbookBase64 = await toBase64(formData.get('logbook'));
+    const receiptBase64 = await toBase64(formData.get('receipt'));
+
+    const payload = {
+      name: formData.get('name'),
+      certificate: formData.get('certificate'),
+      date: formData.get('date'),
+      rate: formData.get('rate'),
+      hours: formData.get('hours'),
+      amount: formData.get('amount'),
+      logbook: logbookBase64,
+      receipt: receiptBase64
+    };
+
+    try {
+      const res = await fetch('https://script.google.com/macros/s/AKfycbxnUZZBQmvpPOyf9AMilwaHhyPPJtMrEw-4tHWGNvHIZEUTWpYa_ibEXjBwmT9acAtbkw/exec', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        alert("✅ Submission received! We’ll process your reimbursement within 3–5 business days.");
+        form.reset();
         document.getElementById('amount').value = '';
+      } else {
+        alert("❌ Submission failed: " + result.error);
       }
+    } catch (err) {
+      alert("❌ Error during submission: " + err.message);
     }
+  });
+</script>
 
-    function showSuccessMessage() {
-      alert("✅ Submission received! We’ll process your reimbursement within 3–5 business days.");
-      document.getElementById("reimbursementForm").reset();
-    }
 
-    document.getElementById('rate').addEventListener('input', updateAmount);
-    document.getElementById('hours').addEventListener('input', updateAmount);
-  </script>
 </body>
 </html>
