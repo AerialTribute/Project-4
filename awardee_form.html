@@ -91,6 +91,7 @@
 </footer>
 
 <script>
+  // Firebase Config
   const firebaseConfig = {
     apiKey: "AIzaSyDpSaAtGWJeDQtkn20jhneTQhjyMf6DL-Hc",
     authDomain: "aerialtributeproject25.firebaseapp.com",
@@ -105,7 +106,7 @@
   const db = firebase.firestore();
   const storage = firebase.storage();
 
-  // Auto calculate amount
+  // Auto calculation
   function updateAmount() {
     const rate = parseFloat(document.getElementById('rate').value);
     const hours = parseFloat(document.getElementById('hours').value);
@@ -116,15 +117,15 @@
   document.getElementById('rate').addEventListener('input', updateAmount);
   document.getElementById('hours').addEventListener('input', updateAmount);
 
-  // FORM SUBMIT
-  document.getElementById('reimbursementForm').addEventListener('submit', async (e) => {
+  // Form submission
+  document.getElementById('reimbursementForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-
     const statusEl = document.getElementById('status');
-    statusEl.style.color = "black";
     statusEl.textContent = "Submitting, please wait...";
+    statusEl.style.color = "black";
 
     const form = e.target;
+
     const name = form.name.value;
     const certificate = form.certificate.value;
     const date = form.date.value;
@@ -136,13 +137,13 @@
     const receiptFile = form.receipt.files[0];
 
     if (!logbookFile || !receiptFile) {
-      statusEl.style.color = 'red';
-      statusEl.textContent = "Please select both logbook and receipt files.";
+      statusEl.textContent = "❌ Please select both logbook and receipt files.";
+      statusEl.style.color = "red";
       return;
     }
 
     try {
-      // Create Firestore record
+      // 1. Create Firestore document
       const docRef = await db.collection("reimbursements").add({
         name,
         certificate,
@@ -157,31 +158,36 @@
 
       const docId = docRef.id;
 
-      // Upload Logbook
-      const logRef = storage.ref(`reimbursements/${docId}/logbook_${logbookFile.name}`);
+      // 2. Upload LOGBOOK → reimbursements/logbooks/
+      const logRef = storage.ref(`reimbursements/logbooks/${docId}_${logbookFile.name}`);
       await logRef.put(logbookFile);
       const logbookUrl = await logRef.getDownloadURL();
 
-      // Upload Receipt
-      const receiptRef = storage.ref(`reimbursements/${docId}/receipt_${receiptFile.name}`);
+      // 3. Upload RECEIPT → reimbursements/receipts/
+      const receiptRef = storage.ref(`reimbursements/receipts/${docId}_${receiptFile.name}`);
       await receiptRef.put(receiptFile);
       const receiptUrl = await receiptRef.getDownloadURL();
 
-      // Update Firestore record with URLs
+      // 4. Save URLs back into Firestore
       await docRef.update({ logbookUrl, receiptUrl });
 
-      statusEl.style.color = "green";
       statusEl.textContent = "✅ Submission received! Your reimbursement will be processed.";
+      statusEl.style.color = "green";
 
       form.reset();
       document.getElementById('amount').value = "";
 
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      statusEl.textContent = "❌ Error: " + err.message;
       statusEl.style.color = "red";
-      statusEl.textContent = "❌ Error: " + error.message;
     }
   });
+
+  function toggleMenu() {
+    const nav = document.getElementById('mobileNav');
+    nav.classList.toggle('open');
+  }
 </script>
 
 </body>
