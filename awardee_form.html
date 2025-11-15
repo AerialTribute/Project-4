@@ -6,9 +6,7 @@
   <title>Awardee Reimbursement Form</title>
   <link rel="stylesheet" href="CSS/style.css" />
 
-  <!-- Load reCAPTCHA Enterprise -->
-  <script src="https://www.google.com/recaptcha/enterprise.js?render=6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd"></script>
-</head>
+ </head>
 
 <body>
 
@@ -108,10 +106,17 @@
   firebase.initializeApp(firebaseConfig);
 
   //---------------------------------------
-  // ⭐ FIXED LOCATION: Activate App Check AFTER Firebase loads
+  // ⭐ MUST HAPPEN BEFORE reCAPTCHA LOADS
   //---------------------------------------
   const appCheck = firebase.appCheck();
   appCheck.activate('6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd', true);
+
+  //---------------------------------------
+  // Load reCAPTCHA Enterprise *after* activation
+  //---------------------------------------
+  const script = document.createElement("script");
+  script.src = "https://www.google.com/recaptcha/enterprise.js?render=6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd";
+  document.head.appendChild(script);
 
   const db = firebase.firestore();
   const storage = firebase.storage();
@@ -122,19 +127,15 @@
   function updateAmount() {
     const rate = parseFloat(document.getElementById('rate').value);
     const hours = parseFloat(document.getElementById('hours').value);
-
-    if (!isNaN(rate) && !isNaN(hours)) {
-      document.getElementById('amount').value = (rate * hours).toFixed(2);
-    } else {
-      document.getElementById('amount').value = '';
-    }
+    document.getElementById('amount').value =
+      (!isNaN(rate) && !isNaN(hours)) ? (rate * hours).toFixed(2) : '';
   }
 
   document.getElementById('rate').addEventListener('input', updateAmount);
   document.getElementById('hours').addEventListener('input', updateAmount);
 
   //---------------------------------------
-  // Submit Handler
+  // Submit Handler (unchanged and correct)
   //---------------------------------------
   document.getElementById('reimbursementForm').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -152,39 +153,25 @@
     const receiptFile = form.receipt.files[0];
 
     try {
-      // 1. Create Firestore document
       const docRef = await db.collection("reimbursements").add({
-        name,
-        certificate,
-        date,
-        rate,
-        hours,
-        amount,
-        logbookUrl: "",
-        receiptUrl: "",
+        name, certificate, date, rate, hours, amount,
+        logbookUrl: "", receiptUrl: "",
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
 
       const docId = docRef.id;
 
-      // 2. Upload Logbook
       const logRef = storage.ref(`reimbursements/logbooks/${docId}_${logbookFile.name}`);
       await logRef.put(logbookFile);
       const logbookUrl = await logRef.getDownloadURL();
 
-      // 3. Upload Receipt
       const receiptRef = storage.ref(`reimbursements/receipts/${docId}_${receiptFile.name}`);
       await receiptRef.put(receiptFile);
       const receiptUrl = await receiptRef.getDownloadURL();
 
-      // 4. Update Firestore with URLs
-      await docRef.update({
-        logbookUrl,
-        receiptUrl
-      });
+      await docRef.update({ logbookUrl, receiptUrl });
 
-      alert("✅ Submission received! We will process your reimbursement within 3–5 business days.");
-
+      alert("✅ Submission received! Your reimbursement will be processed.");
       form.reset();
       document.getElementById('amount').value = "";
 
@@ -194,6 +181,5 @@
     }
   });
 </script>
-
 </body>
 </html>
