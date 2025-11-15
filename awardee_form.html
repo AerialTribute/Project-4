@@ -8,7 +8,7 @@
 </head>
 <body>
 
-  <script>
+<script>
   const password = prompt("Please enter the password to access this form:");
   if (password !== "avi2025") {
     alert("Incorrect password. Redirecting to home.");
@@ -35,50 +35,44 @@
   </div>
 </header>
 
-  <form
-    id="reimbursementForm"
-    action="https://script.google.com/macros/s/AKfycbxnUZZBQmvpPOyf9AMilwaHhyPPJtMrEw-4tHWGNvHIZEUTWpYa_ibEXjBwmT9acAtbkw/exec"
-    method="POST"
-    enctype="multipart/form-data"
-    target="hidden_iframe"
-    onsubmit="submitted=true;"
-    style="background: #fff; padding: 2rem; max-width: 600px; margin: 3rem auto; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.08);"
-  >
-    <h2 style="text-align:center; margin-bottom: 2rem;">Scholarship: Reimbursement Form</h2>
+<form
+  id="reimbursementForm"
+  enctype="multipart/form-data"
+  style="background: #fff; padding: 2rem; max-width: 600px; margin: 3rem auto; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.08);"
+>
+  <h2 style="text-align:center; margin-bottom: 2rem;">Scholarship: Reimbursement Form</h2>
 
-    <label>Full Name</label>
-    <input type="text" name="name" required /><br /><br />
+  <label>Full Name</label>
+  <input type="text" name="name" required /><br /><br />
 
-    <label>Pilot Certificate Number</label>
-    <input type="text" name="certificate" required /><br /><br />
+  <label>Pilot Certificate Number</label>
+  <input type="text" name="certificate" required /><br /><br />
 
-    <label>Date of Lesson</label>
-    <input type="date" name="date" required /><br /><br />
+  <label>Date of Lesson</label>
+  <input type="date" name="date" required /><br /><br />
 
-    <label>CFI Rate (per hour)</label>
-    <input type="number" step="0.01" name="rate" id="rate" required /><br /><br />
+  <label>CFI Rate (per hour)</label>
+  <input type="number" step="0.01" name="rate" id="rate" required /><br /><br />
 
-    <label>Total CFI Hours Charged</label>
-    <input type="number" step="0.1" name="hours" id="hours" required /><br /><br />
+  <label>Total CFI Hours Charged</label>
+  <input type="number" step="0.1" name="hours" id="hours" required /><br /><br />
 
-    <label>Reimbursement Amount ($)</label>
-    <input type="text" name="amount" id="amount" readonly /><br />
-    <small>Automatically calculated based on rate × hours</small><br /><br />
+  <label>Reimbursement Amount ($)</label>
+  <input type="text" name="amount" id="amount" readonly /><br />
+  <small>Automatically calculated based on rate × hours</small><br /><br />
 
-    <label>Upload Logbook Photo</label>
-    <input type="file" name="logbook" accept="application/pdf,image/*" required /><br /><br />
+  <label>Upload Logbook Photo</label>
+  <input type="file" name="logbook" accept="application/pdf,image/*" required /><br /><br />
 
-    <label>Upload Receipt</label>
-    <input type="file" name="receipt" accept="application/pdf,image/*" required /><br /><br />
+  <label>Upload Receipt</label>
+  <input type="file" name="receipt" accept="application/pdf,image/*" required /><br /><br />
 
-    <div style="text-align:center;">
+  <div style="text-align:center;">
     <button type="submit" class="form-button">Submit</button>
-    </div>
-  </form>
+  </div>
+</form>
 
-  <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted) showSuccessMessage();"></iframe>
-
-  <footer>
+<footer>
   <p>© 2025 The Aerial Tribute Project • Tax-Exempt 501(c)(3)</p>
   <p>Contact: <a href="mailto:connect@aerialtributeproject.org">connect@aerialtributeproject.org</a> | MA</p>
   <div class="social-icons">
@@ -87,70 +81,96 @@
   </div>
 </footer>
 
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js"></script>
+
 <script>
+  // Your Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDpSaAtGWJeDQtkn20jhneTQhjyMf6DL-Hc",
+    authDomain: "aerialtributeproject25.firebaseapp.com",
+    projectId: "aerialtributeproject25",
+    storageBucket: "aerialtributeproject25.firebasestorage.app",
+    messagingSenderId: "781203906167",
+    appId: "1:781203906167:web:cb43305702bdaa6512b072",
+    measurementId: "G-B09DP86QX1"
+  };
+
+  // Initialize Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const storage = firebase.storage();
+
+  // Auto-calc logic
   function updateAmount() {
     const rate = parseFloat(document.getElementById('rate').value);
     const hours = parseFloat(document.getElementById('hours').value);
-    if (!isNaN(rate) && !isNaN(hours)) {
-      document.getElementById('amount').value = (rate * hours).toFixed(2);
-    } else {
-      document.getElementById('amount').value = '';
-    }
+    document.getElementById('amount').value =
+      !isNaN(rate) && !isNaN(hours) ? (rate * hours).toFixed(2) : '';
   }
 
   document.getElementById('rate').addEventListener('input', updateAmount);
   document.getElementById('hours').addEventListener('input', updateAmount);
 
+  // Submit handler
   document.getElementById('reimbursementForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const form = e.target;
-    const formData = new FormData(form);
+    const name = form.name.value;
+    const certificate = form.certificate.value;
+    const date = form.date.value;
+    const rate = form.rate.value;
+    const hours = form.hours.value;
+    const amount = form.amount.value;
 
-    const toBase64 = file => new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result.split(',')[1]);
-      reader.onerror = error => reject(error);
-    });
-
-    const logbookBase64 = await toBase64(formData.get('logbook'));
-    const receiptBase64 = await toBase64(formData.get('receipt'));
-
-    const payload = {
-      name: formData.get('name'),
-      certificate: formData.get('certificate'),
-      date: formData.get('date'),
-      rate: formData.get('rate'),
-      hours: formData.get('hours'),
-      amount: formData.get('amount'),
-      logbook: logbookBase64,
-      receipt: receiptBase64
-    };
+    const logbookFile = form.logbook.files[0];
+    const receiptFile = form.receipt.files[0];
 
     try {
-      const res = await fetch('https://script.google.com/macros/s/AKfycbxnUZZBQmvpPOyf9AMilwaHhyPPJtMrEw-4tHWGNvHIZEUTWpYa_ibEXjBwmT9acAtbkw/exec', {
-        method: 'POST',
-        body: JSON.stringify(payload),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      // 1) Create Firestore doc first to get ID
+      const docRef = await db.collection("reimbursements").add({
+        name,
+        certificate,
+        date,
+        rate,
+        hours,
+        amount,
+        logbookUrl: "",
+        receiptUrl: "",
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      const result = await res.json();
-      if (result.success) {
-        alert("✅ Submission received! We’ll process your reimbursement within 3–5 business days.");
-        form.reset();
-        document.getElementById('amount').value = '';
-      } else {
-        alert("❌ Submission failed: " + result.error);
-      }
-    } catch (err) {
-      alert("❌ Error during submission: " + err.message);
+      const docId = docRef.id;
+
+      // 2) Upload logbook
+      const logbookRef = storage.ref(`reimbursements/logbooks/${docId}_${logbookFile.name}`);
+      await logbookRef.put(logbookFile);
+      const logbookUrl = await logbookRef.getDownloadURL();
+
+      // 3) Upload receipt
+      const receiptRef = storage.ref(`reimbursements/receipts/${docId}_${receiptFile.name}`);
+      await receiptRef.put(receiptFile);
+      const receiptUrl = await receiptRef.getDownloadURL();
+
+      // 4) Update Firestore with URLs
+      await docRef.update({
+        logbookUrl,
+        receiptUrl
+      });
+
+      alert("✅ Submission received! We’ll process your reimbursement within 3–5 business days.");
+      form.reset();
+      document.getElementById('amount').value = "";
+
+    } catch (error) {
+      alert("❌ Error: " + error.message);
+      console.error(error);
     }
   });
 </script>
-
 
 </body>
 </html>
