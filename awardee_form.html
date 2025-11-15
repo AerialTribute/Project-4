@@ -6,8 +6,8 @@
   <title>Awardee Reimbursement Form</title>
   <link rel="stylesheet" href="CSS/style.css" />
 
-  <!-- Correct reCAPTCHA v3 script for Firebase App Check -->
-  <script src="https://www.google.com/recaptcha/api.js?render=6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd"></script>
+  <!-- Load reCAPTCHA v3 -->
+  <script src="https://www.google.com/recaptcha/api.js?render=6Lc5ug0sAAAAAEUxMz-HLLASvzMcgW1FoC-hReDi"></script>
 </head>
 
 <body>
@@ -23,6 +23,10 @@
 <header>
   <div class="nav-container">
     <img src="images/logo.jpg" alt="Logo" class="logo">
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <span>Menu</span>
+      <span id="caret">▾</span>
+    </div>
     <nav>
       <ul class="nav-links" id="mobileNav">
         <li><a href="index.html" class="active">Home</a></li>
@@ -75,6 +79,10 @@
 <footer>
   <p>© 2025 The Aerial Tribute Project • Tax-Exempt 501(c)(3)</p>
   <p>Contact: <a href="mailto:connect@aerialtributeproject.org">connect@aerialtributeproject.org</a> | MA</p>
+  <div class="social-icons">
+    <a href="https://facebook.com" target="_blank"><img src="images/facebook.png" alt="Facebook"></a>
+    <a href="https://instagram.com" target="_blank"><img src="images/instagram.png" alt="Instagram"></a>
+  </div>
 </footer>
 
 <!-- Firebase SDKs -->
@@ -84,91 +92,82 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check-compat.js"></script>
 
 <script>
-  /* -------------------------
-     Firebase Initialization
-  ------------------------- */
   const firebaseConfig = {
     apiKey: "AIzaSyDpSaAtGWJeDQtkn20jhneTQhjyMf6DL-Hc",
     authDomain: "aerialtributeproject25.firebaseapp.com",
     projectId: "aerialtributeproject25",
     storageBucket: "aerialtributeproject25.appspot.com",
     messagingSenderId: "781203906167",
-    appId: "1:781203906167:web:cb43305702bdaa6512b072"
+    appId: "1:781203906167:web:cb43305702bdaa6512b072",
+    measurementId: "G-B09DP86QX1"
   };
 
   firebase.initializeApp(firebaseConfig);
 
-  /* -------------------------
-     Firebase App Check (must run BEFORE any Firestore/Storage)
-  ------------------------- */
+  // Correct App Check for reCAPTCHA v3
   const appCheck = firebase.appCheck();
-  appCheck.activate(
-    "6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd",
-    true
-  );
+  appCheck.activate('6Lc5ug0sAAAAAEUxMz-HLLASvzMcgW1FoC-hReDi', true);
 
   const db = firebase.firestore();
   const storage = firebase.storage();
 
-  /* -------------------------
-     Auto-calc reimbursement
-  ------------------------- */
+  // Auto calculation
   function updateAmount() {
     const rate = parseFloat(document.getElementById('rate').value);
     const hours = parseFloat(document.getElementById('hours').value);
     document.getElementById('amount').value =
-      (!isNaN(rate) && !isNaN(hours)) ? (rate * hours).toFixed(2) : "";
+      (!isNaN(rate) && !isNaN(hours)) ? (rate * hours).toFixed(2) : '';
   }
 
-  document.getElementById("rate").addEventListener("input", updateAmount);
-  document.getElementById("hours").addEventListener("input", updateAmount);
+  document.getElementById('rate').addEventListener('input', updateAmount);
+  document.getElementById('hours').addEventListener('input', updateAmount);
 
-  /* -------------------------
-     Form Submit Handler
-  ------------------------- */
-  document.getElementById("reimbursementForm").addEventListener("submit", async (e) => {
+  // Submit handler
+  document.getElementById('reimbursementForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
-    const name = e.target.name.value;
-    const certificate = e.target.certificate.value;
-    const date = e.target.date.value;
-    const rate = e.target.rate.value;
-    const hours = e.target.hours.value;
-    const amount = e.target.amount.value;
-    const logbookFile = e.target.logbook.files[0];
-    const receiptFile = e.target.receipt.files[0];
+    // Get a reCAPTCHA token
+    const token = await grecaptcha.execute('6Lc5ug0sAAAAAEUxMz-HLLASvzMcgW1FoC-hReDi', {action: 'submit'});
+
+    const form = e.target;
+
+    const name = form.name.value;
+    const certificate = form.certificate.value;
+    const date = form.date.value;
+    const rate = form.rate.value;
+    const hours = form.hours.value;
+    const amount = form.amount.value;
+
+    const logbookFile = form.logbook.files[0];
+    const receiptFile = form.receipt.files[0];
 
     try {
-      // Create Firestore document
       const docRef = await db.collection("reimbursements").add({
         name, certificate, date, rate, hours, amount,
-        logbookUrl: "",
-        receiptUrl: "",
+        logbookUrl: "", receiptUrl: "",
+        recaptchaToken: token,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      const id = docRef.id;
+      const docId = docRef.id;
 
-      // Upload logbook
-      const logRef = storage.ref(`reimbursements/logbooks/${id}_${logbookFile.name}`);
+      const logRef = storage.ref(`reimbursements/logbooks/${docId}_${logbookFile.name}`);
       await logRef.put(logbookFile);
       const logbookUrl = await logRef.getDownloadURL();
 
-      // Upload receipt
-      const receiptRef = storage.ref(`reimbursements/receipts/${id}_${receiptFile.name}`);
+      const receiptRef = storage.ref(`reimbursements/receipts/${docId}_${receiptFile.name}`);
       await receiptRef.put(receiptFile);
       const receiptUrl = await receiptRef.getDownloadURL();
 
-      // Update Firestore
       await docRef.update({ logbookUrl, receiptUrl });
 
       alert("✅ Submission received! Your reimbursement will be processed.");
-      e.target.reset();
-      document.getElementById("amount").value = "";
+      form.reset();
+      document.getElementById('amount').value = "";
 
-    } catch (err) {
-      console.error(err);
-      alert("❌ Error: " + err.message);
+    } catch (error) {
+      console.error(error);
+      alert("❌ Error: " + error.message);
     }
   });
 </script>
