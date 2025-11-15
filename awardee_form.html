@@ -94,15 +94,16 @@
   // -------------------------------------------------
   // Firebase initialization (original project)
   // -------------------------------------------------
-  const firebaseConfig = {
-    apiKey: "AIzaSyDpSaAtGWJeDQtkn20jhneTQhjyMf6DL-Hc",
-    authDomain: "aerialtributeproject25.firebaseapp.com",
-    projectId: "aerialtributeproject25",
-    storageBucket: "aerialtributeproject25.appspot.com",
-    messagingSenderId: "781203906167",
-    appId: "1:781203906167:web:cb43305702bdaa6512b072",
-    measurementId: "G-B09DP86QX1"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyDpSaAtGWJeDQtkn20jhneTQhjyMf6DL-Hc",
+  authDomain: "aerialtributeproject25.firebaseapp.com",
+  projectId: "aerialtributeproject25",
+  storageBucket: "aerialtributeproject25.firebasestorage.app",
+  messagingSenderId: "781203906167",
+  appId: "1:781203906167:web:cb43305702bdaa6512b072",
+  measurementId: "G-B09DP86QX1"
+};
+
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
