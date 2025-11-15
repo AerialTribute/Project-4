@@ -105,6 +105,7 @@
   const db = firebase.firestore();
   const storage = firebase.storage();
 
+  // Auto calculate amount
   function updateAmount() {
     const rate = parseFloat(document.getElementById('rate').value);
     const hours = parseFloat(document.getElementById('hours').value);
@@ -115,8 +116,10 @@
   document.getElementById('rate').addEventListener('input', updateAmount);
   document.getElementById('hours').addEventListener('input', updateAmount);
 
+  // FORM SUBMIT
   document.getElementById('reimbursementForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+
     const statusEl = document.getElementById('status');
     statusEl.style.color = "black";
     statusEl.textContent = "Submitting, please wait...";
@@ -139,6 +142,7 @@
     }
 
     try {
+      // Create Firestore record
       const docRef = await db.collection("reimbursements").add({
         name,
         certificate,
@@ -153,19 +157,22 @@
 
       const docId = docRef.id;
 
-      // Uploads NOW match your Storage rules
+      // Upload Logbook (correct folder)
       const logRef = storage.ref(`reimbursements/${docId}_logbook_${logbookFile.name}`);
       await logRef.put(logbookFile);
       const logbookUrl = await logRef.getDownloadURL();
 
+      // Upload Receipt (correct folder)
       const receiptRef = storage.ref(`reimbursements/${docId}_receipt_${receiptFile.name}`);
       await receiptRef.put(receiptFile);
       const receiptUrl = await receiptRef.getDownloadURL();
 
+      // Update Firestore record with URLs
       await docRef.update({ logbookUrl, receiptUrl });
 
       statusEl.style.color = "green";
-      statusEl.textContent = "✅ Submission received! Your reimbursement will be processed.";
+      statusEl.textContent =
+        "✅ Submission received! Your reimbursement will be processed.";
 
       form.reset();
       document.getElementById('amount').value = "";
