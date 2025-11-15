@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Awardee Reimbursement Form</title>
   <link rel="stylesheet" href="CSS/style.css" />
-
- </head>
+</head>
 
 <body>
 
+<!-- PASSWORD PROTECTION -->
 <script>
   const password = prompt("Please enter the password to access this form:");
   if (password !== "avi2025") {
@@ -90,9 +90,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check-compat.js"></script>
 
 <script>
-  //---------------------------------------
+  // ------------------------------
   // Firebase Initialization
-  //---------------------------------------
+  // ------------------------------
   const firebaseConfig = {
     apiKey: "AIzaSyDpSaAtGWJeDQtkn20jhneTQhjyMf6DL-Hc",
     authDomain: "aerialtributeproject25.firebaseapp.com",
@@ -105,15 +105,13 @@
 
   firebase.initializeApp(firebaseConfig);
 
-  //---------------------------------------
-  // ⭐ MUST HAPPEN BEFORE reCAPTCHA LOADS
-  //---------------------------------------
+  // ------------------------------
+  // Enable App Check
+  // ------------------------------
   const appCheck = firebase.appCheck();
   appCheck.activate('6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd', true);
 
-  //---------------------------------------
-  // Load reCAPTCHA Enterprise *after* activation
-  //---------------------------------------
+  // Load reCAPTCHA Enterprise after activation
   const script = document.createElement("script");
   script.src = "https://www.google.com/recaptcha/enterprise.js?render=6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd";
   document.head.appendChild(script);
@@ -121,22 +119,24 @@
   const db = firebase.firestore();
   const storage = firebase.storage();
 
-  //---------------------------------------
-  // Auto-calc for reimbursement amount
-  //---------------------------------------
+  // ------------------------------
+  // Auto Calculation
+  // ------------------------------
   function updateAmount() {
     const rate = parseFloat(document.getElementById('rate').value);
     const hours = parseFloat(document.getElementById('hours').value);
     document.getElementById('amount').value =
-      (!isNaN(rate) && !isNaN(hours)) ? (rate * hours).toFixed(2) : '';
+      (!isNaN(rate) && !isNaN(hours)) ? (rate * hours).toFixed(2) : "";
   }
 
-  document.getElementById('rate').addEventListener('input', updateAmount);
-  document.getElementById('hours').addEventListener('input', updateAmount);
+  window.onload = () => {
+    document.getElementById('rate').addEventListener('input', updateAmount);
+    document.getElementById('hours').addEventListener('input', updateAmount);
+  };
 
-  //---------------------------------------
-  // Submit Handler (unchanged and correct)
-  //---------------------------------------
+  // ------------------------------
+  // Submit Handler
+  // ------------------------------
   document.getElementById('reimbursementForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
@@ -153,22 +153,35 @@
     const receiptFile = form.receipt.files[0];
 
     try {
+      // ⭐ REQUIRED: Execute reCAPTCHA for App Check verification
+      await grecaptcha.enterprise.ready();
+      const token = await grecaptcha.enterprise.execute(
+        '6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd',
+        { action: 'submit_reimbursement' }
+      );
+
+      // 1. Insert Firestore doc
       const docRef = await db.collection("reimbursements").add({
         name, certificate, date, rate, hours, amount,
-        logbookUrl: "", receiptUrl: "",
+        logbookUrl: "",
+        receiptUrl: "",
+        recaptchaToken: token,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
 
       const docId = docRef.id;
 
+      // 2. Upload Logbook
       const logRef = storage.ref(`reimbursements/logbooks/${docId}_${logbookFile.name}`);
       await logRef.put(logbookFile);
       const logbookUrl = await logRef.getDownloadURL();
 
+      // 3. Upload Receipt
       const receiptRef = storage.ref(`reimbursements/receipts/${docId}_${receiptFile.name}`);
       await receiptRef.put(receiptFile);
       const receiptUrl = await receiptRef.getDownloadURL();
 
+      // 4. Update Firestore with URLs
       await docRef.update({ logbookUrl, receiptUrl });
 
       alert("✅ Submission received! Your reimbursement will be processed.");
@@ -181,5 +194,6 @@
     }
   });
 </script>
+
 </body>
 </html>
