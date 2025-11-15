@@ -5,7 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Awardee Reimbursement Form</title>
   <link rel="stylesheet" href="CSS/style.css" />
+
+  <!-- Load reCAPTCHA Enterprise -->
+  <script src="https://www.google.com/recaptcha/enterprise.js?render=6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd"></script>
+
+  <!-- Firebase App Check activation (REQUIRED for Storage uploads) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const appCheck = firebase.appCheck();
+      appCheck.activate('6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd', true);
+    });
+  </script>
 </head>
+
 <body>
 
 <script>
@@ -81,15 +93,15 @@
   </div>
 </footer>
 
-<!-- Firebase COMPAT SDKs (important: compat version preserves firebase.* global API) -->
+<!-- Firebase SDKs (compat versions) -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 
 <script>
-  // --------------------------
-  // Auto-calc logic
-  // --------------------------
+  //---------------------------------------
+  // Auto-calc for reimbursement amount
+  //---------------------------------------
   function updateAmount() {
     const rate = parseFloat(document.getElementById('rate').value);
     const hours = parseFloat(document.getElementById('hours').value);
@@ -104,9 +116,9 @@
   document.getElementById('rate').addEventListener('input', updateAmount);
   document.getElementById('hours').addEventListener('input', updateAmount);
 
-  // --------------------------
+  //---------------------------------------
   // Firebase Initialization
-  // --------------------------
+  //---------------------------------------
   const firebaseConfig = {
     apiKey: "AIzaSyDpSaAtGWJeDQtkn20jhneTQhjyMf6DL-Hc",
     authDomain: "aerialtributeproject25.firebaseapp.com",
@@ -117,13 +129,13 @@
     measurementId: "G-B09DP86QX1"
   };
 
-  const app = firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
   const storage = firebase.storage();
 
-  // --------------------------
+  //---------------------------------------
   // Submit Handler
-  // --------------------------
+  //---------------------------------------
   document.getElementById('reimbursementForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
@@ -140,7 +152,7 @@
     const receiptFile = form.receipt.files[0];
 
     try {
-      // 1) Create Firestore doc first
+      // 1. Create Firestore document
       const docRef = await db.collection("reimbursements").add({
         name,
         certificate,
@@ -155,23 +167,23 @@
 
       const docId = docRef.id;
 
-      // 2) Upload logbook file
-      const logbookRef = storage.ref(`reimbursements/logbooks/${docId}_${logbookFile.name}`);
-      await logbookRef.put(logbookFile);
-      const logbookUrl = await logbookRef.getDownloadURL();
+      // 2. Upload Logbook
+      const logRef = storage.ref(`reimbursements/logbooks/${docId}_${logbookFile.name}`);
+      await logRef.put(logbookFile);
+      const logbookUrl = await logRef.getDownloadURL();
 
-      // 3) Upload receipt file
+      // 3. Upload Receipt
       const receiptRef = storage.ref(`reimbursements/receipts/${docId}_${receiptFile.name}`);
       await receiptRef.put(receiptFile);
       const receiptUrl = await receiptRef.getDownloadURL();
 
-      // 4) Update Firestore with URLs
+      // 4. Update Firestore with URLs
       await docRef.update({
         logbookUrl,
         receiptUrl
       });
 
-      alert("✅ Submission received! We'll process your reimbursement within 3–5 business days.");
+      alert("✅ Submission received! We will process your reimbursement within 3–5 business days.");
 
       form.reset();
       document.getElementById('amount').value = "";
