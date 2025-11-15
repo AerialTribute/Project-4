@@ -1,187 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Awardee Reimbursement Form</title>
-  <link rel="stylesheet" href="CSS/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scholarship Reimbursement Form</title>
 
-  <!-- reCAPTCHA v3 JS -->
-  <script src="https://www.google.com/recaptcha/api.js?render=6Ldt6g0sAAAAAIG78mZ76kGFxoLAF63Yfz54T6j1"></script>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app-check-compat.js"></script>
+
+    <!-- Your Google reCAPTCHA v3 site key -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6Ldt6g0sAAAAAIG78mZ76kGFXoLAF63Yfz54T6j1"></script>
+
+    <style>
+        body { font-family: Arial, sans-serif; background:#fafafa; margin:0; }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        label { font-weight: bold; display:block; margin-top:15px; }
+        input[type="text"], input[type="number"], input[type="date"] {
+            width: 100%; padding: 8px; border:1px solid #ccc; border-radius:5px;
+        }
+        input[type="file"] { margin-top: 8px; }
+        button {
+            margin-top: 25px; padding: 12px 25px;
+            background:#007bff; color:white; border:none;
+            border-radius:5px; cursor:pointer; font-size:16px;
+        }
+        button:hover { background:#0056b3; }
+        #statusMessage { margin-top:20px; font-size:16px; }
+    </style>
 </head>
 
 <body>
 
-<script>
-  const password = prompt("Please enter the password to access this form:");
-  if (password !== "avi2025") {
-    alert("Incorrect password. Redirecting to home.");
-    window.location.href = "index.html";
-  }
-</script>
+<div class="container">
+    <h2>Scholarship: Reimbursement Form</h2>
 
-<header>
-  <div class="nav-container">
-    <img src="images/logo.jpg" alt="Logo" class="logo">
-    <div class="menu-toggle" onclick="toggleMenu()">
-      <span>Menu</span>
-      <span id="caret">▾</span>
-    </div>
-    <nav>
-      <ul class="nav-links" id="mobileNav">
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="scholarships.html">Scholarships</a></li>
-        <li><a href="impact.html">Our Impact</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a class="donate-btn" href="donate.html">Donate</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
+    <form id="reimbursementForm">
 
-<form
-  id="reimbursementForm"
-  enctype="multipart/form-data"
-  style="background: #fff; padding: 2rem; max-width: 600px; margin: 3rem auto; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.08);"
->
-  <h2 style="text-align:center; margin-bottom: 2rem;">Scholarship: Reimbursement Form</h2>
+        <label>Full Name</label>
+        <input type="text" id="fullName" required>
 
-  <label>Full Name</label>
-  <input type="text" name="name" required /><br /><br />
+        <label>Pilot Certificate Number</label>
+        <input type="text" id="certificateNumber" required>
 
-  <label>Pilot Certificate Number</label>
-  <input type="text" name="certificate" required /><br /><br />
+        <label>Date of Lesson</label>
+        <input type="date" id="lessonDate" required>
 
-  <label>Date of Lesson</label>
-  <input type="date" name="date" required /><br /><br />
+        <label>CFI Rate (per hour)</label>
+        <input type="number" id="cfiRate" required>
 
-  <label>CFI Rate (per hour)</label>
-  <input type="number" step="0.01" name="rate" id="rate" required /><br /><br />
+        <label>Total CFI Hours Charged</label>
+        <input type="number" id="cfiHours" required>
 
-  <label>Total CFI Hours Charged</label>
-  <input type="number" step="0.1" name="hours" id="hours" required /><br /><br />
+        <label>Reimbursement Amount ($)</label>
+        <input type="number" id="reimbursementAmount" readonly>
 
-  <label>Reimbursement Amount ($)</label>
-  <input type="text" name="amount" id="amount" readonly /><br />
-  <small>Automatically calculated based on rate × hours</small><br /><br />
+        <label>Upload Logbook Photo</label>
+        <input type="file" id="logbookPhoto" accept="image/*" required>
 
-  <label>Upload Logbook Photo</label>
-  <input type="file" name="logbook" accept="application/pdf,image/*" required /><br /><br />
+        <label>Upload Receipt</label>
+        <input type="file" id="receiptPhoto" accept="image/*" required>
 
-  <label>Upload Receipt</label>
-  <input type="file" name="receipt" accept="application/pdf,image/*" required /><br /><br />
+        <button type="submit">Submit</button>
+    </form>
 
-  <div style="text-align:center;">
-    <button type="submit" class="form-button">Submit</button>
-  </div>
-</form>
-
-<footer>
-  <p>© 2025 The Aerial Tribute Project • Tax-Exempt 501(c)(3)</p>
-  <p>Contact: <a href="mailto:connect@aerialtributeproject.org">connect@aerialtributeproject.org</a> | MA</p>
-  <div class="social-icons">
-    <a href="https://facebook.com" target="_blank"><img src="images/facebook.png" alt="Facebook"></a>
-    <a href="https://instagram.com" target="_blank"><img src="images/instagram.png" alt="Instagram"></a>
-  </div>
-</footer>
-
-<!-- Firebase Compat SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check-compat.js"></script>
+    <div id="statusMessage"></div>
+</div>
 
 <script>
-// -----------------------------------------
-// Firebase Init
-// -----------------------------------------
-const firebaseConfig = {
-  apiKey: "AIzaSyDpSaAtGWJeDQtkn20jhneTQhjyMf6DL-Hc",
-  authDomain: "aerialtributeproject25.firebaseapp.com",
-  projectId: "aerialtributeproject25",
-  storageBucket: "aerialtributeproject25.appspot.com",
-  messagingSenderId: "781203906167",
-  appId: "1:781203906167:web:cb43305702bdaa6512b072",
-};
+    // -----------------------------
+    // Initialize Firebase
+    // -----------------------------
+    const firebaseConfig = {
+        apiKey: "AIzaSyAjumS9NrNMHnjCDq0UFDKCEK1ViXkmSTQ",
+        authDomain: "aerialtributeprojectforms.firebaseapp.com",
+        projectId: "aerialtributeprojectforms",
+        storageBucket: "aerialtributeprojectforms.appspot.com",
+        messagingSenderId: "570972716430",
+        appId: "1:570972716430:web:bcc02cab64d03dbef76e16"
+    };
 
-firebase.initializeApp(firebaseConfig);
+    const app = firebase.initializeApp(firebaseConfig);
 
-// -----------------------------------------
-// Firebase App Check using reCAPTCHA v3
-// -----------------------------------------
-firebase.appCheck().activate(
-  "6Ldt6g0sAAAAAIG78mZ76kGFxoLAF63Yfz54T6j1", // SAME SITE KEY
-  true // auto-refresh
-);
-
-// -----------------------------------------
-// Firestore + Storage References
-// -----------------------------------------
-const db = firebase.firestore();
-const storage = firebase.storage();
-
-// Auto-calc reimbursement
-function updateAmount() {
-  const rate = parseFloat(document.getElementById('rate').value);
-  const hours = parseFloat(document.getElementById('hours').value);
-  document.getElementById('amount').value =
-    (!isNaN(rate) && !isNaN(hours)) ? (rate * hours).toFixed(2) : '';
-}
-
-document.getElementById('rate').addEventListener('input', updateAmount);
-document.getElementById('hours').addEventListener('input', updateAmount);
-
-// -----------------------------------------
-// Form Submit
-// -----------------------------------------
-document.getElementById('reimbursementForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const form = e.target;
-
-  try {
-    // 1️⃣ Get reCAPTCHA token
-    const token = await grecaptcha.execute(
-      "6Ldt6g0sAAAAAIG78mZ76kGFxoLAF63Yfz54T6j1",
-      { action: "submit" }
+    // -----------------------------
+    // APP CHECK (Monitoring Mode)
+    // -----------------------------
+    const appCheck = firebase.appCheck();
+    appCheck.activate(
+        "6Ldt6g0sAAAAAIG78mZ76kGFXoLAF63Yfz54T6j1",
+        true  // <-- Monitoring mode (NOT enforced)
     );
 
-    // 2️⃣ Save form text data
-    const docRef = await db.collection("reimbursements").add({
-      name: form.name.value,
-      certificate: form.certificate.value,
-      date: form.date.value,
-      rate: form.rate.value,
-      hours: form.hours.value,
-      amount: form.amount.value,
-      recaptchaToken: token,
-      logbookUrl: "",
-      receiptUrl: "",
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    // -----------------------------
+    // Auto-calc reimbursement
+    // -----------------------------
+    document.getElementById("cfiRate").addEventListener("input", updateAmount);
+    document.getElementById("cfiHours").addEventListener("input", updateAmount);
+
+    function updateAmount() {
+        const rate = parseFloat(document.getElementById("cfiRate").value) || 0;
+        const hours = parseFloat(document.getElementById("cfiHours").value) || 0;
+        document.getElementById("reimbursementAmount").value = (rate * hours).toFixed(2);
+    }
+
+    // -----------------------------
+    // Form Submit Handler
+    // -----------------------------
+    document.getElementById("reimbursementForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        document.getElementById("statusMessage").innerText = "Uploading... Please wait.";
+
+        try {
+            const fullName = document.getElementById("fullName").value;
+            const certNum = document.getElementById("certificateNumber").value;
+            const lessonDate = document.getElementById("lessonDate").value;
+            const cfiRate = document.getElementById("cfiRate").value;
+            const cfiHours = document.getElementById("cfiHours").value;
+            const amount = document.getElementById("reimbursementAmount").value;
+
+            // Files
+            const logbookFile = document.getElementById("logbookPhoto").files[0];
+            const receiptFile = document.getElementById("receiptPhoto").files[0];
+
+            // Upload files
+            const logbookRef = storage.ref(`logbooks/${Date.now()}-${logbookFile.name}`);
+            await logbookRef.put(logbookFile);
+            const logbookURL = await logbookRef.getDownloadURL();
+
+            const receiptRef = storage.ref(`receipts/${Date.now()}-${receiptFile.name}`);
+            await receiptRef.put(receiptFile);
+            const receiptURL = await receiptRef.getDownloadURL();
+
+            // Save Firestore
+            await db.collection("reimbursements").add({
+                fullName,
+                certNum,
+                lessonDate,
+                cfiRate,
+                cfiHours,
+                amount,
+                logbookURL,
+                receiptURL,
+                submittedAt: new Date()
+            });
+
+            document.getElementById("statusMessage").innerHTML =
+                "<span style='color:green;'>Form submitted successfully!</span>";
+
+        } catch (err) {
+            console.error(err);
+            document.getElementById("statusMessage").innerHTML =
+                "<span style='color:red;'>Error submitting form. Check console.</span>";
+        }
     });
-
-    const docId = docRef.id;
-
-    // 3️⃣ Upload files
-    const logRef = storage.ref(`reimbursements/logbooks/${docId}_${form.logbook.files[0].name}`);
-    await logRef.put(form.logbook.files[0]);
-    const logbookUrl = await logRef.getDownloadURL();
-
-    const receiptRef = storage.ref(`reimbursements/receipts/${docId}_${form.receipt.files[0].name}`);
-    await receiptRef.put(form.receipt.files[0]);
-    const receiptUrl = await receiptRef.getDownloadURL();
-
-    // 4️⃣ Update Firestore document with URLs
-    await docRef.update({ logbookUrl, receiptUrl });
-
-    alert("✅ Submission received! Your reimbursement will be processed.");
-    form.reset();
-    document.getElementById("amount").value = "";
-
-  } catch (error) {
-    console.error(error);
-    alert("❌ Error: " + error.message);
-  }
-});
 </script>
 
 </body>
