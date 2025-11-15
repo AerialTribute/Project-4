@@ -88,8 +88,13 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check-compat.js"></script>
 
+<!-- Load reCAPTCHA v3 (Firebase compatible) -->
+<script src="https://www.google.com/recaptcha/api.js?render=6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd"></script>
+
 <script>
-  // Firebase Init
+  //--------------------------------------------------
+  // Firebase Initialization
+  //--------------------------------------------------
   const firebaseConfig = {
     apiKey: "AIzaSyDpSaAtGWJeDQtkn20jhneTQhjyMf6DL-Hc",
     authDomain: "aerialtributeproject25.firebaseapp.com",
@@ -102,24 +107,31 @@
 
   firebase.initializeApp(firebaseConfig);
 
-  // App Check - CORRECT VERSION
+  //--------------------------------------------------
+  // Firebase App Check using reCAPTCHA v3
+  //--------------------------------------------------
   const appCheck = firebase.appCheck();
   appCheck.activate('6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd', true);
 
   const db = firebase.firestore();
   const storage = firebase.storage();
 
-  // Auto calculate
+  //--------------------------------------------------
+  // Auto calculation
+  //--------------------------------------------------
   function updateAmount() {
     const rate = parseFloat(document.getElementById('rate').value);
     const hours = parseFloat(document.getElementById('hours').value);
     document.getElementById('amount').value =
       (!isNaN(rate) && !isNaN(hours)) ? (rate * hours).toFixed(2) : '';
   }
+
   document.getElementById('rate').addEventListener('input', updateAmount);
   document.getElementById('hours').addEventListener('input', updateAmount);
 
+  //--------------------------------------------------
   // Submit Handler
+  //--------------------------------------------------
   document.getElementById('reimbursementForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
