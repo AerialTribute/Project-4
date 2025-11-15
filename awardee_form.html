@@ -81,13 +81,32 @@
   </div>
 </footer>
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js"></script>
+<!-- Firebase COMPAT SDKs (important: compat version preserves firebase.* global API) -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 
 <script>
-  // Your Firebase config
+  // --------------------------
+  // Auto-calc logic
+  // --------------------------
+  function updateAmount() {
+    const rate = parseFloat(document.getElementById('rate').value);
+    const hours = parseFloat(document.getElementById('hours').value);
+
+    if (!isNaN(rate) && !isNaN(hours)) {
+      document.getElementById('amount').value = (rate * hours).toFixed(2);
+    } else {
+      document.getElementById('amount').value = '';
+    }
+  }
+
+  document.getElementById('rate').addEventListener('input', updateAmount);
+  document.getElementById('hours').addEventListener('input', updateAmount);
+
+  // --------------------------
+  // Firebase Initialization
+  // --------------------------
   const firebaseConfig = {
     apiKey: "AIzaSyDpSaAtGWJeDQtkn20jhneTQhjyMf6DL-Hc",
     authDomain: "aerialtributeproject25.firebaseapp.com",
@@ -98,27 +117,18 @@
     measurementId: "G-B09DP86QX1"
   };
 
-  // Initialize Firebase
   const app = firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
   const storage = firebase.storage();
 
-  // Auto-calc logic
-  function updateAmount() {
-    const rate = parseFloat(document.getElementById('rate').value);
-    const hours = parseFloat(document.getElementById('hours').value);
-    document.getElementById('amount').value =
-      !isNaN(rate) && !isNaN(hours) ? (rate * hours).toFixed(2) : '';
-  }
-
-  document.getElementById('rate').addEventListener('input', updateAmount);
-  document.getElementById('hours').addEventListener('input', updateAmount);
-
-  // Submit handler
+  // --------------------------
+  // Submit Handler
+  // --------------------------
   document.getElementById('reimbursementForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const form = e.target;
+
     const name = form.name.value;
     const certificate = form.certificate.value;
     const date = form.date.value;
@@ -130,7 +140,7 @@
     const receiptFile = form.receipt.files[0];
 
     try {
-      // 1) Create Firestore doc first to get ID
+      // 1) Create Firestore doc first
       const docRef = await db.collection("reimbursements").add({
         name,
         certificate,
@@ -145,12 +155,12 @@
 
       const docId = docRef.id;
 
-      // 2) Upload logbook
+      // 2) Upload logbook file
       const logbookRef = storage.ref(`reimbursements/logbooks/${docId}_${logbookFile.name}`);
       await logbookRef.put(logbookFile);
       const logbookUrl = await logbookRef.getDownloadURL();
 
-      // 3) Upload receipt
+      // 3) Upload receipt file
       const receiptRef = storage.ref(`reimbursements/receipts/${docId}_${receiptFile.name}`);
       await receiptRef.put(receiptFile);
       const receiptUrl = await receiptRef.getDownloadURL();
@@ -161,13 +171,14 @@
         receiptUrl
       });
 
-      alert("✅ Submission received! We’ll process your reimbursement within 3–5 business days.");
+      alert("✅ Submission received! We'll process your reimbursement within 3–5 business days.");
+
       form.reset();
       document.getElementById('amount').value = "";
 
     } catch (error) {
-      alert("❌ Error: " + error.message);
       console.error(error);
+      alert("❌ Error: " + error.message);
     }
   });
 </script>
