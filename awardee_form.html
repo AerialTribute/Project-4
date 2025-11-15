@@ -91,27 +91,20 @@
 </footer>
 
 <script>
-  // -------------------------------------------------
-  // Firebase initialization (original project)
-  // -------------------------------------------------
-const firebaseConfig = {
-  apiKey: "AIzaSyDpSaAtGWJeDQtkn20jhneTQhjyMf6DL-Hc",
-  authDomain: "aerialtributeproject25.firebaseapp.com",
-  projectId: "aerialtributeproject25",
-  storageBucket: "aerialtributeproject25.firebasestorage.app",
-  messagingSenderId: "781203906167",
-  appId: "1:781203906167:web:cb43305702bdaa6512b072",
-  measurementId: "G-B09DP86QX1"
-};
-
+  const firebaseConfig = {
+    apiKey: "AIzaSyDpSaAtGWJeDQtkn20jhneTQhjyMf6DL-Hc",
+    authDomain: "aerialtributeproject25.firebaseapp.com",
+    projectId: "aerialtributeproject25",
+    storageBucket: "aerialtributeproject25.firebasestorage.app",
+    messagingSenderId: "781203906167",
+    appId: "1:781203906167:web:cb43305702bdaa6512b072",
+    measurementId: "G-B09DP86QX1"
+  };
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
   const storage = firebase.storage();
 
-  // -------------------------------------------------
-  // Auto-calc reimbursement amount
-  // -------------------------------------------------
   function updateAmount() {
     const rate = parseFloat(document.getElementById('rate').value);
     const hours = parseFloat(document.getElementById('hours').value);
@@ -122,17 +115,13 @@ const firebaseConfig = {
   document.getElementById('rate').addEventListener('input', updateAmount);
   document.getElementById('hours').addEventListener('input', updateAmount);
 
-  // -------------------------------------------------
-  // Form submit handler (Firestore + Storage)
-  // -------------------------------------------------
-  document.getElementById('reimbursementForm').addEventListener('submit', async function(e) {
+  document.getElementById('reimbursementForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const statusEl = document.getElementById('status');
-    statusEl.style.color = 'black';
-    statusEl.textContent = 'Submitting, please wait...';
+    statusEl.style.color = "black";
+    statusEl.textContent = "Submitting, please wait...";
 
     const form = e.target;
-
     const name = form.name.value;
     const certificate = form.certificate.value;
     const date = form.date.value;
@@ -145,12 +134,12 @@ const firebaseConfig = {
 
     if (!logbookFile || !receiptFile) {
       statusEl.style.color = 'red';
-      statusEl.textContent = 'Please select both logbook and receipt files.';
+      statusEl.textContent = "Please select both logbook and receipt files.";
       return;
     }
 
     try {
-      // 1. Create Firestore document (without file URLs yet)
+      // Create Firestore document
       const docRef = await db.collection("reimbursements").add({
         name,
         certificate,
@@ -165,37 +154,35 @@ const firebaseConfig = {
 
       const docId = docRef.id;
 
-      // 2. Upload logbook
-      const logRef = storage.ref(`reimbursements/logbooks/${docId}_${logbookFile.name}`);
+      // Upload files DIRECTLY under /reimbursements/
+      const logRef = storage.ref(`reimbursements/${docId}_logbook_${logbookFile.name}`);
       await logRef.put(logbookFile);
       const logbookUrl = await logRef.getDownloadURL();
 
-      // 3. Upload receipt
-      const receiptRef = storage.ref(`reimbursements/receipts/${docId}_${receiptFile.name}`);
+      const receiptRef = storage.ref(`reimbursements/${docId}_receipt_${receiptFile.name}`);
       await receiptRef.put(receiptFile);
       const receiptUrl = await receiptRef.getDownloadURL();
 
-      // 4. Update Firestore doc with URLs
       await docRef.update({ logbookUrl, receiptUrl });
 
-      statusEl.style.color = 'green';
-      statusEl.textContent = '✅ Submission received! Your reimbursement will be processed.';
+      statusEl.style.color = "green";
+      statusEl.textContent = "✅ Submission received! Your reimbursement will be processed.";
 
       form.reset();
       document.getElementById('amount').value = "";
 
     } catch (error) {
       console.error(error);
-      statusEl.style.color = 'red';
-      statusEl.textContent = '❌ Error: ' + error.message;
+      statusEl.style.color = "red";
+      statusEl.textContent = "❌ Error: " + error.message;
     }
   });
 
-  // Basic mobile nav toggle (if your CSS uses it)
   function toggleMenu() {
     const nav = document.getElementById('mobileNav');
     nav.classList.toggle('open');
   }
 </script>
+
 </body>
 </html>
