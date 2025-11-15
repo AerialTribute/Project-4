@@ -90,9 +90,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check-compat.js"></script>
 
 <script>
-  // ------------------------------
-  // Firebase Initialization
-  // ------------------------------
+  // --------------------------------
+  // Firebase Init
+  // --------------------------------
   const firebaseConfig = {
     apiKey: "AIzaSyDpSaAtGWJeDQtkn20jhneTQhjyMf6DL-Hc",
     authDomain: "aerialtributeproject25.firebaseapp.com",
@@ -102,69 +102,65 @@
     appId: "1:781203906167:web:cb43305702bdaa6512b072",
     measurementId: "G-B09DP86QX1"
   };
-
   firebase.initializeApp(firebaseConfig);
 
-  // ------------------------------
-  // Enable App Check
-  // ------------------------------
+  // --------------------------------
+  // Activate App Check
+  // --------------------------------
   const appCheck = firebase.appCheck();
-  appCheck.activate('6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd', true);
-
-  // Load reCAPTCHA Enterprise after activation
-  const script = document.createElement("script");
-  script.src = "https://www.google.com/recaptcha/enterprise.js?render=6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd";
-  document.head.appendChild(script);
+  appCheck.activate("6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd", true);
 
   const db = firebase.firestore();
   const storage = firebase.storage();
+</script>
 
-  // ------------------------------
+<!-- ⭐ LOAD reCAPTCHA AFTER App Check AND Firebase -->
+<script src="https://www.google.com/recaptcha/enterprise.js?render=6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd"></script>
+
+<script>
+  // --------------------------------
   // Auto Calculation
-  // ------------------------------
+  // --------------------------------
   function updateAmount() {
-    const rate = parseFloat(document.getElementById('rate').value);
-    const hours = parseFloat(document.getElementById('hours').value);
-    document.getElementById('amount').value =
-      (!isNaN(rate) && !isNaN(hours)) ? (rate * hours).toFixed(2) : "";
+    const rate = parseFloat(document.getElementById("rate").value);
+    const hours = parseFloat(document.getElementById("hours").value);
+    document.getElementById("amount").value =
+      !isNaN(rate) && !isNaN(hours) ? (rate * hours).toFixed(2) : "";
   }
 
   window.onload = () => {
-    document.getElementById('rate').addEventListener('input', updateAmount);
-    document.getElementById('hours').addEventListener('input', updateAmount);
+    document.getElementById("rate").addEventListener("input", updateAmount);
+    document.getElementById("hours").addEventListener("input", updateAmount);
   };
 
-  // ------------------------------
+  // --------------------------------
   // Submit Handler
-  // ------------------------------
-  document.getElementById('reimbursementForm').addEventListener('submit', async function(e) {
+  // --------------------------------
+  document.getElementById("reimbursementForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const form = e.target;
-
     const name = form.name.value;
     const certificate = form.certificate.value;
     const date = form.date.value;
     const rate = form.rate.value;
     const hours = form.hours.value;
     const amount = form.amount.value;
-
     const logbookFile = form.logbook.files[0];
     const receiptFile = form.receipt.files[0];
 
     try {
-      // ⭐ REQUIRED: Execute reCAPTCHA for App Check verification
+      // ⭐ REQUIRED: Execute reCAPTCHA token
       await grecaptcha.enterprise.ready();
       const token = await grecaptcha.enterprise.execute(
-        '6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd',
-        { action: 'submit_reimbursement' }
+        "6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd",
+        { action: "submit_reimbursement" }
       );
 
-      // 1. Insert Firestore doc
+      // 1. Create Firestore doc
       const docRef = await db.collection("reimbursements").add({
         name, certificate, date, rate, hours, amount,
-        logbookUrl: "",
-        receiptUrl: "",
+        logbookUrl: "", receiptUrl: "",
         recaptchaToken: token,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
@@ -181,12 +177,12 @@
       await receiptRef.put(receiptFile);
       const receiptUrl = await receiptRef.getDownloadURL();
 
-      // 4. Update Firestore with URLs
+      // 4. Update Firestore doc
       await docRef.update({ logbookUrl, receiptUrl });
 
-      alert("✅ Submission received! Your reimbursement will be processed.");
+      alert("✅ Submission received! Thank you.");
       form.reset();
-      document.getElementById('amount').value = "";
+      document.getElementById("amount").value = "";
 
     } catch (error) {
       console.error(error);
@@ -194,6 +190,7 @@
     }
   });
 </script>
+
 
 </body>
 </html>
