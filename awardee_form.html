@@ -9,7 +9,7 @@
 
 <body>
 
-<!-- PASSWORD PROTECTION -->
+<!-- PASSWORD GATE -->
 <script>
   const password = prompt("Please enter the password to access this form:");
   if (password !== "avi2025") {
@@ -83,16 +83,19 @@
   </div>
 </footer>
 
-<!-- Firebase SDKs (compat versions) -->
+<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check-compat.js"></script>
 
+<!-- reCAPTCHA Enterprise (STATIC, SINGLE LOAD — REQUIRED) -->
+<script src="https://www.google.com/recaptcha/enterprise.js?render=6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd"></script>
+
 <script>
-  // --------------------------------
-  // Firebase Init
-  // --------------------------------
+  //---------------------------------------
+  // Firebase Initialization
+  //---------------------------------------
   const firebaseConfig = {
     apiKey: "AIzaSyDpSaAtGWJeDQtkn20jhneTQhjyMf6DL-Hc",
     authDomain: "aerialtributeproject25.firebaseapp.com",
@@ -102,87 +105,105 @@
     appId: "1:781203906167:web:cb43305702bdaa6512b072",
     measurementId: "G-B09DP86QX1"
   };
+
   firebase.initializeApp(firebaseConfig);
 
-  // --------------------------------
-  // Activate App Check
-  // --------------------------------
+  //---------------------------------------
+  // App Check (MUST MATCH FIREBASE KEY)
+  //---------------------------------------
   const appCheck = firebase.appCheck();
   appCheck.activate("6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd", true);
 
   const db = firebase.firestore();
   const storage = firebase.storage();
-</script>
 
-<!-- ⭐ LOAD reCAPTCHA AFTER App Check AND Firebase -->
-<script src="https://www.google.com/recaptcha/enterprise.js?render=6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd"></script>
-
-<script>
-  // --------------------------------
-  // Auto Calculation
-  // --------------------------------
+  //---------------------------------------
+  // Auto-calc for reimbursement amount
+  //---------------------------------------
   function updateAmount() {
-    const rate = parseFloat(document.getElementById("rate").value);
-    const hours = parseFloat(document.getElementById("hours").value);
-    document.getElementById("amount").value =
-      !isNaN(rate) && !isNaN(hours) ? (rate * hours).toFixed(2) : "";
+    const rate = parseFloat(document.getElementById('rate').value);
+    const hours = parseFloat(document.getElementById('hours').value);
+
+    document.getElementById('amount').value =
+      (!isNaN(rate) && !isNaN(hours)) ? (rate * hours).toFixed(2) : '';
   }
 
   window.onload = () => {
-    document.getElementById("rate").addEventListener("input", updateAmount);
-    document.getElementById("hours").addEventListener("input", updateAmount);
+    document.getElementById('rate').addEventListener('input', updateAmount);
+    document.getElementById('hours').addEventListener('input', updateAmount);
   };
 
-  // --------------------------------
-  // Submit Handler
-  // --------------------------------
-  document.getElementById("reimbursementForm").addEventListener("submit", async (e) => {
+  //---------------------------------------
+  // Form Submission
+  //---------------------------------------
+  document.getElementById('reimbursementForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const form = e.target;
+
     const name = form.name.value;
     const certificate = form.certificate.value;
     const date = form.date.value;
     const rate = form.rate.value;
     const hours = form.hours.value;
     const amount = form.amount.value;
+
     const logbookFile = form.logbook.files[0];
     const receiptFile = form.receipt.files[0];
 
     try {
-      // ⭐ REQUIRED: Execute reCAPTCHA token
+      //-----------------------------------
+      // Get reCAPTCHA Enterprise Token
+      //-----------------------------------
       await grecaptcha.enterprise.ready();
       const token = await grecaptcha.enterprise.execute(
         "6Ld_Gg0sAAAAAHhNwbmD4ovz5v1Lsj6X7r88b5Gd",
         { action: "submit_reimbursement" }
       );
 
-      // 1. Create Firestore doc
+      //-----------------------------------
+      // Step 1: Create Firestore Document
+      //-----------------------------------
       const docRef = await db.collection("reimbursements").add({
-        name, certificate, date, rate, hours, amount,
-        logbookUrl: "", receiptUrl: "",
+        name,
+        certificate,
+        date,
+        rate,
+        hours,
+        amount,
+        logbookUrl: "",
+        receiptUrl: "",
         recaptchaToken: token,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
 
       const docId = docRef.id;
 
-      // 2. Upload Logbook
+      //-----------------------------------
+      // Step 2: Upload Logbook File
+      //-----------------------------------
       const logRef = storage.ref(`reimbursements/logbooks/${docId}_${logbookFile.name}`);
       await logRef.put(logbookFile);
       const logbookUrl = await logRef.getDownloadURL();
 
-      // 3. Upload Receipt
+      //-----------------------------------
+      // Step 3: Upload Receipt File
+      //-----------------------------------
       const receiptRef = storage.ref(`reimbursements/receipts/${docId}_${receiptFile.name}`);
       await receiptRef.put(receiptFile);
       const receiptUrl = await receiptRef.getDownloadURL();
 
-      // 4. Update Firestore doc
-      await docRef.update({ logbookUrl, receiptUrl });
+      //-----------------------------------
+      // Step 4: Update Firestore with URLs
+      //-----------------------------------
+      await docRef.update({
+        logbookUrl: logbookUrl,
+        receiptUrl: receiptUrl
+      });
 
-      alert("✅ Submission received! Thank you.");
+      alert("✅ Submission received! Your reimbursement will be processed.");
       form.reset();
-      document.getElementById("amount").value = "";
+      document.getElementById('amount').value = "";
 
     } catch (error) {
       console.error(error);
@@ -190,7 +211,6 @@
     }
   });
 </script>
-
 
 </body>
 </html>
