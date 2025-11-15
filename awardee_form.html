@@ -6,7 +6,7 @@
   <title>Awardee Reimbursement Form</title>
   <link rel="stylesheet" href="CSS/style.css" />
 
-  <!-- Firebase SDKs (NO App Check here) -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
@@ -157,13 +157,13 @@
 
       const docId = docRef.id;
 
-      // Upload Logbook (correct folder)
-      const logRef = storage.ref(`reimbursements/${docId}_logbook_${logbookFile.name}`);
+      // Upload Logbook
+      const logRef = storage.ref(`reimbursements/${docId}/logbook_${logbookFile.name}`);
       await logRef.put(logbookFile);
       const logbookUrl = await logRef.getDownloadURL();
 
-      // Upload Receipt (correct folder)
-      const receiptRef = storage.ref(`reimbursements/${docId}_receipt_${receiptFile.name}`);
+      // Upload Receipt
+      const receiptRef = storage.ref(`reimbursements/${docId}/receipt_${receiptFile.name}`);
       await receiptRef.put(receiptFile);
       const receiptUrl = await receiptRef.getDownloadURL();
 
@@ -171,8 +171,7 @@
       await docRef.update({ logbookUrl, receiptUrl });
 
       statusEl.style.color = "green";
-      statusEl.textContent =
-        "✅ Submission received! Your reimbursement will be processed.";
+      statusEl.textContent = "✅ Submission received! Your reimbursement will be processed.";
 
       form.reset();
       document.getElementById('amount').value = "";
