@@ -139,7 +139,6 @@
     }
 
     try {
-      // Create Firestore document
       const docRef = await db.collection("reimbursements").add({
         name,
         certificate,
@@ -154,7 +153,7 @@
 
       const docId = docRef.id;
 
-      // Upload files DIRECTLY under /reimbursements/
+      // Uploads NOW match your Storage rules
       const logRef = storage.ref(`reimbursements/${docId}_logbook_${logbookFile.name}`);
       await logRef.put(logbookFile);
       const logbookUrl = await logRef.getDownloadURL();
@@ -177,12 +176,8 @@
       statusEl.textContent = "❌ Error: " + error.message;
     }
   });
-
-  function toggleMenu() {
-    const nav = document.getElementById('mobileNav');
-    nav.classList.toggle('open');
-  }
 </script>
+
 
 </body>
 </html>
