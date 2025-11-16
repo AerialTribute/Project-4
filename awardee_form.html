@@ -1,193 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Awardee Reimbursement Form</title>
-  <link rel="stylesheet" href="CSS/style.css" />
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Awardee Reimbursement Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 700px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            margin-top: 0;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 18px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 12px 20px;
+            width: 100%;
+            background: #0066cc;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .message {
+            margin-top: 15px;
+            font-size: 16px;
+            display: none;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: #cc0000;
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- Simple password gate -->
-<script>
-  const password = prompt("Please enter the password to access this form:");
-  if (password !== "avi2025") {
-    alert("Incorrect password. Redirecting to home.");
-    window.location.href = "index.html";
-  }
-</script>
+<div class="container">
+    <h2>Awardee Reimbursement Form</h2>
 
-<header>
-  <div class="nav-container">
-    <img src="images/logo.jpg" alt="Logo" class="logo">
-    <div class="menu-toggle" onclick="toggleMenu()">
-      <span>Menu</span>
-      <span id="caret">▾</span>
-    </div>
-    <nav>
-      <ul class="nav-links" id="mobileNav">
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="scholarships.html">Scholarships</a></li>
-        <li><a href="impact.html">Our Impact</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a class="donate-btn" href="donate.html">Donate</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
+    <form id="awardeeForm" enctype="multipart/form-data">
 
-<form
-  id="reimbursementForm"
-  enctype="multipart/form-data"
-  style="background: #fff; padding: 2rem; max-width: 600px; margin: 3rem auto; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.08);"
->
-  <h2 style="text-align:center; margin-bottom: 2rem;">Scholarship: Reimbursement Form</h2>
+        <label>Your Full Name</label>
+        <input type="text" name="name" required />
 
-  <label>Full Name</label>
-  <input type="text" name="name" required /><br /><br />
+        <label>Certificate Number</label>
+        <input type="text" name="certificate" required />
 
-  <label>Pilot Certificate Number</label>
-  <input type="text" name="certificate" required /><br /><br />
+        <label>Session Date</label>
+        <input type="date" name="date" required />
 
-  <label>Date of Lesson</label>
-  <input type="date" name="date" required /><br /><br />
+        <label>Hourly Rate ($)</label>
+        <input type="number" name="rate" step="0.01" required />
 
-  <label>CFI Rate (per hour)</label>
-  <input type="number" step="0.01" name="rate" id="rate" required /><br /><br />
+        <label>Total Hours</label>
+        <input type="number" name="hours" step="0.1" required />
 
-  <label>Total CFI Hours Charged</label>
-  <input type="number" step="0.1" name="hours" id="hours" required /><br /><br />
+        <label>Total Amount</label>
+        <input type="number" name="amount" step="0.01" required />
 
-  <label>Reimbursement Amount ($)</label>
-  <input type="text" name="amount" id="amount" readonly /><br />
-  <small>Automatically calculated based on rate × hours</small><br /><br />
+        <label>Upload Logbook (image or PDF)</label>
+        <input type="file" name="logbook" accept="image/*,application/pdf" required />
 
-  <label>Upload Logbook Photo</label>
-  <input type="file" name="logbook" accept="application/pdf,image/*" required /><br /><br />
+        <label>Upload Receipt (image or PDF)</label>
+        <input type="file" name="receipt" accept="image/*,application/pdf" required />
 
-  <label>Upload Receipt</label>
-  <input type="file" name="receipt" accept="application/pdf,image/*" required /><br /><br />
+        <button type="submit" id="submitBtn">Submit Reimbursement</button>
 
-  <div style="text-align:center;">
-    <button type="submit" class="form-button">Submit</button>
-  </div>
+        <div id="formMessage" class="message"></div>
 
-  <p id="status" style="text-align:center; margin-top:1rem; font-weight:bold;"></p>
-</form>
-
-<footer>
-  <p>© 2025 The Aerial Tribute Project • Tax-Exempt 501(c)(3)</p>
-  <p>Contact: <a href="mailto:connect@aerialtributeproject.org">connect@aerialtributeproject.org</a> | MA</p>
-  <div class="social-icons">
-    <a href="https://facebook.com" target="_blank"><img src="images/facebook.png" alt="Facebook"></a>
-    <a href="https://instagram.com" target="_blank"><img src="images/instagram.png" alt="Instagram"></a>
-  </div>
-</footer>
+    </form>
+</div>
 
 <script>
-  // Firebase Config
-  const firebaseConfig = {
-    apiKey: "AIzaSyDpSaAtGWJeDQtkn20jhneTQhjyMf6DL-Hc",
-    authDomain: "aerialtributeproject25.firebaseapp.com",
-    projectId: "aerialtributeproject25",
-    storageBucket: "aerialtributeproject25.appspot.com",
-    messagingSenderId: "781203906167",
-    appId: "1:781203906167:web:cb43305702bdaa6512b072",
-    measurementId: "G-B09DP86QX1"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const storage = firebase.storage();
-
-  // Auto calculation
-  function updateAmount() {
-    const rate = parseFloat(document.getElementById('rate').value);
-    const hours = parseFloat(document.getElementById('hours').value);
-    document.getElementById('amount').value =
-      (!isNaN(rate) && !isNaN(hours)) ? (rate * hours).toFixed(2) : '';
-  }
-
-  document.getElementById('rate').addEventListener('input', updateAmount);
-  document.getElementById('hours').addEventListener('input', updateAmount);
-
-  // Form submission
-  document.getElementById('reimbursementForm').addEventListener('submit', async function(e) {
+document.getElementById("awardeeForm").addEventListener("submit", async function (e) {
     e.preventDefault();
-    const statusEl = document.getElementById('status');
-    statusEl.textContent = "Submitting, please wait...";
-    statusEl.style.color = "black";
 
     const form = e.target;
+    const submitBtn = document.getElementById("submitBtn");
+    const msg = document.getElementById("formMessage");
 
-    const name = form.name.value;
-    const certificate = form.certificate.value;
-    const date = form.date.value;
-    const rate = form.rate.value;
-    const hours = form.hours.value;
-    const amount = form.amount.value;
+    // Reset message
+    msg.style.display = "none";
+    msg.classList.remove("success", "error");
 
-    const logbookFile = form.logbook.files[0];
-    const receiptFile = form.receipt.files[0];
+    // Disable button during submission
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting...";
 
-    if (!logbookFile || !receiptFile) {
-      statusEl.textContent = "❌ Please select both logbook and receipt files.";
-      statusEl.style.color = "red";
-      return;
-    }
+    const formData = new FormData(form);
 
     try {
-      // 1. Create Firestore document
-      const docRef = await db.collection("reimbursements").add({
-        name,
-        certificate,
-        date,
-        rate,
-        hours,
-        amount,
-        logbookUrl: "",
-        receiptUrl: "",
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      });
+        const response = await fetch("https://api-dqisynzkaq-uc.a.run.app/submitReimbursement", {
+            method: "POST",
+            body: formData
+        });
 
-      const docId = docRef.id;
+        const result = await response.json();
 
-      // 2. Upload LOGBOOK → reimbursements/logbooks/
-      const logRef = storage.ref(`reimbursements/logbooks/${docId}_${logbookFile.name}`);
-      await logRef.put(logbookFile);
-      const logbookUrl = await logRef.getDownloadURL();
+        if (response.ok) {
+            msg.textContent = "✅ Your reimbursement has been submitted successfully!";
+            msg.classList.add("success");
+            msg.style.display = "block";
 
-      // 3. Upload RECEIPT → reimbursements/receipts/
-      const receiptRef = storage.ref(`reimbursements/receipts/${docId}_${receiptFile.name}`);
-      await receiptRef.put(receiptFile);
-      const receiptUrl = await receiptRef.getDownloadURL();
-
-      // 4. Save URLs back into Firestore
-      await docRef.update({ logbookUrl, receiptUrl });
-
-      statusEl.textContent = "✅ Submission received! Your reimbursement will be processed.";
-      statusEl.style.color = "green";
-
-      form.reset();
-      document.getElementById('amount').value = "";
-
+            form.reset();
+        } else {
+            msg.textContent = "❌ Error: " + (result.error || "Unknown error");
+            msg.classList.add("error");
+            msg.style.display = "block";
+        }
     } catch (err) {
-      console.error(err);
-      statusEl.textContent = "❌ Error: " + err.message;
-      statusEl.style.color = "red";
+        msg.textContent = "❌ Network or server error submitting your form.";
+        msg.classList.add("error");
+        msg.style.display = "block";
     }
-  });
 
-  function toggleMenu() {
-    const nav = document.getElementById('mobileNav');
-    nav.classList.toggle('open');
-  }
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit Reimbursement";
+});
 </script>
 
 </body>

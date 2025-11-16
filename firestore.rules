@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Reimbursements collection
+    match /reimbursements/{docId} {
+
+      // Allow anyone to create a reimbursement (public write)
+      allow create: if true;
+
+      // Prevent reading or deleting from public
+      allow read, delete: if false;
+
+      // Allow update ONLY for server/admin (in future)
+      allow update: if request.auth != null;
+    }
+
+  }
+}
