@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Awardee Reimbursement Form</title>
   <link rel="stylesheet" href="CSS/style.css" />
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 </head>
 
 <body>
@@ -39,7 +42,7 @@
 
 <form
   id="reimbursementForm"
-  action="https://api-dqisynzkaq-uc.a.run.app/"
+  action="https://api-dqisynzkaq-uc.a.run.app/submitReimbursement"
   method="POST"
   enctype="multipart/form-data"
   style="background: #fff; padding: 2rem; max-width: 600px; margin: 3rem auto; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.08);"
@@ -62,7 +65,7 @@
   <input type="number" step="0.1" name="hours" id="hours" required /><br /><br />
 
   <label>Reimbursement Amount ($)</label>
-  <input type="text" name="amount" id="amount" readonly /><br />
+  <input type="text" name="amount" id="amount" readonly />
   <small>Automatically calculated based on rate × hours</small><br /><br />
 
   <label>Upload Logbook Photo</label>
@@ -88,27 +91,27 @@
 </footer>
 
 <script>
-  // Amount auto-calculation
+  // Auto calculation
   function updateAmount() {
-    const rate = parseFloat(document.getElementById("rate").value);
-    const hours = parseFloat(document.getElementById("hours").value);
-    document.getElementById("amount").value =
-      !isNaN(rate) && !isNaN(hours) ? (rate * hours).toFixed(2) : "";
+    const rate = parseFloat(document.getElementById('rate').value);
+    const hours = parseFloat(document.getElementById('hours').value);
+    document.getElementById('amount').value =
+      (!isNaN(rate) && !isNaN(hours)) ? (rate * hours).toFixed(2) : '';
   }
 
-  document.getElementById("rate").addEventListener("input", updateAmount);
-  document.getElementById("hours").addEventListener("input", updateAmount);
+  document.getElementById('rate').addEventListener('input', updateAmount);
+  document.getElementById('hours').addEventListener('input', updateAmount);
 
-  // Status display during submit
-  document.getElementById("reimbursementForm").addEventListener("submit", function () {
-    const statusEl = document.getElementById("status");
+  // Intercept submit to show loading + preserve Cloud Function behavior
+  document.getElementById('reimbursementForm').addEventListener('submit', function(e) {
+    const statusEl = document.getElementById('status');
     statusEl.textContent = "Submitting, please wait...";
     statusEl.style.color = "black";
   });
 
   function toggleMenu() {
-    const nav = document.getElementById("mobileNav");
-    nav.classList.toggle("open");
+    const nav = document.getElementById('mobileNav');
+    nav.classList.toggle('open');
   }
 </script>
 
