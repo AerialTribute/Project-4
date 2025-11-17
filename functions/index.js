@@ -1,7 +1,9 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const express = require("express");
-const cors = require("cors")({
+const cors = require("cors");
+
+const corsOptions = {
   origin: [
     "https://aerialtributeproject.org",
     "https://www.aerialtributeproject.org",
@@ -10,7 +12,7 @@ const cors = require("cors")({
   ],
   methods: ["POST", "OPTIONS"],
   allowedHeaders: ["Content-Type"],
-});
+};
 
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
@@ -24,10 +26,10 @@ const app = express();
 /* ---------------------------
    REQUIRED FIXES FOR GEN 2 CLOUD RUN
    --------------------------- */
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-/* --------------------------- */
+
 
 app.post(
   "/submitReimbursement",
