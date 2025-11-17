@@ -104,12 +104,16 @@
   document.getElementById('rate').addEventListener('input', updateAmount);
   document.getElementById('hours').addEventListener('input', updateAmount);
 
-  // Intercept submit to show loading + preserve Cloud Function behavior
-  document.getElementById('reimbursementForm').addEventListener('submit', function(e) {
-    const statusEl = document.getElementById('status');
-    statusEl.textContent = "Submitting, please wait...";
-    statusEl.style.color = "black";
-  });
+document.getElementById('reimbursementForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // <-- REQUIRED
+
+  const statusEl = document.getElementById('status');
+  statusEl.textContent = "Submitting, please wait...";
+  statusEl.style.color = "black";
+
+  this.submit(); // <-- forces correct POST instead of GET fallback
+});
+
 
   function toggleMenu() {
     const nav = document.getElementById('mobileNav');
