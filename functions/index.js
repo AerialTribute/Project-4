@@ -7,6 +7,8 @@ const corsOptions = {
   origin: [
     "https://aerialtributeproject.org",
     "https://www.aerialtributeproject.org",
+    "http://aerialtributeproject.org",
+    "http://www.aerialtributeproject.org",
     "http://localhost:5500",
     "http://127.0.0.1:5500"
   ],
