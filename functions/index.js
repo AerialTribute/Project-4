@@ -17,7 +17,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 admin.initializeApp();
 const db = admin.firestore();
-const storage = admin.storage().bucket();
+const storage = admin.storage().bucket("aerialtributeproject25.firebasestorage.app");
 
 const app = express();
 
