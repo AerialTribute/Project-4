@@ -24,7 +24,7 @@ const app = express();
 /* ---------------------------
    REQUIRED FIXES FOR GEN 2 CLOUD RUN
    --------------------------- */
-app.use(cors);
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 /* --------------------------- */
