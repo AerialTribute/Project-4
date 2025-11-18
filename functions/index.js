@@ -2,113 +2,105 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const express = require("express");
 const cors = require("cors");
-
-const corsOptions = {
-  origin: [
-    "https://aerialtributeproject.org",
-    "https://www.aerialtributeproject.org",
-    "http://aerialtributeproject.org",
-    "http://www.aerialtributeproject.org",
-    "http://localhost:5500",
-    "http://127.0.0.1:5500"
-  ],
-  methods: ["POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type"],
-};
-
 const multer = require("multer");
-const upload = multer({ storage: multer.memoryStorage() });
+const uuid = require("uuid").v4;
 
 admin.initializeApp();
 const db = admin.firestore();
-const storage = admin.storage().bucket("aerialtributeproject25.firebasestorage.app");
+const bucket = admin.storage().bucket();
 
 const app = express();
 
-/* ---------------------------
-   REQUIRED FIXES FOR GEN 2 CLOUD RUN
-   --------------------------- */
+// ====== FIXED CORS ======
+const corsOptions = {
+  origin: [
+    "https://aerialtributeproject25.web.app",
+    "https://www.aerialtributeproject23.org",
+    "https://aerialtributeproject.org",
+    "http://localhost:5500"
+  ],
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
+  credentials: true,
+};
+
+// Enable CORS properly for ALL requests
 app.use(cors(corsOptions));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.options("*", cors(corsOptions));   // preflight requests
 
+// ====== Multer for file uploads ======
+const upload = multer({
+  storage: multer.memoryStorage(),
+});
 
-app.post(
-  "/submitReimbursement",
-  upload.fields([
-    { name: "logbook", maxCount: 1 },
-    { name: "receipt", maxCount: 1 }
-  ]),
-  async (req, res) => {
-    try {
-      const { name, certificate, date, rate, hours, amount } = req.body;
+// ====== Submit Awardee Form ======
+app.post("/submitAwardeeForm", upload.fields([
+  { name: "logbookPhoto", maxCount: 1 },
+  { name: "receiptPhoto", maxCount: 1 }
+]), async (req, res) => {
+  try {
+    const {
+      fullName,
+      email,
+      lessonDescription,
+      dateOfLesson,
+      cfiRate,
+      totalHours,
+      amount,
+      pilotCertificateNumber
+    } = req.body;
 
-      if (!name || !certificate || !date || !rate || !hours) {
-        return res.status(400).json({
-          success: false,
-          error: "Missing required fields",
-        });
-      }
+    // Prepare the Firestore document
+    const docData = {
+      fullName,
+      email,
+      lessonDescription,
+      dateOfLesson,
+      cfiRate: Number(cfiRate),
+      totalHours: Number(totalHours),
+      reimbursementAmount: Number(amount),
+      pilotCertificateNumber,
+      submittedAt: admin.firestore.Timestamp.now()
+    };
 
-      // Create Firestore document
-      const docRef = await db.collection("reimbursements").add({
-        name,
-        certificate,
-        date,
-        rate,
-        hours,
-        amount,
-        logbookUrl: "",
-        receiptUrl: "",
-        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+    // Upload logbook
+    if (req.files["logbookPhoto"]) {
+      const logbookFile = req.files["logbookPhoto"][0];
+      const logbookName = `awardees/logbook_${Date.now()}_${uuid()}.jpg`;
+      const file = bucket.file(logbookName);
+      await file.save(logbookFile.buffer, {
+        contentType: logbookFile.mimetype,
       });
-
-      const docId = docRef.id;
-
-      /* ---------------------------
-         Upload LOGBOOK
-         --------------------------- */
-      const logbookFile = req.files.logbook[0];
-      const logDest = `reimbursements/logbooks/${docId}_${logbookFile.originalname}`;
-      const logUpload = storage.file(logDest);
-
-      await logUpload.save(logbookFile.buffer);
-      const [logbookUrl] = await logUpload.getSignedUrl({
-        action: "read",
-        expires: "03-01-2030",
-      });
-
-      /* ---------------------------
-         Upload RECEIPT
-         --------------------------- */
-      const receiptFile = req.files.receipt[0];
-      const receiptDest = `reimbursements/receipts/${docId}_${receiptFile.originalname}`;
-      const receiptUpload = storage.file(receiptDest);
-
-      await receiptUpload.save(receiptFile.buffer);
-      const [receiptUrl] = await receiptUpload.getSignedUrl({
-        action: "read",
-        expires: "03-01-2030",
-      });
-
-      // Update Firestore with URLs
-      await docRef.update({
-        logbookUrl,
-        receiptUrl,
-      });
-
-      return res.json({ success: true });
-    } catch (err) {
-      console.error("ERROR:", err);
-      return res.status(500).json({
-        success: false,
-        error: err.message,
-      });
+      docData.logbookPhotoURL = `https://storage.googleapis.com/${bucket.name}/${logbookName}`;
     }
-  }
-);
 
-/* ---------------------------
-   EXPORT FOR FIREBASE FUNCTIONS GEN 2
-   --------------------------- */
+    // Upload receipt
+    if (req.files["receiptPhoto"]) {
+      const receiptFile = req.files["receiptPhoto"][0];
+      const receiptName = `awardees/receipt_${Date.now()}_${uuid()}.jpg`;
+      const file = bucket.file(receiptName);
+      await file.save(receiptFile.buffer, {
+        contentType: receiptFile.mimetype,
+      });
+      docData.receiptPhotoURL = `https://storage.googleapis.com/${bucket.name}/${receiptName}`;
+    }
+
+    // Save to Firestore
+    await db.collection("awardee_submissions").add(docData);
+
+    return res.status(200).json({
+      success: true,
+      message: "Awardee form submitted successfully!",
+    });
+
+  } catch (error) {
+    console.error("Awardee Form Error:", error);
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Export the API
 exports.api = functions.https.onRequest(app);
