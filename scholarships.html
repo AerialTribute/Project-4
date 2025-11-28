@@ -5,24 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Scholarships | The Aerial Tribute Project</title>
   <link rel="stylesheet" href="CSS/style.css" />
+
   <style>
+    /* PAGE WRAPPER */
     .page-container {
       max-width: 960px;
       margin: 0 auto;
       padding: 2rem;
     }
 
-    .highlight-box {
-      background: #e9fff0;
-      border: 2px solid #00a651;
-      color: #00a651;
-      font-weight: bold;
-      text-align: center;
-      padding: 1rem;
-      margin-bottom: 2rem;
-      border-radius: 8px;
+    /* MODERN AWARD ANNOUNCEMENT CARD */
+    .scholarship-award-card {
+      background: #ffffff;
+      border-left: 6px solid #00a651;
+      padding: 1.75rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      margin: 2rem 0;
     }
 
+    .scholarship-award-card h2 {
+      margin: 0 0 0.5rem;
+      font-size: 1.75rem;
+      color: #00a651;
+    }
+
+    /* MODERN CHECKLIST */
+    .checklist {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 1rem;
+    }
+
+    .checklist li {
+      position: relative;
+      padding-left: 1.75rem;
+      margin-bottom: 0.75rem;
+      font-size: 1.05rem;
+    }
+
+    .checklist li::before {
+      content: "✔";
+      color: #00a651;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+      top: -1px;
+    }
+
+    /* ELIGIBILITY + BUTTON LAYOUT */
     .eligibility-section {
       display: flex;
       flex-wrap: wrap;
@@ -35,58 +66,88 @@
     .eligibility-box {
       flex: 1 1 300px;
       border: 4px solid #a46600;
-      padding: 1rem 1.5rem;
+      padding: 1.5rem 1.75rem;
       background: white;
-      border-radius: 8px;
+      border-radius: 12px;
     }
 
     .eligibility-box h3 {
       margin-top: 0;
-      text-align: center;
+      text-align: left;
+      color: #a46600;
     }
 
-    .eligibility-box ul {
-      list-style-type: none;
-      padding-left: 0;
-    }
-
-    .eligibility-box li {
-      padding: 0.5rem 0;
-      font-size: 1rem;
-    }
-
+    /* MODERN BUTTONS WITH ICONS */
     .button-column {
       flex: 1 1 250px;
       display: flex;
       flex-direction: column;
       gap: 1rem;
+      margin-top: 0.75rem;
     }
 
-    .btn-box {
-      width: 100%;
-      padding: 1rem;
-      border-radius: 6px;
+    .modern-btn {
+      background: #007bff;
+      padding: 0.9rem 1.2rem;
+      border-radius: 30px;
+      font-weight: 600;
       text-align: center;
-      font-weight: bold;
+      color: white;
       cursor: pointer;
+      transition: 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.15rem;
+      align-items: center;
+      font-size: 1.05rem;
     }
 
-    .faq {
+    .modern-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+
+    .modern-btn.red {
+      background: #d9534f;
+    }
+
+    .modern-btn small {
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+
+    /* FAQ */
+    .faq-section {
       margin-top: 2rem;
     }
 
-    .faq summary {
-      background: #f0f0f0;
+    .faq-section details {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: white;
       padding: 0.75rem 1rem;
-      cursor: pointer;
+      margin-bottom: 0.75rem;
+    }
+
+    .faq-section summary {
       font-weight: bold;
-      border-bottom: 1px solid #ccc;
+      cursor: pointer;
     }
 
-    .faq details {
-      margin-bottom: 0.5rem;
+    /* CAROUSEL SPACING & STYLING */
+    .scholarship-section {
+      margin-top: 3rem;
+      margin-bottom: 4rem;
+      text-align: center;
     }
 
+    .carousel-track img {
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    /* MODAL STYLING */
     .modal {
       display: none;
       position: fixed;
@@ -104,8 +165,14 @@
       margin: 5% auto;
       padding: 2rem;
       max-width: 960px;
-      border-radius: 10px;
+      border-radius: 12px;
       position: relative;
+      animation: modalFade 0.3s ease-out;
+    }
+
+    @keyframes modalFade {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .close-modal {
@@ -120,6 +187,7 @@
       border-radius: 5px;
     }
 
+    /* Map modal layout (restored from original) */
     .map-flex {
       display: flex;
       flex-wrap: wrap;
@@ -153,30 +221,16 @@
         flex-direction: column;
       }
     }
-    .modal-content {
-  animation: slideUp 0.3s ease-out;
-}
-@keyframes slideUp {
-  from {
-    transform: translateY(30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
   </style>
 </head>
+
 <body>
 
-  <!-- Header + Navigation -->
+  <!-- HEADER -->
   <header>
     <div class="nav-container">
       <img src="images/logo.jpg" alt="Logo" class="logo">
 
-      <!-- Dropdown Toggle for Mobile -->
       <div class="menu-toggle" onclick="toggleMenu()">
         <span>Menu</span>
         <span id="caret">▾</span>
@@ -184,9 +238,9 @@
 
       <nav>
         <ul class="nav-links" id="mobileNav">
-          <li><a href="index.html" class="active">Home</a></li>
-          <li><a href="scholarships.html">Scholarships</a></li>
-          <li><a href="impact.html">Our Impact</a></li>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="scholarships.html" class="active">Scholarships</a></li>
+          <li><a href="OurImpact.html">Our Impact</a></li>
           <li><a href="about.html">About Us</a></li>
           <li><a class="donate-btn" href="donate.html">Donate</a></li>
         </ul>
@@ -194,38 +248,49 @@
     </div>
   </header>
 
-  <!-- Main Content -->
+  <!-- MAIN PAGE CONTENT -->
   <main class="page-container">
-    <div class="highlight-box">
-      <div><strong>$1,000 Award</strong></div>
-      <div>Rewarding pilots who aspire to continue their passion for humanitarianism through aviation.</div>
+
+    <!-- Award card -->
+    <div class="scholarship-award-card">
+      <h2>$1,000 Aviation Training Scholarship</h2>
+      <p>Supporting pilots who aspire to serve their communities through humanitarian aviation.</p>
     </div>
 
-    <div class="eligibility-section">
+    <!-- Eligibility + buttons -->
+    <section class="eligibility-section">
+
       <div class="eligibility-box">
         <h3>Eligibility</h3>
-        <ul>
-          <li>✅ Be a U.S. citizen and permanent resident</li>
-          <li>✅ Meet all FAA requirements to legally hold an aviation student certificate</li>
-          <li>✅ Be enrolled in part 141 or 61 flight training and have an assigned CFI</li>
-          <li>✅ Have at least 10 hours of flight time</li>
+
+        <ul class="checklist">
+          <li>Be a U.S. citizen or permanent resident</li>
+          <li>Eligible for an FAA student pilot certificate</li>
+          <li>Enrolled in Part 141 or Part 61 flight training</li>
+          <li>Minimum 10 flight hours</li>
         </ul>
       </div>
 
       <div class="button-column">
-        <div class="btn-box" style="background:#007bff; color:white;" onclick="openModal('mapModal')">
-          Connected Flight Schools<br><small>"See if your school is on the list"</small>
+        <!-- Restored original button wording -->
+        <div class="modern-btn" onclick="openModal('mapModal')">
+          <div>Connected Flight Schools</div>
+          <small>"See if your school is on the list"</small>
         </div>
-        <div class="btn-box" style="background:#d9534f; color:white;" onclick="openModal('selectionModal')">
-          Selection Criteria
+
+        <div class="modern-btn red" onclick="openModal('selectionModal')">
+          <span>Selection Criteria</span>
         </div>
-        <div class="btn-box" style="background:#666; color:white;">
-          Application Window:<br>CLOSED
+
+        <div class="modern-btn" style="background:#666;">
+          Application Window: CLOSED
         </div>
       </div>
-    </div>
 
-    <section class="faq">
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section">
       <details>
         <summary>Q1. What can the scholarship be used for?</summary>
         <p>This award covers the CFI cost and lowers your total cost per lesson.</p>
@@ -243,9 +308,35 @@
         <p>Email us your school’s contact and we’ll follow up to begin screening. No payment or marketing is required, we simply want an established relationship to keep the pulse on their reputation and culture.</p>
       </details>
     </section>
+
+    <!-- Carousel at bottom -->
+    <section class="scholarship-section">
+      <h2>Our Scholarship Winners</h2>
+
+      <div class="carousel">
+        <button class="carousel-btn prev" onclick="scrollCarousel('prev')">&#10094;</button>
+
+        <div class="carousel-track" id="scholarshipCarousel">
+          <img src="images/2024 Scholarship Award Winner Brook W. (1).png" alt="Brook W. Scholarship Winner">
+          <img src="images/2024 Scholarship Award Winner Grace B..png" alt="Grace B. Scholarship Winner">
+          <img src="images/2025 Scholarship Award Winner Placeholder.png" alt="Award Winner Placeholder">
+        </div>
+
+        <button class="carousel-btn next" onclick="scrollCarousel('next')">&#10095;</button>
+      </div>
+    </section>
+
+    <script>
+      function scrollCarousel(direction) {
+        const track = document.getElementById('scholarshipCarousel');
+        const scrollAmount = 320;
+        track.scrollBy({ left: direction === 'next' ? scrollAmount : -scrollAmount, behavior: 'smooth' });
+      }
+    </script>
+
   </main>
 
-  <!-- Map Modal -->
+  <!-- MAP MODAL (restored original content) -->
   <div class="modal" id="mapModal">
     <div class="modal-content">
       <span class="close-modal" onclick="closeModal()">&larr; Back</span>
@@ -264,70 +355,62 @@
     </div>
   </div>
 
-  <!-- Selection Modal -->
-<div id="selectionModal" class="modal">
-  <div class="modal-content">
-    <span class="close-modal" onclick="closeModal()">&larr; Back</span>
-    <h2>Selection Criteria</h2>
+  <!-- SELECTION CRITERIA MODAL (restored original content) -->
+  <div class="modal" id="selectionModal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal()">&larr; Back</span>
+      <h2>Selection Criteria</h2>
 
-    <p><strong>Personal Impact and Leadership (1–5 Points)</strong></p>
-    <ul>
-      <li><strong>1 Point:</strong> Minimal or no evidence of personal impact or leadership.</li>
-      <li><strong>2 Points:</strong> Some involvement in local flight program demonstrating impact or leadership but lacks depth or significant influence.</li>
-      <li><strong>3 Points:</strong> Adequate demonstration of impact and leadership, with clear examples.</li>
-      <li><strong>4 Points:</strong> Strong leadership and significant impact helping other pilots.</li>
-      <li><strong>5 Points:</strong> Exceptional leadership and transformative impact on the pilot community.</li>
-    </ul>
+      <p><strong>Personal Impact and Leadership (1–5 Points)</strong></p>
+      <ul>
+        <li><strong>1 Point:</strong> Minimal or no evidence of personal impact or leadership.</li>
+        <li><strong>2 Points:</strong> Some involvement in local flight program demonstrating impact or leadership but lacks depth or significant influence.</li>
+        <li><strong>3 Points:</strong> Adequate demonstration of impact and leadership, with clear examples.</li>
+        <li><strong>4 Points:</strong> Strong leadership and significant impact helping other pilots.</li>
+        <li><strong>5 Points:</strong> Exceptional leadership and transformative impact on the pilot community.</li>
+      </ul>
 
-    <p><strong>Community Engagement and Service (1–5 Points)</strong></p>
-    <ul>
-      <li><strong>1 Point:</strong> Minimal involvement in community activities; participation is sporadic or superficial with little to no impact.</li>
-      <li><strong>2 Points:</strong> Some involvement in community service or projects, but impact remains limited.</li>
-      <li><strong>3 Points:</strong> Active participation in community service or projects with a good level of impact.</li>
-      <li><strong>4 Points:</strong> Strong, sustained involvement with significant impact; demonstrates leadership.</li>
-      <li><strong>5 Points:</strong> Extensive involvement with profound impact; recognized as a community leader.</li>
-    </ul>
+      <p><strong>Community Engagement and Service (1–5 Points)</strong></p>
+      <ul>
+        <li><strong>1 Point:</strong> Minimal involvement in community activities; participation is sporadic or superficial with little to no impact.</li>
+        <li><strong>2 Points:</strong> Some involvement in community service or projects, but impact remains limited.</li>
+        <li><strong>3 Points:</strong> Active participation in community service or projects with a good level of impact.</li>
+        <li><strong>4 Points:</strong> Strong, sustained involvement with significant impact; demonstrates leadership.</li>
+        <li><strong>5 Points:</strong> Extensive involvement with profound impact; recognized as a community leader.</li>
+      </ul>
 
-    <p><strong>Resilience and Perseverance (1–5 Points)</strong></p>
-    <ul>
-      <li><strong>1 Point:</strong> Shows minimal resilience and struggles significantly with challenges.</li>
-      <li><strong>2 Points:</strong> Displays some resilience; overcomes everyday challenges but falters under stress.</li>
-      <li><strong>3 Points:</strong> Good level of resilience by overcoming notable obstacles.</li>
-      <li><strong>4 Points:</strong> Strong perseverance, overcoming major obstacles for growth.</li>
-      <li><strong>5 Points:</strong> Exceptional resilience; overcame severe setbacks with increased commitment.</li>
-    </ul>
+      <p><strong>Resilience and Perseverance (1–5 Points)</strong></p>
+      <ul>
+        <li><strong>1 Point:</strong> Shows minimal resilience and struggles significantly with challenges.</li>
+        <li><strong>2 Points:</strong> Displays some resilience; overcomes everyday challenges but falters under stress.</li>
+        <li><strong>3 Points:</strong> Good level of resilience by overcoming notable obstacles.</li>
+        <li><strong>4 Points:</strong> Strong perseverance, overcoming major obstacles for growth.</li>
+        <li><strong>5 Points:</strong> Exceptional resilience; overcame severe setbacks with increased commitment.</li>
+      </ul>
+    </div>
   </div>
-</div>
 
-  <!-- Footer -->
+  <!-- FOOTER -->
   <footer>
     <p>© 2025 The Aerial Tribute Project • Tax-Exempt 501(c)(3)</p>
-    <p>Contact: <a href="mailto:connect@aerialtributeproject.org">connect@aerialtributeproject.org</a> | MA</p>
-    <div class="social-icons">
-      <a href="https://facebook.com" target="_blank"><img src="images/facebook.png" alt="Facebook"></a>
-      <a href="https://instagram.com" target="_blank"><img src="images/instagram.png" alt="Instagram"></a>
-    </div>
+    <p>Contact: <a href="mailto:connect@aerialtributeproject.org">connect@aerialtributeproject.org</a></p>
   </footer>
 
+  <!-- SCRIPTS -->
   <script>
     function openModal(id) {
       document.getElementById(id).style.display = 'block';
     }
-
     function closeModal() {
-      document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
+      document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+    }
+    function toggleMenu() {
+      const menu = document.getElementById("mobileNav");
+      const caret = document.getElementById("caret");
+      menu.classList.toggle("open");
+      caret.textContent = menu.classList.contains("open") ? "▴" : "▾";
     }
   </script>
 
-    <!-- Dropdown JavaScript -->
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById('mobileNav');
-      const caret = document.getElementById('caret');
-      menu.classList.toggle('open');
-      caret.textContent = menu.classList.contains('open') ? '▴' : '▾';
-    }
-  </script>
 </body>
 </html>
-
