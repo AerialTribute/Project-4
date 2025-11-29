@@ -144,8 +144,8 @@
     }
 
     .impact-button.secondary {
-      background: #e9f1ff;
-      color: #00408f;
+      background: #ff0000;
+      color: #ffffff;
     }
 
     .impact-button:hover {
@@ -594,7 +594,7 @@
             If you or someone you know needs assistance, you can reach out confidentially below.
           </p>
           <div class="impact-actions">
-            <button class="impact-button primary" onclick="openAssistanceForm()">
+            <button class="impact-button secondary" onclick="openAssistanceForm()">
               Request Assistance
             </button>
           </div>
@@ -640,30 +640,31 @@
 
   <!-- Modals -->
   <!-- Request Assistance Modal -->
-  <div id="assistance-modal" class="modal-backdrop" onclick="backdropClick(event, 'assistance-modal')">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="assistance-modal-title">
-      <div class="modal-header">
-        <h3 class="modal-title" id="assistance-modal-title">Request Assistance</h3>
-        <button class="modal-close" onclick="closeModal('assistance-modal')" aria-label="Close assistance form">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p>
-          If you or someone you know needs aviation support for medical care, family travel, or other critical needs,
-          you can submit a confidential assistance request.
-        </p>
-        <p>
-          We will review your request and, when possible, connect you with pilots and nonprofit partners who can help.
-        </p>
-        <!-- TODO: Replace # with your Google Form link when ready -->
-        <a href="#" target="_blank" class="impact-button primary">
-          Open Request Assistance Form
-        </a>
-        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;">
-          This link will open a secure form in a new tab.
-        </p>
-      </div>
+<!-- Assistance Request Modal -->
+<div id="assistance-modal" class="modal-backdrop" onclick="backdropClick(event, 'assistance-modal')">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="assistance-modal-title">
+
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('assistance-modal')" aria-label="Close form">&times;</button>
     </div>
+
+    <div class="modal-body">
+      <div class="form-embed-wrapper">
+        <iframe 
+          src="https://docs.google.com/forms/d/e/1FAIpQLSf7AVdZdjKrBAMlo9ZND-ai6LevS3ij1ekSYamPi97535DMAA/viewform?embedded=true"
+          frameborder="0"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <p class="form-note">
+        This form is secure. It may take a moment to load.
+      </p>
+    </div>
+
   </div>
+</div>
+
 
   <!-- Nonprofit / VPO Modal -->
   <div id="nonprofit-modal" class="modal-backdrop" onclick="backdropClick(event, 'nonprofit-modal')">
