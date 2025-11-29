@@ -235,16 +235,20 @@
       display: flex;
     }
 
-    .modal {
-      background: #ffffff;
-      border-radius: 16px;
-      max-width: 480px;
-      width: 90%;
-      padding: 1.5rem 1.5rem 1.25rem;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.18);
-      position: relative;
-      animation: modalFadeIn 0.2s ease-out;
-    }
+.modal {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  max-width: 900px;
+  width: 90%;
+  height: auto;
+  max-height: 90vh;
+
+  overflow: hidden;   /* STOP modal from scrolling */
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  padding-right: 1rem;
+}
+
 
     .modal-header {
       display: flex;
@@ -280,6 +284,45 @@
       display: inline-block;
       text-decoration: none;
     }
+
+.form-embed-wrapper {
+  width: 100%;
+  height: calc(90vh - 140px); /* adjusts space dynamically */
+  overflow: hidden;           /* wrapper stops scrolling */
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+
+.form-embed-wrapper iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  overflow-y: auto;    /* iframe scrolls instead */
+}
+
+/* Mobile-friendly modal */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95% !important;
+        max-width: 95% !important;
+        height: 90vh !important;
+        padding: 10px !important;
+    }
+}
+
+/* Responsive Google Form iframe */
+.form-wrapper {
+    width: 100%;
+    height: 80vh;     /* scales with screen height */
+    overflow-y: scroll;
+}
+
+.form-wrapper iframe {
+    width: 100% !important;
+    height: 100% !important;
+    border: none;
+}
 
     @keyframes modalFadeIn {
       from {
@@ -526,7 +569,7 @@
           </p>
           <div class="impact-actions">
             <button class="impact-button primary" onclick="openPilotForm()">
-              Pilot Pre-Registration
+              Pilot Volunteer Sign-Up
             </button>
           </div>
         </section>
@@ -650,31 +693,31 @@
   </div>
 
   <!-- Pilot Pre-Registration Modal -->
-  <div id="pilot-modal" class="modal-backdrop" onclick="backdropClick(event, 'pilot-modal')">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pilot-modal-title">
-      <div class="modal-header">
-        <h3 class="modal-title" id="pilot-modal-title">Pilot Pre-Registration</h3>
-        <button class="modal-close" onclick="closeModal('pilot-modal')" aria-label="Close pilot form">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p>
-          Ready to use your flight time for good? Pre-register as a volunteer pilot to receive early updates as we
-          launch AviPair and expand our mission network.
-        </p>
-        <p>
-          We’ll ask for basic contact information, your home airport, and the types of missions you’re most
-          interested in supporting.
-        </p>
-        <!-- TODO: Replace # with your Google Form link when ready -->
-        <a href="#" target="_blank" class="impact-button primary">
-          Open Pilot Pre-Registration Form
-        </a>
-        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;">
-          This link will open a secure form in a new tab.
-        </p>
-      </div>
+<div id="pilot-modal" class="modal-backdrop" onclick="backdropClick(event, 'pilot-modal')">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pilot-modal-title">
+
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('pilot-modal')" aria-label="Close pilot form">&times;</button>
     </div>
+
+      <div class="form-embed-wrapper">
+        <iframe 
+          src="https://docs.google.com/forms/d/e/1FAIpQLSf0I3yBwd4E8MgDMuQDbOIzoYg4StGGXRvTPub6O01cZnGFGA/viewform?embedded=true"
+          frameborder="0"
+          marginheight="0"
+          marginwidth="0"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;">
+        This form is secure. It may take a moment to load.
+      </p>
+    </div>
+
   </div>
+</div>
+
 
   <!-- Airport Manager Modal -->
   <div id="airport-modal" class="modal-backdrop" onclick="backdropClick(event, 'airport-modal')">
@@ -800,6 +843,7 @@
     document.addEventListener('DOMContentLoaded', function() {
       setImpactView('start');
     });
+    
   </script>
 
   <!-- Footer -->
