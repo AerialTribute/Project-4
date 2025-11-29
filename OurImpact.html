@@ -160,7 +160,6 @@
   display: inline-block;
 }
 
-
     /* Right: Toggle menu */
     .impact-menu {
       background: #ffffff;
@@ -532,7 +531,7 @@
             resources and the people who need them most.
           </p>
           <button class="impact-button primary" onclick="openNonprofitForm()">
-            Join Our Nonprofit Network
+            Let us know you're interested!
           </button>
         </section>
 
@@ -554,7 +553,7 @@
             for humanitarian aviation. Click below to join our network and help with matching pilots to lifechanging opportunities.
           </p>
           <button class="impact-button primary" onclick="openNonprofitForm()">
-            Join Our Nonprofit Network
+            Let us know you're interested!
           </button>
         </section>
 
@@ -647,7 +646,6 @@
   </div>
 
   <!-- Modals -->
-  <!-- Request Assistance Modal -->
 <!-- Assistance Request Modal -->
 <div id="assistance-modal" class="modal-backdrop" onclick="backdropClick(event, 'assistance-modal')">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="assistance-modal-title">
@@ -674,32 +672,32 @@
 </div>
 
 
-  <!-- Nonprofit / VPO Modal -->
-  <div id="nonprofit-modal" class="modal-backdrop" onclick="backdropClick(event, 'nonprofit-modal')">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="nonprofit-modal-title">
-      <div class="modal-header">
-        <h3 class="modal-title" id="nonprofit-modal-title">Join Our Nonprofit Network</h3>
-        <button class="modal-close" onclick="closeModal('nonprofit-modal')" aria-label="Close nonprofit form">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p>
-          We partner with nonprofits and volunteer pilot organizations to coordinate missions, reduce travel costs,
-          and reach communities that are hard to serve by ground alone.
-        </p>
-        <p>
-          Share a few details about your organization, and we’ll follow up with next steps to connect you with
-          volunteer pilots and airports in your region.
-        </p>
-        <!-- TODO: Replace # with your Google Form link when ready -->
-        <a href="#" target="_blank" class="impact-button primary">
-          Open Nonprofit / VPO Form
-        </a>
-        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;">
-          This link will open a secure form in a new tab.
-        </p>
-      </div>
+<!-- Nonprofit & VPO Contact Modal -->
+<div id="nonprofit-modal" class="modal-backdrop" onclick="backdropClick(event, 'nonprofit-modal')">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="nonprofit-modal-title">
+
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('nonprofit-modal')" aria-label="Close form">&times;</button>
     </div>
+
+    <div class="modal-body">
+      <div class="form-embed-wrapper">
+        <iframe 
+          src="https://docs.google.com/forms/d/e/1FAIpQLSfcV8dGxbK-9EuWQH161YM_50w4yjT_zXYD0arfz9R-gGq8Ow/viewform?embedded=true"
+          frameborder="0"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <p class="form-note">
+        This form is secure. It may take a moment to load.
+      </p>
+    </div>
+
   </div>
+</div>
+
+
 
   <!-- Pilot Pre-Registration Modal -->
 <div id="pilot-modal" class="modal-backdrop" onclick="backdropClick(event, 'pilot-modal')">
