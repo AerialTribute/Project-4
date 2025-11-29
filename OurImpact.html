@@ -153,6 +153,14 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
 
+    /* Make mailto buttons look like real buttons */
+.impact-btn-link {
+  text-decoration: none !important;
+  color: white !important;
+  display: inline-block;
+}
+
+
     /* Right: Toggle menu */
     .impact-menu {
       background: #ffffff;
@@ -737,7 +745,13 @@
           and share ways to get involved.
         </p>
         <button class="impact-button primary" onclick="contactAirportTeam()">
-          Email Our Team
+<a 
+  href="mailto:connect@aerialtributeproject.org?subject=Airport%20Manager%20Inquiry"
+  class="impact-primary-btn impact-btn-link"
+>
+  Email Our Team
+</a>
+
         </button>
         <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;">
           This will open your default email app with a pre-filled subject line.
