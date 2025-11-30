@@ -1,258 +1,728 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aerial Tribute - Admin Portal</title>
+<head>
+  <meta charset="UTF-8" />
+  <title>Aerial Tribute Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Google Analytics tag (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B09D986QX1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-B09D986QX1");
+  </script>
 
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="style.css" />
+  <!-- Inter font -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
 
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B09D986QX1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag("js", new Date());
-      gtag("config", "G-B09D986QX1");
-    </script>
+  <style>
+    :root {
+      --sidebar-bg: #0b1f3a;
+      --sidebar-bg-soft: #12284c;
+      --sidebar-accent: #1a73e8;
+      --sidebar-text: #e6edf7;
+      --sidebar-muted: #8f9bb5;
+      --bg-main: #f5f7fb;
+      --card-bg: #ffffff;
+      --card-border: #e3e7f0;
+      --text-main: #1b2433;
+      --text-muted: #6a7284;
+      --border-radius-lg: 16px;
+      --border-radius-md: 12px;
+      --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.12);
+    }
 
-    <style>
-      /* Dashboard clean-up for Option 1 */
-      .dashboard-placeholder {
-        background: #ffffff;
-        border-radius: 12px;
-        padding: 32px;
-        border: 1px solid #e2e4e8;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-        text-align: center;
-        margin-top: 20px;
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      background: var(--bg-main);
+      color: var(--text-main);
+    }
+
+    /* Layout */
+    .admin-layout {
+      display: flex;
+      min-height: 100vh;
+      visibility: hidden; /* made visible when auth succeeds */
+    }
+
+    /* Sidebar */
+    .admin-sidebar {
+      width: 260px;
+      background: radial-gradient(circle at top left, #1e3a8a, #020617);
+      color: var(--sidebar-text);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      color: white;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: var(--sidebar-muted);
+    }
+
+    .sidebar-section-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--sidebar-muted);
+      letter-spacing: 0.08em;
+      margin: 18px 0 8px;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sidebar-link {
+      border-radius: 10px;
+      padding: 9px 11px;
+      font-size: 14px;
+      color: var(--sidebar-text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background 0.2s ease, border-color 0.2s ease,
+        color 0.2s ease, transform 0.1s ease;
+    }
+
+    .sidebar-link:hover {
+      background: rgba(15, 23, 42, 0.7);
+      border-color: rgba(148, 163, 184, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .sidebar-link.active {
+      background: linear-gradient(135deg, #1d4ed8, #22c55e);
+      border-color: transparent;
+      color: #ffffff;
+    }
+
+    .sidebar-link-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.7);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+    }
+
+    .sidebar-link.active .sidebar-link-icon {
+      background: rgba(15, 23, 42, 0.2);
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      font-size: 11px;
+      color: var(--sidebar-muted);
+      padding-top: 24px;
+      border-top: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .sidebar-footer a {
+      color: var(--sidebar-accent);
+      text-decoration: none;
+    }
+
+    /* Main area */
+    .admin-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 28px;
+      gap: 18px;
+    }
+
+    /* Topbar */
+    .admin-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .topbar-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .topbar-title {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .topbar-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chip {
+      background: #e0ecff;
+      color: #1d4ed8;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border-radius: 999px;
+      border: 1px solid #d0d7e5;
+      padding: 7px 12px;
+      font-size: 13px;
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease,
+        transform 0.1s ease;
+    }
+
+    .btn-ghost:hover {
+      background: #e5edff;
+      border-color: #b3c2f0;
+      transform: translateY(-0.5px);
+    }
+
+    .btn-primary {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #1d4ed8, #22c55e);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 10px 30px rgba(37, 99, 235, 0.36);
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 40px rgba(37, 99, 235, 0.45);
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: #1d4ed8;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 600;
+      color: #e5efff;
+    }
+
+    /* Content area */
+    .admin-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .cards-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius-md);
+      padding: 16px 18px;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .card-value {
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .card-subtext {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .page-section {
+      display: none;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .page-section.active {
+      display: flex;
+    }
+
+    .section-title-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .section-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .analytics-embed-card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 18px 10px;
+    }
+
+    .analytics-iframe {
+      width: 100%;
+      height: 900px;
+      border-radius: 12px;
+      border: none;
+      margin-top: 10px;
+    }
+
+    .placeholder-panel {
+      background: var(--card-bg);
+      border-radius: var(--border-radius-lg);
+      border: 1px dashed #cbd2e2;
+      padding: 30px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .placeholder-panel strong {
+      color: var(--text-main);
+    }
+
+    @media (max-width: 900px) {
+      .admin-layout {
+        flex-direction: column;
       }
-      .dashboard-placeholder p {
-        color: #6d7a8b;
-        font-size: 15px;
-      }
-      .dashboard-placeholder h3 {
-        font-size: 20px;
-        margin-bottom: 10px;
-      }
-
-      iframe.analytics-embed {
+      .admin-sidebar {
         width: 100%;
-        height: 900px;
-        border: none;
-        border-radius: 14px;
-        margin-top: 20px;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 16px;
       }
-    </style>
-  </head>
-
-  <body>
-
-    <div class="admin-layout" id="adminLayout">
-
-      <!-- SIDEBAR -->
-      <aside class="admin-sidebar">
-        <div class="sidebar-brand">
-          <div class="brand-logo">A</div>
-          <div class="brand-text">
-            <span class="brand-title">Aerial Tribute</span>
-            <span class="brand-subtitle">Admin Portal</span>
-          </div>
+      .sidebar-brand {
+        margin-bottom: 0;
+        margin-right: 24px;
+      }
+      .sidebar-section-label {
+        display: none;
+      }
+      .sidebar-nav {
+        flex-direction: row;
+      }
+      .sidebar-footer {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- App wrapper (hidden until auth validates admin) -->
+  <div class="admin-layout" id="adminLayout">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">A</div>
+        <div class="brand-text">
+          <span class="brand-title">Aerial Tribute</span>
+          <span class="brand-subtitle">Admin Portal</span>
         </div>
+      </div>
 
-        <!-- Overview -->
+      <div>
         <div class="sidebar-section-label">Overview</div>
         <div class="sidebar-nav">
           <div class="sidebar-link active" data-page="dashboard">
-            <span class="sidebar-link-icon">🏠</span> Dashboard
+            <span class="sidebar-link-icon">🏠</span>
+            <span>Dashboard</span>
           </div>
           <div class="sidebar-link" data-page="analytics">
-            <span class="sidebar-link-icon">📊</span> Site Analytics
+            <span class="sidebar-link-icon">📊</span>
+            <span>Site Analytics</span>
           </div>
         </div>
 
-        <!-- Programs -->
         <div class="sidebar-section-label">Programs</div>
         <div class="sidebar-nav">
           <div class="sidebar-link" data-page="awards">
-            <span class="sidebar-link-icon">🎓</span> Award Requests
+            <span class="sidebar-link-icon">🎓</span>
+            <span>Award Requests</span>
           </div>
           <div class="sidebar-link" data-page="volunteers">
-            <span class="sidebar-link-icon">🤝</span> Volunteer Submissions
+            <span class="sidebar-link-icon">🤝</span>
+            <span>Volunteer Submissions</span>
           </div>
           <div class="sidebar-link" data-page="resources">
-            <span class="sidebar-link-icon">🛩️</span> Resource Requests
+            <span class="sidebar-link-icon">🛩️</span>
+            <span>Resource Requests</span>
           </div>
         </div>
 
-        <!-- System -->
         <div class="sidebar-section-label">System</div>
         <div class="sidebar-nav">
           <div class="sidebar-link" data-page="settings">
-            <span class="sidebar-link-icon">⚙️</span> Settings
+            <span class="sidebar-link-icon">⚙️</span>
+            <span>Settings</span>
           </div>
         </div>
+      </div>
 
-        <div class="sidebar-footer">
-          <div>Signed in as admin.</div>
-          <div>Return to <a href="index.html">main site</a>.</div>
+      <div class="sidebar-footer">
+        <div>Signed in as admin</div>
+        <div>
+          Back to site:
+          <a href="index.html">aerialtributeproject.org</a>
         </div>
-      </aside>
+      </div>
+    </aside>
 
-      <!-- MAIN AREA -->
-      <main class="admin-main">
-
-        <!-- TOP BAR -->
-        <header class="admin-topbar">
-          <div class="topbar-left">
-            <div class="topbar-title">Hello, Admin!</div>
-            <div class="topbar-subtitle">Manage your site activity and submissions.</div>
+    <!-- MAIN -->
+    <main class="admin-main">
+      <!-- TOPBAR -->
+      <header class="admin-topbar">
+        <div class="topbar-left">
+          <div class="topbar-title">Hello, Admin!</div>
+          <div class="topbar-subtitle">
+            Monitor your site, forms, and impact at a glance.
           </div>
+        </div>
+        <div class="topbar-right">
+          <div class="chip">
+            <span class="chip-dot"></span>
+            <span>System healthy</span>
+          </div>
+          <button class="btn-ghost" id="logoutBtn">
+            ⎋ Log out
+          </button>
+          <div class="avatar" id="adminAvatar">A</div>
+        </div>
+      </header>
 
-          <div class="topbar-right">
-            <div class="chip">
-              <span class="chip-dot"></span> System healthy
+      <!-- CONTENT -->
+      <section class="admin-content">
+        <!-- DASHBOARD PAGE -->
+        <div class="page-section active" id="page-dashboard">
+          <div class="section-title-row">
+            <div>
+              <div class="section-title">Dashboard Overview</div>
+              <div class="section-subtitle">
+                Simple traffic and engagement summary. (We’ll wire live data here next.)
+              </div>
             </div>
-            <button id="logoutBtn" class="btn-ghost">⎋ Log out</button>
-            <div class="avatar" id="adminAvatar">A</div>
-          </div>
-        </header>
 
-        <!-- PAGE CONTENT -->
-        <section class="admin-content">
 
-          <!-- DASHBOARD (simplified per your instruction) -->
-          <div class="page-section active" id="page-dashboard">
-            <h1 class="page-title">Dashboard Overview</h1>
-            <p class="section-subtitle">This section will later show high-level metrics from your forms and operations.</p>
 
-            <div class="dashboard-placeholder">
-              <h3>Dashboard Metrics Coming Soon</h3>
-              <p>We'll add high-level summaries here once your form submission data is wired in.</p>
+        <!-- SITE ANALYTICS PAGE -->
+        <div class="page-section" id="page-analytics">
+          <div class="section-title-row">
+            <div>
+              <div class="section-title">Site Analytics</div>
+              <div class="section-subtitle">
+                Deep-dive website performance, traffic sources, and engagement metrics.
+              </div>
             </div>
           </div>
 
-          <!-- SITE ANALYTICS -->
-          <div class="page-section" id="page-analytics">
-            <h1 class="page-title">Site Analytics</h1>
-            <p class="section-subtitle">Google Analytics 4 reporting for your website.</p>
-
+          <div class="analytics-embed-card">
             <iframe
-              class="analytics-embed"
+              class="analytics-iframe"
+              src="https://lookerstudio.google.com/embed/reporting/3bd6a3ee-00ae-44f8-9a1c-268369c625a5/page/kIV1C"
               allowfullscreen
               loading="lazy"
-              src="https://lookerstudio.google.com/embed/reporting/3bd6a3ee-00ae-44f8-9a1c-268369c625a5/page/kIV1C"
             ></iframe>
           </div>
+        </div>
 
-          <!-- AWARD REQUESTS (placeholder for now) -->
-          <div class="page-section" id="page-awards">
-            <h1 class="page-title">Award Requests</h1>
-            <div class="dashboard-placeholder">
-              <h3>Award Request Data</h3>
-              <p>We'll connect your Google Form responses here.</p>
+        <!-- AWARD REQUESTS PAGE (placeholder for now) -->
+        <div class="page-section" id="page-awards">
+          <div class="section-title-row">
+            <div>
+              <div class="section-title">Award Requests</div>
+              <div class="section-subtitle">
+                This will display award reimbursement submissions from your forms.
+              </div>
             </div>
           </div>
+          <div class="placeholder-panel">
+            <strong>Award Requests will appear here.</strong><br />
+            We’ll connect this to your Firestore collection next so you can review
+            and manage award reimbursement forms in one place.
+          </div>
+        </div>
 
-          <!-- VOLUNTEER SUBMISSIONS -->
-          <div class="page-section" id="page-volunteers">
-            <h1 class="page-title">Volunteer Submissions</h1>
-            <div class="dashboard-placeholder">
-              <h3>Volunteer Form Data</h3>
-              <p>Responses from your volunteer form will appear here.</p>
+        <!-- VOLUNTEERS PAGE (placeholder) -->
+        <div class="page-section" id="page-volunteers">
+          <div class="section-title-row">
+            <div>
+              <div class="section-title">Volunteer Submissions</div>
+              <div class="section-subtitle">
+                Future view for Google Form / Firestore-powered volunteer signups.
+              </div>
             </div>
           </div>
+          <div class="placeholder-panel">
+            <strong>Volunteer form responses coming soon.</strong><br />
+            We’ll surface new volunteer applications here once we route your Google
+            Form responses into Firestore.
+          </div>
+        </div>
 
-          <!-- RESOURCE REQUESTS -->
-          <div class="page-section" id="page-resources">
-            <h1 class="page-title">Resource Requests</h1>
-            <div class="dashboard-placeholder">
-              <h3>Resource Request Data</h3>
-              <p>We'll add response tables for airport / nonprofit resource requests.</p>
+        <!-- RESOURCE REQUESTS PAGE (placeholder) -->
+        <div class="page-section" id="page-resources">
+          <div class="section-title-row">
+            <div>
+              <div class="section-title">Resource Requests</div>
+              <div class="section-subtitle">
+                Future hub for airport / nonprofit resource request submissions.
+              </div>
             </div>
           </div>
+          <div class="placeholder-panel">
+            <strong>Resource requests will be managed here.</strong><br />
+            Ideal for mission requests, assistance needs, or partner airport intake.
+          </div>
+        </div>
 
-          <!-- SETTINGS -->
-          <div class="page-section" id="page-settings">
-            <h1 class="page-title">Settings</h1>
-            <div class="dashboard-placeholder">
-              <h3>System Preferences</h3>
-              <p>Future admin management panel goes here.</p>
+        <!-- SETTINGS PAGE (placeholder) -->
+        <div class="page-section" id="page-settings">
+          <div class="section-title-row">
+            <div>
+              <div class="section-title">Settings</div>
+              <div class="section-subtitle">
+                Basic configuration for admin access and system preferences.
+              </div>
             </div>
           </div>
+          <div class="placeholder-panel">
+            <strong>Settings panel coming soon.</strong><br />
+            Here you’ll eventually manage admin users, API keys, and integration
+            toggles for analytics + forms.
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 
-        </section>
+  <!-- Firebase + Auth Guard -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut,
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
 
-      </main>
-    </div>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDpSAtGWJeDQtkn20jhmeTQhjyMf6Dl-Hc",
+      authDomain: "aerialtributeproject25.firebaseapp.com",
+      projectId: "aerialtributeproject25",
+      storageBucket: "aerialtributeproject25.appspot.com",
+      messagingSenderId: "559701693905",
+      appId: "1:559701693905:web:194b9daed39adbc68f223f",
+    };
 
-    <!-- Firebase Auth & Navigation -->
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-      import {
-        getAuth,
-        onAuthStateChanged,
-        signOut,
-      } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-      /* Firebase config */
-      const firebaseConfig = {
-        apiKey: "AIzaSyDpSAtGWJeDQtkn20jhmeTQhjyMf6Dl-Hc",
-        authDomain: "aerialtributeproject25.firebaseapp.com",
-        projectId: "aerialtributeproject25",
-        storageBucket: "aerialtributeproject25.appspot.com",
-        messagingSenderId: "559701693905",
-        appId: "1:559701693905:web:194b9daed39adbc68f223f",
-      };
+    const adminLayout = document.getElementById("adminLayout");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const avatarEl = document.getElementById("adminAvatar");
 
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth(app);
+    // Auth guard
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
 
-      /* Auth Guard */
-      onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-          window.location.href = "login.html";
-          return;
-        }
+      const token = await user.getIdTokenResult();
+      const isAdmin = !!token.claims.admin;
 
-        const token = await user.getIdTokenResult();
-        if (!token.claims.admin) {
-          await signOut(auth);
-          window.location.href = "index.html";
-          return;
-        }
+      if (!isAdmin) {
+        // Not authorized → sign out and redirect to home
+        await signOut(auth);
+        window.location.href = "index.html";
+        return;
+      }
 
-        document.getElementById("adminLayout").style.visibility = "visible";
+      // Show admin UI
+      adminLayout.style.visibility = "visible";
 
-        const initial = (user.email || "A").charAt(0).toUpperCase();
-        document.getElementById("adminAvatar").textContent = initial;
-      });
+      // Avatar initial
+      const email = user.email || "";
+      const initial = email.trim().charAt(0).toUpperCase() || "A";
+      avatarEl.textContent = initial;
+    });
 
-      /* Logout */
-      document.getElementById("logoutBtn").addEventListener("click", async () => {
+    // Logout
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", async () => {
         await signOut(auth);
         window.location.href = "index.html";
       });
+    }
 
-      /* Navigation */
-      const links = document.querySelectorAll(".sidebar-link");
-      const pages = document.querySelectorAll(".page-section");
+    // Simple client-side navigation
+    const sidebarLinks = document.querySelectorAll(".sidebar-link");
+    const pages = document.querySelectorAll(".page-section");
 
-      links.forEach((link) => {
-        link.addEventListener("click", () => {
-          links.forEach((l) => l.classList.remove("active"));
-          link.classList.add("active");
+    sidebarLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        const targetPage = link.getAttribute("data-page");
 
-          pages.forEach((p) => p.classList.remove("active"));
-          const target = link.dataset.page;
-          document.getElementById("page-" + target).classList.add("active");
-        });
+        sidebarLinks.forEach((l) => l.classList.remove("active"));
+        link.classList.add("active");
+
+        pages.forEach((p) => p.classList.remove("active"));
+        const pageEl = document.getElementById("page-" + targetPage);
+        if (pageEl) pageEl.classList.add("active");
       });
-    </script>
-  </body>
+    });
+
+    // Date range UI (UI only for now; real GA calls will be added later)
+    const range7dBtn = document.getElementById("range7dBtn");
+    const rangeCustomBtn = document.getElementById("rangeCustomBtn");
+    const customRangeControls = document.getElementById("customRangeControls");
+
+    function activateRangeButton(button) {
+      [range7dBtn, rangeCustomBtn].forEach((btn) => {
+        if (!btn) return;
+        if (btn === button) {
+          btn.classList.add("btn-primary-selected");
+          btn.style.background =
+            "linear-gradient(135deg, #1d4ed8, #22c55e)";
+          btn.style.color = "#fff";
+          btn.style.border = "none";
+        } else {
+          btn.classList.remove("btn-primary-selected");
+          btn.style.background = "transparent";
+          btn.style.color = "#1b2433";
+          btn.style.border = "1px solid #d0d7e5";
+        }
+      });
+    }
+
+    if (range7dBtn && rangeCustomBtn) {
+      // Default
+      activateRangeButton(range7dBtn);
+
+      range7dBtn.addEventListener("click", () => {
+        customRangeControls.style.display = "none";
+        activateRangeButton(range7dBtn);
+        // Later: call GA function with { range: "7d" }
+      });
+
+      rangeCustomBtn.addEventListener("click", () => {
+        customRangeControls.style.display = "block";
+        activateRangeButton(rangeCustomBtn);
+        // Later: wait for Apply button to call GA with start/end
+      });
+    }
+
+    const applyRangeBtn = document.getElementById("applyRangeBtn");
+    if (applyRangeBtn) {
+      applyRangeBtn.addEventListener("click", () => {
+        const start = document.getElementById("startDate").value;
+        const end = document.getElementById("endDate").value;
+        if (!start || !end) return;
+        // Later: call GA function with { range: "custom", startDate: start, endDate: end }
+        console.log("Custom range chosen:", start, "→", end);
+      });
+    }
+  </script>
+</body>
 </html>
