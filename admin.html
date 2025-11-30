@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ATP Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Google tag (gtag.js) – GA4 -->
+  <!-- If you have a different Measurement ID for Aerial Tribute, replace G-NJDW7N1DG5 below -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NJDW7N1DG5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NJDW7N1DG5');
+  </script>
+
+  <!-- Basic reset / fonts -->
+  <style>
+    :root {
+      --sidebar-width: 240px;
+      --bg-body: #f5f7fb;
+      --bg-card: #ffffff;
+      --bg-sidebar: #ffffff;
+      --border-subtle: #e5e7eb;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --primary: #2563eb;
+      --primary-soft: #e0edff;
+      --accent-purple: #6366f1;
+      --accent-teal: #14b8a6;
+      --radius-lg: 18px;
+      --shadow-soft: 0 10px 25px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Layout */
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-subtle);
+      padding: 1.25rem 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .sidebar-logo span.logo-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.9rem;
+    }
+
+    .sidebar-nav-section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+      margin-top: 0.5rem;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      flex: 1;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.9rem;
+      padding: 0.45rem 0.6rem;
+      border-radius: 999px;
+      color: #4b5563;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .sidebar-item-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+    }
+
+    .sidebar-item.active {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .sidebar-footer {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    /* Main panel */
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    /* Top bar */
+
+    .topbar {
+      height: 64px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.75rem;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .topbar-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .topbar-left h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .topbar-left span {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .topbar-chip {
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      padding: 0.3rem 0.75rem;
+      font-size: 0.8rem;
+      background: #f9fafb;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-muted);
+    }
+
+    .topbar-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--primary), var(--accent-teal));
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .btn-ghost {
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      padding: 0.25rem 0.8rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-muted);
+    }
+
+    .btn-ghost:hover {
+      background: #f3f4f6;
+    }
+
+    /* Content */
+
+    .content {
+      padding: 1.5rem 1.75rem 2.5rem;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 2.3fr 1.1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.2rem;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .card-subtitle {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .stat-value {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .stat-pill {
+      font-size: 0.75rem;
+      border-radius: 999px;
+      padding: 0.15rem 0.5rem;
+      background: #ecfdf5;
+      color: #15803d;
+    }
+
+    .pill-muted {
+      background: #f3f4f6;
+      color: var(--text-muted);
+    }
+
+    .todo-list {
+      list-style: none;
+      margin-top: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      font-size: 0.82rem;
+    }
+
+    .todo-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .todo-label {
+      color: var(--text-muted);
+    }
+
+    .badge-small {
+      font-size: 0.7rem;
+      border-radius: 999px;
+      padding: 0.1rem 0.45rem;
+    }
+
+    .badge-green {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-amber {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge-red {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+
+    th, td {
+      padding: 0.4rem 0.35rem;
+      text-align: left;
+      border-bottom: 1px solid #eef0f4;
+      white-space: nowrap;
+    }
+
+    th {
+      font-weight: 600;
+      color: var(--text-muted);
+      background: #f9fafb;
+    }
+
+    tr:nth-child(even) td {
+      background: #fdfdff;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .pill-status {
+      font-size: 0.72rem;
+      padding: 0.18rem 0.45rem;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .pill-status.approved {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .pill-status.pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .pill-status.denied {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .analytics-iframe {
+      width: 100%;
+      height: 420px;
+      border: none;
+      border-radius: var(--radius-lg);
+    }
+
+    @media (max-width: 1024px) {
+      .grid, .grid-2 {
+        grid-template-columns: 1fr;
+      }
+      .grid-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      .layout {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 0.75rem;
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+      .sidebar-logo {
+        display: none;
+      }
+      .sidebar-nav-section-title, .sidebar-footer {
+        display: none;
+      }
+      .sidebar-nav {
+        flex-direction: row;
+        gap: 0.5rem;
+      }
+      .sidebar-item {
+        border-radius: 999px;
+      }
+      .topbar {
+        padding: 0 1rem;
+      }
+      .content {
+        padding: 1.1rem 1rem 2rem;
+      }
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-mark">AT</span>
+      <span>ATP Admin</span>
+    </div>
+
+    <div class="sidebar-nav">
+      <div class="sidebar-nav-section-title">Overview</div>
+      <div class="sidebar-item active" data-section="dashboard">
+        <span class="sidebar-item-icon">🏠</span>
+        <span>Dashboard</span>
+      </div>
+
+      <div class="sidebar-nav-section-title">Programs</div>
+      <div class="sidebar-item" data-section="awards">
+        <span class="sidebar-item-icon">🎓</span>
+        <span>Award Requests</span>
+      </div>
+
+      <div class="sidebar-nav-section-title">Analytics</div>
+      <div class="sidebar-item" data-section="analytics">
+        <span class="sidebar-item-icon">📈</span>
+        <span>Site Analytics</span>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      Aerial Tribute Project<br>
+      <span style="opacity:0.75;">https://aerialtributeproject.org/</span>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1>Hello, Admin!</h1>
+        <span>Your Aerial Tribute summary at a glance.</span>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-ghost" id="dateRangeBtn">
+          <span id="dateRangeLabel">Last 7 days</span>
+          <span>▾</span>
+        </button>
+        <button class="btn-ghost" id="logoutBtn">
+          Log out
+        </button>
+        <div class="topbar-avatar" id="adminAvatar">AT</div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="content">
+
+      <!-- DASHBOARD SECTION -->
+      <section id="section-dashboard" class="section active">
+        <!-- Top row: line chart + stat cards -->
+        <div class="grid">
+          <!-- Traffic Line Chart -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Traffic overview</div>
+                <div class="card-subtitle">Website visits over time (placeholder until GA is wired)</div>
+              </div>
+              <div class="card-subtitle" id="trafficSummaryLabel">–</div>
+            </div>
+            <canvas id="trafficChart" height="120"></canvas>
+          </div>
+
+          <!-- Stat cards + Todo -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Today’s snapshot</div>
+                <div class="card-subtitle">Early look at visitors and engagement.</div>
+              </div>
+            </div>
+
+            <div class="grid-3" style="margin-bottom:0.75rem;">
+              <div>
+                <div class="stat-label">Total visitors (7 days)</div>
+                <div class="stat-value" id="statTotalVisitors">–</div>
+              </div>
+              <div>
+                <div class="stat-label">Avg visits / day</div>
+                <div class="stat-value" id="statAvgPerDay">–</div>
+              </div>
+              <div>
+                <div class="stat-label">Active programs tracked</div>
+                <div class="stat-value">3</div>
+              </div>
+            </div>
+
+            <hr style="border:none;border-top:1px solid #eef0f4;margin:0.75rem 0;" />
+
+            <div class="card-subtitle" style="margin-bottom:0.4rem;">Quick tasks</div>
+            <ul class="todo-list">
+              <li class="todo-item">
+                <span class="todo-label">Review new award reimbursement submissions</span>
+                <span class="badge-small badge-amber">Due soon</span>
+              </li>
+              <li class="todo-item">
+                <span class="todo-label">Confirm scholarship cycle dates for website</span>
+                <span class="badge-small badge-green">Planned</span>
+              </li>
+              <li class="todo-item">
+                <span class="todo-label">Decide which volunteer metrics to track first</span>
+                <span class="badge-small badge-muted">Backlog</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Second row: bar chart + latest awards -->
+        <div class="grid-2">
+          <!-- Visits per month -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Visits by month</div>
+                <div class="card-subtitle">Placeholder data until GA metrics are connected.</div>
+              </div>
+            </div>
+            <canvas id="visitsChart" height="110"></canvas>
+          </div>
+
+          <!-- Latest award requests (short list) -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Recent award reimbursement requests</div>
+                <div class="card-subtitle">Quick view – full table in “Award Requests.”</div>
+              </div>
+              <button class="btn-ghost" id="refreshDashboardAwardsBtn" style="font-size:0.75rem;">Refresh</button>
+            </div>
+            <div style="overflow-x:auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboardAwardsBody">
+                  <!-- Filled from Firestore -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AWARD REQUESTS SECTION -->
+      <section id="section-awards" class="section">
+        <div class="card" style="margin-bottom:1.1rem;">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Award reimbursement requests</div>
+              <div class="card-subtitle">
+                Data loaded directly from your Firebase Firestore collection
+                once configured.
+              </div>
+            </div>
+            <button class="btn-ghost" id="refreshAwardBtn">Refresh</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table id="awardTable">
+              <thead>
+                <tr>
+                  <th>Submitted</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Receipt</th>
+                  <th>Logbook</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Filled dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ANALYTICS SECTION -->
+      <section id="section-analytics" class="section">
+        <div class="card" style="margin-bottom:1rem;">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Embedded Google Analytics / Looker Studio</div>
+              <div class="card-subtitle">
+                When you create a shareable GA or Looker Studio dashboard link,
+                paste it into the <code>analyticsEmbedUrl</code> constant in the script below.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <iframe id="analyticsFrame" class="analytics-iframe" src="about:blank" title="Analytics overview"></iframe>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- Scripts: Firebase + Chart.js + logic -->
+<script type="module">
+  /***********************
+   * Firebase imports
+   ***********************/
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import {
+    getAuth,
+    onAuthStateChanged,
+    signOut,
+    getIdTokenResult
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import {
+    getFirestore,
+    collection,
+    getDocs,
+    query,
+    orderBy
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  /***********************
+   * Chart.js (UMD build)
+   ***********************/
+  import "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js";
+
+  /***********************
+   * Firebase config
+   * TODO: replace with your Aerial Tribute Firebase project values
+   ***********************/
+  const firebaseConfig = {
+    apiKey: "YOUR_FIREBASE_API_KEY",
+    authDomain: "YOUR_FIREBASE_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_FIREBASE_PROJECT_ID",
+    storageBucket: "YOUR_FIREBASE_PROJECT_ID.appspot.com",
+    messagingSenderId: "SENDER_ID",
+    appId: "APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  /***********************
+   * Simple section switching
+   ***********************/
+  const sidebarItems = document.querySelectorAll(".sidebar-item");
+  const sections = document.querySelectorAll(".section");
+
+  sidebarItems.forEach(item => {
+    item.addEventListener("click", () => {
+      const target = item.getAttribute("data-section");
+      sidebarItems.forEach(i => i.classList.remove("active"));
+      item.classList.add("active");
+
+      sections.forEach(sec => {
+        sec.classList.toggle("active", sec.id === `section-${target}`);
+      });
+    });
+  });
+
+  /***********************
+   * Auth guard
+   ***********************/
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = "login.html";
+      return;
+    }
+
+    try {
+      const token = await getIdTokenResult(user);
+      if (!token.claims.admin) {
+        alert("Access denied. Admin privileges required.");
+        await signOut(auth);
+        window.location.href = "index.html";
+        return;
+      }
+
+      // Set avatar initial from email
+      const avatar = document.getElementById("adminAvatar");
+      const initial = (user.email || "AT").charAt(0).toUpperCase();
+      avatar.textContent = initial;
+
+      initDashboard();
+
+    } catch (err) {
+      console.error("Error verifying admin claim", err);
+      alert("Problem verifying your access. Please log in again.");
+      await signOut(auth);
+      window.location.href = "login.html";
+    }
+  });
+
+  document.getElementById("logoutBtn").addEventListener("click", async () => {
+    await signOut(auth);
+    window.location.href = "login.html";
+  });
+
+  /***********************
+   * Dashboard init
+   ***********************/
+  let trafficChartInstance = null;
+  let visitsChartInstance = null;
+
+  async function initDashboard() {
+    // For now, charts use placeholder data.
+    // Later, we can replace these with real GA Data API calls.
+    initTrafficChart();
+    initVisitsChart();
+    updateDashboardStatsFromCharts();
+
+    // Awards data for both dashboard preview + awards table
+    await loadAwardData();
+    await populateDashboardAwards();
+
+    document.getElementById("refreshAwardBtn").onclick = loadAwardData;
+    document.getElementById("refreshDashboardAwardsBtn").onclick = populateDashboardAwards;
+
+    initAnalyticsEmbed();
+  }
+
+  /***********************
+   * Placeholder charts
+   ***********************/
+  function initTrafficChart() {
+    const ctx = document.getElementById("trafficChart");
+    if (!ctx) return;
+
+    const labels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const values = [48, 90, 130, 110, 160, 190, 175]; // TODO replace with GA data
+
+    // eslint-disable-next-line no-undef
+    trafficChartInstance = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "Visits",
+            data: values,
+            fill: true,
+            tension: 0.4
+          }
+        ]
+      },
+      options: {
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  function initVisitsChart() {
+    const ctx = document.getElementById("visitsChart");
+    if (!ctx) return;
+
+    const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+    const values = [210, 180, 250, 230, 310, 280]; // TODO replace with GA data
+
+    // eslint-disable-next-line no-undef
+    visitsChartInstance = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "Visits per month",
+            data: values,
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  function updateDashboardStatsFromCharts() {
+    if (!trafficChartInstance) return;
+    const values = trafficChartInstance.data.datasets[0].data;
+    const total = values.reduce((a, b) => a + b, 0);
+    const avg = values.length ? Math.round(total / values.length) : 0;
+
+    document.getElementById("statTotalVisitors").textContent = total;
+    document.getElementById("statAvgPerDay").textContent = avg;
+    document.getElementById("trafficSummaryLabel").textContent =
+      `Approx. ${total} visits in the last 7 days`;
+  }
+
+  /***********************
+   * Firestore – Award requests
+   * (matches your existing award form collection)
+   ***********************/
+  async function loadAwardData() {
+    try {
+      const qRef = query(
+        collection(db, "award_reimbursement_requests"),
+        orderBy("submittedAt", "desc")
+      );
+      const snap = await getDocs(qRef);
+      const tbody = document.querySelector("#awardTable tbody");
+      tbody.innerHTML = "";
+
+      snap.forEach(docSnap => {
+        const data = docSnap.data();
+        const tr = document.createElement("tr");
+
+        const submitted = data.submittedAt?.toDate?.() || data.submittedAt;
+        const submittedStr = submitted ? new Date(submitted).toLocaleString() : "";
+
+        const amount = data.amount || data.reimbursementAmount || "";
+
+        const status = (data.status || "Pending").toLowerCase();
+        const statusClass =
+          status === "approved" ? "approved" :
+          status === "denied" ? "denied" : "pending";
+
+        tr.innerHTML = `
+          <td>${submittedStr}</td>
+          <td>${data.name || data.fullName || ""}</td>
+          <td>${data.email || ""}</td>
+          <td>${amount}</td>
+          <td><span class="pill-status ${statusClass}">${data.status || "Pending"}</span></td>
+          <td>${data.receiptUrl ? `<a href="${data.receiptUrl}" target="_blank">View</a>` : ""}</td>
+          <td>${data.logbookUrl ? `<a href="${data.logbookUrl}" target="_blank">View</a>` : ""}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    } catch (err) {
+      console.error("Error loading award requests:", err);
+    }
+  }
+
+  async function populateDashboardAwards() {
+    try {
+      const qRef = query(
+        collection(db, "award_reimbursement_requests"),
+        orderBy("submittedAt", "desc")
+      );
+      const snap = await getDocs(qRef);
+      const tbody = document.getElementById("dashboardAwardsBody");
+      tbody.innerHTML = "";
+
+      let count = 0;
+      snap.forEach(docSnap => {
+        if (count >= 5) return; // show up to 5
+        const data = docSnap.data();
+        const tr = document.createElement("tr");
+
+        const submitted = data.submittedAt?.toDate?.() || data.submittedAt;
+        const submittedStr = submitted ? new Date(submitted).toLocaleDateString() : "";
+
+        const amount = data.amount || data.reimbursementAmount || "";
+
+        const status = (data.status || "Pending").toLowerCase();
+        const statusClass =
+          status === "approved" ? "approved" :
+          status === "denied" ? "denied" : "pending";
+
+        tr.innerHTML = `
+          <td>${submittedStr}</td>
+          <td>${data.name || data.fullName || ""}</td>
+          <td>${amount}</td>
+          <td><span class="pill-status ${statusClass}">${data.status || "Pending"}</span></td>
+        `;
+        tbody.appendChild(tr);
+        count++;
+      });
+    } catch (err) {
+      console.error("Error loading dashboard awards preview:", err);
+    }
+  }
+
+  /***********************
+   * Analytics embed
+   ***********************/
+  function initAnalyticsEmbed() {
+    const iframe = document.getElementById("analyticsFrame");
+    // TODO: paste your shareable GA / Looker Studio URL here once ready:
+    const analyticsEmbedUrl = "about:blank";
+    iframe.src = analyticsEmbedUrl;
+  }
+</script>
+</body>
+</html>
