@@ -406,6 +406,30 @@
       border-radius: var(--radius-lg);
     }
 
+    .analytics-section {
+  margin-top: 20px;
+}
+
+.analytics-section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.analytics-section .subtitle {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.analytics-card {
+  background: #fff;
+  padding: 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+
     @media (max-width: 1024px) {
       .grid, .grid-2 {
         grid-template-columns: 1fr;
@@ -646,18 +670,24 @@
       </section>
 
       <!-- ANALYTICS SECTION -->
-      <section id="section-analytics" class="section">
-        <div class="card" style="margin-bottom:1rem;">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Embedded Google Analytics / Looker Studio</div>
-              <div class="card-subtitle">
-                When you create a shareable GA or Looker Studio dashboard link,
-                paste it into the <code>analyticsEmbedUrl</code> constant in the script below.
-              </div>
-            </div>
-          </div>
-        </div>
+<section class="analytics-section">
+  <h2>Site Analytics</h2>
+  <p class="subtitle">Real-time Google Analytics for Aerial Tribute Project</p>
+
+  <div class="analytics-card">
+    <iframe
+      width="100%"
+      height="2100"
+      src="https://lookerstudio.google.com/embed/reporting/3bd6a3ee-00ae-44f8-9a1c-268369c625a5/page/kIV1C"
+      frameborder="0"
+      style="border:0; border-radius: 10px;"
+      allowfullscreen
+      loading="lazy"
+      sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+    ></iframe>
+  </div>
+</section>
+
 
         <div class="card">
           <iframe id="analyticsFrame" class="analytics-iframe" src="about:blank" title="Analytics overview"></iframe>
