@@ -17,6 +17,14 @@
 
 
   <style>
+    .login-link {
+  font-weight: 600;
+  color: #1a73e8;
+}
+
+.login-link:hover {
+  color: #0b58c8;
+}
     /* PAGE WRAPPER */
     .page-container {
       max-width: 960px;
@@ -421,6 +429,59 @@
       caret.textContent = menu.classList.contains("open") ? "▴" : "▾";
     }
   </script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+    const firebaseConfig = {
+        apiKey: "AIzaSyDpSAtGWJeDQtkn20jhmeTQhjyMf6Dl-Hc",
+        authDomain: "aerialtributeproject25.firebaseapp.com",
+        projectId: "aerialtributeproject25",
+        storageBucket: "aerialtributeproject25.appspot.com",
+        messagingSenderId: "559701693905",
+        appId: "1:559701693905:web:194b9daed39adbc68f223f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // DOM elements (works for desktop + mobile)
+    const loginLink = document.querySelector(".nav-login");
+    const dashboardLink = document.querySelector(".nav-dashboard");
+    const logoutLink = document.querySelector(".nav-logout");
+
+    // Ensure dashboard/logout are hidden initially
+    if (dashboardLink) dashboardLink.style.display = "none";
+    if (logoutLink) logoutLink.style.display = "none";
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const token = await user.getIdTokenResult();
+
+            // Only show dashboard if admin
+            if (token.claims.admin) {
+                if (loginLink) loginLink.style.display = "none";
+                if (dashboardLink) dashboardLink.style.display = "inline-block";
+                if (logoutLink) logoutLink.style.display = "inline-block";
+            }
+        } else {
+            // Not signed in
+            if (loginLink) loginLink.style.display = "inline-block";
+            if (dashboardLink) dashboardLink.style.display = "none";
+            if (logoutLink) logoutLink.style.display = "none";
+        }
+    });
+
+    // Logout functionality
+    if (logoutLink) {
+        logoutLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            signOut(auth)
+                .then(() => {
+                    window.location.href = "/login.html";
+                });
+        });
+    }
+</script>
 </body>
 </html>
