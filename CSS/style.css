@@ -73,7 +73,7 @@ nav ul li a:hover {
   border-radius: 20px;
   color: #d10000;
   font-weight: bold;
-  border: 1px solid rgba(0,123,255,0.25);
+  border: 1px solid #d10000;
 }
 
 /* Mobile Menu Toggle (hidden on desktop) */
@@ -112,7 +112,7 @@ nav ul li a:hover {
 
 .hero h1 {
   font-size: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: .75rem;
 }
 
 /* Features */
