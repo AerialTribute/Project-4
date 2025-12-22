@@ -259,7 +259,7 @@
 
       <nav>
         <ul class="nav-links" id="mobileNav">
-          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="index.html">Home</a></li>
           <li><a href="scholarships.html">Scholarships</a></li>
           <li><a href="OurImpact.html">Our Impact</a></li>
           <li><a href="about.html">About Us</a></li>
@@ -493,5 +493,14 @@
         });
     }
 </script>
+<script>
+  const currentPage = location.pathname.split("/").pop();
+  document.querySelectorAll("nav a").forEach(link => {
+    if (link.getAttribute("href") === currentPage) {
+      link.classList.add("active");
+    }
+  });
+</script>
+
 </body>
 </html>
