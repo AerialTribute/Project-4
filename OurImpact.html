@@ -16,7 +16,8 @@
 
 
   <style>
-    .login-link {
+    html{ scroll-behavior: smooth; }
+.login-link {
   font-weight: 600;
   color: #1a73e8;
 }
@@ -28,13 +29,33 @@
       background: url('images/ImpactHeadBackground.png') center/cover no-repeat;
       padding: 6rem 2rem;
       color: white;
-      font-size: 2rem;
       text-align: center;
       font-weight: bold;
       text-shadow: 1px 1px 3px #000;
+      position: relative;
+      overflow: hidden;
     }
 
-    .start-image-banner {
+    /* Add a subtle dark overlay so hero text + cards stay readable on bright photos */
+    .banner::before{
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(0,0,0,0.40) 0%,
+        rgba(0,0,0,0.28) 38%,
+        rgba(0,0,0,0.22) 70%,
+        rgba(0,0,0,0.35) 100%
+      );
+      pointer-events: none;
+    }
+
+    .banner > *{
+      position: relative;
+      z-index: 1;
+    }
+.start-image-banner {
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
   width: 100%;
@@ -374,6 +395,215 @@
         transform: translateY(0);
       }
     }
+  
+    /* ===== Goals Hero (replaces simple banner text) ===== */
+    .banner .banner-inner{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .hero-kicker{
+      display: inline-block;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #d8ffe7;
+      background: rgba(0, 140, 74, 0.28);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-title{
+      font-size: 2.2rem;
+      line-height: 1.15;
+      margin: 0 0 0.6rem;
+    }
+
+    .hero-subtitle{
+      font-size: 1.08rem;
+      line-height: 1.6;
+      margin: 0 auto 1.25rem;
+      max-width: 860px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.96);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.45);
+    }
+
+    .hero-goals-grid{
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .hero-goal-card{
+      background: rgba(255,255,255,0.98);
+      color: #111;
+      border-radius: 16px;
+      padding: 1.05rem 1.05rem 1rem;
+      text-align: left;
+      border: 1px solid rgba(0,0,0,0.08);
+      min-height: 98px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .hero-goal-card strong{
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      display: block;
+      margin-bottom: 0.3rem;
+      color: #111;
+      text-shadow: none;
+    }
+
+    .hero-goal-card span{
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #333;
+      line-height: 1.35;
+      text-shadow: none;
+    }
+
+    .hero-cta-row{
+      margin-top: 1.1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+    }
+
+    .impact-button.ghost{
+      background: rgba(255,255,255,0.16);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.35);
+    }
+
+    .impact-button.ghost:hover{
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    }
+
+    @media (max-width: 1100px){
+      .hero-goals-grid{ grid-template-columns: repeat(2, 1fr); }
+      .hero-title{ font-size: 2.0rem; }
+    }
+
+    @media (max-width: 560px){
+      .hero-goals-grid{ grid-template-columns: 1fr; }
+      .hero-title{ font-size: 1.75rem; }
+      .banner{ padding: 4.75rem 1rem; }
+    }
+
+    /* ===== What We Need section ===== */
+    .what-we-need{
+      max-width: 1100px;
+      margin: 2.25rem auto 0;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 1.6rem 1.5rem;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+ .what-we-need-header{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+
+    .what-we-need h2{
+      margin: 0;
+      font-size: 1.45rem;
+      text-align: center;
+    }
+
+    .what-we-need p.lead{
+      margin: 0.35rem 0 0;
+      color: #555;
+      font-size: 0.98rem;
+      line-height: 1.5;
+      max-width: 760px;
+    }
+
+.what-we-need-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.75rem;
+}
+
+    .need-grid{
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.9rem;
+      margin-top: 1.1rem;
+    }
+
+    .need-card{
+      background: #f7f9ff;
+      border: 1px solid #e1e8ff;
+      border-radius: 14px;
+      padding: 1rem;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      min-height: 160px;
+    }
+
+    .need-card .need-top{
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .need-icon{
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: #e9f0ff;
+      border: 1px solid #d3ddff;
+      font-size: 1.05rem;
+    }
+
+    .need-card strong{
+      font-size: 1.05rem;
+      display: block;
+    }
+
+    .need-card span{
+      color: #555;
+      font-size: 0.92rem;
+      line-height: 1.35;
+    }
+
+    /* Fix awkward extra bottom space in "What We Need" cards */
+.need-grid {
+  align-items: start; /* prevents equal-height stretching */
+}
+
+.need-card {
+  min-height: unset !important; /* remove forced height */
+  height: auto !important;
+  align-self: start;            /* ensures each card fits its content */
+}
+
+
+    @media (max-width: 960px){
+      .need-grid{ grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 560px){
+      .need-grid{ grid-template-columns: 1fr; }
+    }
+
   </style>
 </head>
 <body>
@@ -409,9 +639,40 @@
     </div>
   </header>
 
-  <!-- Hero Banner -->
+  <!-- Hero Banner (Goals) -->
   <div class="banner">
-    Growing Pilots. Connecting Missions. Advocating for Aviation.
+    <div class="banner-inner">
+      <span class="hero-kicker">Our 2026 Impact Targets</span>
+      <p class="hero-subtitle">
+        We’re building infrastructure to enable humanitarian aviation — so local airports, nonprofits, and volunteer pilots can work together faster,
+        with fewer barriers and better outcomes.
+      </p>
+
+      <div class="hero-goals-grid" aria-label="ATP goals">
+        <div class="hero-goal-card">
+          <strong>5 VPOs</strong>
+          <span>Modernized with a new mission coordination tool for FREE</span>
+        </div>
+        <div class="hero-goal-card">
+          <strong>20 Nonprofits</strong>
+          <span>Interested in exploring aviation as a new logistics solution</span>
+        </div>
+        <div class="hero-goal-card">
+          <strong>15 Missions</strong>
+          <span>Generated in each community to preserve local airports </span>
+        </div>
+        <div class="hero-goal-card">
+          <strong>$10,000 Raised</strong>
+          <span>Scholarships to grow the next generation of humanitarian pilots</span>
+        </div>
+        <div class="hero-goal-card">
+          <strong>20 Airports</strong>
+          <span>Able to see centralized humanitarian impact metrics</span>
+        </div>
+      </div>
+
+
+    </div>
   </div>
 
   <!-- Impact Layout -->
@@ -419,241 +680,171 @@
     <div class="impact-layout">
       <!-- LEFT: Metrics -->
       <aside class="impact-metrics">
-        <h3>Impact Metrics</h3>
-        <p class="caption">A snapshot of what’s possible when local airports, pilots, and nonprofits work together.</p>
+        <h3>Industry Metrics</h3>
 
         <!-- Start / General -->
         <div class="impact-metric impact-metric-start active">
-          <strong>5,100+ public-use airports</strong>
-          <span>Most are underutilized for humanitarian missions today.</span>
-        </div>
-        <div class="impact-metric impact-metric-start active">
-          <strong>50% of Americans</strong>
-          <span>Live within 30 miles of an airport, creating huge potential for local impact.</span>
-        </div>
-        <div class="impact-metric impact-metric-start active">
-          <strong>Millions in potential value</strong>
-          <span>Untapped mission capacity can be converted into real community outcomes.</span>
+          <strong>Select each audience</strong>
+          <span>to see why this service is needed and what we're doing to help!</span>
         </div>
 
         <!-- Airports -->
-        <div class="impact-metric impact-metric-airports">
-          <strong>15 missions per airport / year</strong>
-          <span>Generates an estimated $26,700+ in annual economic impact per community.</span>
+<div class="impact-metric impact-metric-airports">
+          <strong>50% of Americans</strong>
+          <span>Live within 30 miles of an airport but many communities don’t see the airport’s direct benefit.</span>
         </div>
         <div class="impact-metric impact-metric-airports">
-          <strong>$34.7M+ potential economic impact annually</strong>
-          <span>If humanitarian missions scaled across public-use airports nationwide.</span>
+          <strong>$34.7M+ potential annual impact</strong>
+          <span>When missions scale, airports need defensible metrics to advocate effectively.</span>
         </div>
         <div class="impact-metric impact-metric-airports">
-          <strong>From 7,000 to 5,100 public airports</strong>
-          <span>There are 15% more pilots today than 1970, yet today we have fewer public airports.</span>
+          <strong>6,800 → 5,100 public airports</strong>
+          <span>Since 1970 to today, public airports are closing while while pilot demand has increased to historically high levels.</span>
         </div>
         <div class="impact-metric impact-metric-airports">
-          <strong>2.8 public airports close per month</strong>
-          <span>Airports across the nation are under pressure from the public for complaints of pollution, noise, housing development, and confusion of public benefit.</span>
+          <strong>2.8 airports close / month</strong>
+          <span>Without impact visibility, airports face constant pressure from noise, pollution, development narratives.</span>
         </div>
-        
+
         <!-- Nonprofits -->
-        <div class="impact-metric impact-metric-nonprofits">
-          <strong>98 out of 100 of pilots surveyed</strong>
-          <span>Say they are interested in flying missions for nonprofits.</span>
-        </div>
-        <div class="impact-metric impact-metric-nonprofits">
+<div class="impact-metric impact-metric-nonprofits">
           <strong>80–100% travel cost savings</strong>
-          <span>Volunteer pilots dramatically reduce transportation expenses per mission.</span>
+          <span>Volunteer aviation can remove major transportation expenses.</span>
         </div>
         <div class="impact-metric impact-metric-nonprofits">
-          <strong>Only 487 out of 5,100+</strong>
-          <span>Public airports offer airline services, yet half of the U.S. population lives within 30 miles of an airport.</span>
+          <strong>487 of 5,100+</strong>
+          <span>Only a fraction of public airports have airline service yet local airports unlock better access.</span>
         </div>
         <div class="impact-metric impact-metric-nonprofits">
-          <strong>55 million rural residents</strong>
-          <span>Stand to benefit from better access to care, supplies, and services.</span>
+          <strong>55M rural residents</strong>
+          <span>Distance to care and resources turns travel into a barrier to impact.</span>
         </div>
 
         <!-- VPOs -->
-        <div class="impact-metric impact-metric-vpos">
-          <strong>85% of nonprofits</strong>
-          <span>Say they would use a logistics system that simplifies mission coordination.</span>
+<div class="impact-metric impact-metric-vpos">
+          <strong>98 out of 100 pilots surveyed</strong>
+          <span>Say they’re interested in mission flying but opportunities and processes are fragmented.</span>
         </div>
         <div class="impact-metric impact-metric-vpos">
-          <strong>One shared system</strong>
-          <span>Streamlines missions across airports, pilots, and partner organizations.</span>
+          <strong>85% of nonprofits</strong>
+          <span>Would use a simplified logistics system if it’s clear and easy to access.</span>
+        </div>
+        <div class="impact-metric impact-metric-vpos">
+          <strong>Manual coordination is the bottleneck</strong>
+          <span>Email chains and spreadsheets slow down matching, tracking, and reporting.</span>
         </div>
 
         <!-- Pilots -->
         <div class="impact-metric impact-metric-pilots">
           <strong>1 in 4 nonprofits</strong>
-          <span>Identify transportation as a major barrier to reaching those they serve.</span>
+          <span>Identify transportation as a major barrier — this is an underleveraged opportunity to grow aviation.</span>
         </div>
         <div class="impact-metric impact-metric-pilots">
           <strong>$400–$1,400 saved per trip</strong>
-          <span>Volunteer pilots drastically reduce the logistics cost for nonprofits: less overall hotel, gas, and per diem cost.</span>
+          <span>Volunteer flights can replace hotel, gas, and per diem costs for nonprofits.</span>
         </div>
         <div class="impact-metric impact-metric-pilots">
           <strong>59% of nonprofits under $50,000</strong>
-          <span>We're working to build a free match-making tool for pilots and nonprofits to simplify the volunteering process.</span>
+          <span>Many orgs can’t absorb travel costs so your support could be their only lifeline.</span>
         </div>
         <div class="impact-metric impact-metric-pilots">
-          <strong>1 tool for many missions</strong>
-          <span>See opportunities from medical transportation, disaster relief, veteran support, animal rescue, and more.</span>
+          <strong>Opportunities are scattered</strong>
+          <span>Pilots often have to hunt across systems — we’re consolidating mission visibility.</span>
         </div>
 
-        <!-- Request Assistance -->
-        <div class="impact-metric impact-metric-assistance">
-          <strong>Millions seek help each year</strong>
-          <span>Families, patients, and caregivers regularly face travel gaps they cannot afford to fill alone.</span>
-        </div>
-        <div class="impact-metric impact-metric-assistance">
-          <strong>Transportation is a top barrier</strong>
-          <span>Travel challenges often stand between people and the care, services, or support they need.</span>
-        </div>
-        <div class="impact-metric impact-metric-assistance">
-          <strong>Rural communities feel it most</strong>
-          <span>Long distances and limited options make aviation support especially powerful in remote areas.</span>
-        </div>
-        <div class="impact-metric impact-metric-assistance">
-          <strong>Every request matters</strong>
-          <span>We track assistance requests to advocate for more flights, funding, and support where it’s needed most.</span>
-        </div>
       </aside>
 
       <!-- CENTER: Content -->
       <main class="impact-center">
         <!-- Start -->
-        <section id="impact-start" class="impact-content-section active">
-          <span class="impact-tagline">Start Here</span>
-          <h2>Connecting Airports, Pilots, and Nonprofits for Good</h2>
-          <p>
-            The Aerial Tribute Project connects airports, nonprofits, volunteer pilot organizations, and volunteer pilots
-            to make humanitarian aviation easier, faster, and more impactful. Choose your path to learn about
-            support and engagement opportunities.
-          </p>
-        <div class="start-image-banner">
-          <img src="images/start ATP.png" alt="Aerial Tribute community and aviation impact collage">
-        </div>
+<section id="impact-start" class="impact-content-section active">
+  <span class="impact-tagline">Start Here</span>
 
-        </section>
+  <h2>Research into Action</h2>
+
+  <p>
+    We know there are pilots who want to volunteer but administrative processes hold them back, volunteer pilot organizations (VPOs)
+    coordinating missions with limited resources, and communities with real transportation needs that aviation could help solve.
+  </p>
+
+  <p>
+    Today, humanitarian aviation is fragmented across disconnected systems and manual processes. We’re translating years of
+    research into a new coordination model that helps these groups work together more efficiently and visibly.
+  </p>
+
+  <p class="impact-cta">
+    Explore each audience to see how we’re building tools to support your role.
+  </p>
+
+</section>
+
+
 
         <!-- Airports -->
         <section id="impact-airports" class="impact-content-section">
-          <span class="impact-tagline">For Airports</span>
-          <h2>Transforming “Backyard Airports” into Community Lifelines</h2>
-          <p>
-            The U.S. has over 5,100 public-use airports, yet most are underutilized for humanitarian missions.
-            With just a handful of flights each year, every airport can become a hub for care, relief, and opportunity.
-          </p>
-          <ul>
-            <li>Enjoy coordination tools that help you request assistance and track humanitarian flights.</li>
-            <li>Advocate with government officials and your community using newfound insights and centralized data.</li>
-            <li>Introduce traffic to your airport through new partnerships.</li>
-            <li>Shine a spotlight on the impact your airport provides for the greater good.</li>
-          </ul>
-          <p>
-            We advocate for airports by helping the public see their value not just in operations and jobs, but in
-            real stories of lives touched.
-          </p>
-          <div class="impact-actions">
-            <button class="impact-button primary" onclick="openAirportModal()">
-              Let us know you're interested!
-            </button>
-          </div>
-        </section>
+<span class="impact-tagline">For Airports</span>
+  <h2>Proving Your Airport’s Community Value</h2>
+  <p>
+    Airports are judged on what people can see. Humanitarian missions make impact visible and we’re building a
+    simple way to coordinate activity and report it clearly.
+  </p>
+  <ul>
+    <li><strong>Mission visibility:</strong> track humanitarian flights tied to your field.</li>
+    <li><strong>Defensible reporting:</strong> exportable metrics for boards, towns, and funders.</li>
+    <li><strong>Local partnerships:</strong> connect nonprofits and VPOs to your airport for repeat mission activity.</li>
+  </ul>
+  <p><strong>Outcome:</strong> a clearer story of why your airport matters backed by real missions and data.</p>
+</section>
 
         <!-- Nonprofits -->
         <section id="impact-nonprofits" class="impact-content-section">
-          <span class="impact-tagline">For Nonprofits</span>
-          <h2>Reducing Travel Costs So You Can Serve More People</h2>
-          <p>
-            Many nonprofits are ready to expand their impact, but travel costs and distance hold them back.
-            Volunteer pilots help bridge that gap by donating flight time to move people, supplies, and support.
-          </p>
-          <ul>
-            <li>Free access to post missions and request aviation support.</li>
-            <li>Matching tools that connect you with pilots who are willing and able to help.</li>
-            <li>Significant savings on transportation that can be redirected into your core mission.</li>
-          </ul>
-          <p>
-            From rural communities to families facing medical challenges, aviation can shorten the distance between
-            resources and the people who need them most.
-          </p>
-          <button class="impact-button primary" onclick="openNonprofitForm()">
-            Let us know you're interested!
-          </button>
-        </section>
+<span class="impact-tagline">For Nonprofits</span>
+  <h2>Faster Access, Lower Travel Costs</h2>
+  <p>
+    Many nonprofits have urgent needs but distance and transportation costs limit reach. We’re creating a clear path
+    to request support and get matched with volunteer aviation partners.
+  </p>
+  <ul>
+    <li><strong>Simple requests:</strong> describe the need, timing, and locations.</li>
+    <li><strong>Partner coordination:</strong> connect to VPOs and pilots who can support the mission.</li>
+    <li><strong>Clear status:</strong> fewer handoffs, easier updates, less time lost in email.</li>
+  </ul>
+  <p><strong>Outcome:</strong> more people served with less time and money spent on logistics.</p>
+</section>
 
         <!-- VPOs -->
         <section id="impact-vpos" class="impact-content-section">
-          <span class="impact-tagline">For VPOs</span>
-          <h2>Giving Volunteer Pilot Organizations Modern Logistics Tools</h2>
-          <p>
-            Many volunteer pilot organizations still rely on email chains, spreadsheets, and social media posts to
-            coordinate flights. That makes it hard to scale, track outcomes, or report impact to donors and boards.
-          </p>
-          <ul>
-            <li>A centralized place to coordinate missions, pilots, and receiving organizations.</li>
-            <li>Clear metrics that help you tell your impact story to funders, communities, and partners.</li>
-            <li>Simplified volunteer workflows so pilots spend more time flying and less time digging through messages.</li>
-          </ul>
-          <p>
-            Our goal is to support — not replace — existing VPOs by giving them infrastructure built specifically
-            for humanitarian aviation. Click below to join our network and help with matching pilots to lifechanging opportunities.
-          </p>
-          <button class="impact-button primary" onclick="openNonprofitForm()">
-            Let us know you're interested!
-          </button>
-        </section>
+<span class="impact-tagline">For VPOs</span>
+  <h2>Modern Tools for Mission Coordination</h2>
+  <p>
+    VPOs do the hard work of coordination often with manual systems. We’re building lightweight infrastructure that
+    reduces admin load and makes outcomes easier to measure... for free.
+  </p>
+  <ul>
+    <li><strong>One coordination layer:</strong> mission flow, communications, and status in one place.</li>
+    <li><strong>Cleaner pilot workflows:</strong> less back-and-forth, clearer readiness and assignment tracking.</li>
+    <li><strong>Impact reporting:</strong> simple metrics to brief donors, boards, and partners.</li>
+  </ul>
+  <p><strong>Outcome:</strong> more missions enabled with less admin overhead.</p>
+</section>
 
         <!-- Pilots -->
         <section id="impact-pilots" class="impact-content-section">
-          <span class="impact-tagline">For Pilots</span>
-          <h2>Making It Easy to Turn Flight Time into Real-World Impact</h2>
-          <p>
-            Pilots are eager to help, but the path to volunteering can feel confusing or fragmented across many
-            different organizations. We’re working to make that experience simpler and more rewarding.
-          </p>
-          <ul>
-            <li>Browse mission needs in one place instead of across multiple websites or feeds.</li>
-            <li>Set your preferences for distance, schedule, and mission type.</li>
-            <li>Keep your documents organized while reducing email and text clutter.</li>
-          </ul>
-          <p>
-            Every hour you fly can change what’s possible for a family, a patient, or an entire community. We’re here
-            to make sure those opportunities are easy to find.
-          </p>
-          <div class="impact-actions">
-            <button class="impact-button primary" onclick="openPilotForm()">
-              Pilot Volunteer Sign-Up
-            </button>
-          </div>
-        </section>
+<span class="impact-tagline">For Pilots</span>
+  <h2>Volunteering Without the Friction</h2>
+  <p>
+    Pilots want to help but opportunities are scattered and onboarding can be confusing. We’re organizing mission
+    opportunities and simplifying the path from “interested” to “ready.”
+  </p>
+  <ul>
+    <li><strong>Find missions faster:</strong> see opportunities in one place.</li>
+    <li><strong>Clear expectations:</strong> mission details, timing, and coordination made simple.</li>
+    <li><strong>Less admin noise:</strong> fewer threads, fewer duplicate steps, more time to fly.</li>
+  </ul>
+  <p><strong>Outcome:</strong> a simpler way to turn flight time into real-world impact.</p>
+</section>
 
-        <!-- Request Assistance -->
-        <section id="impact-assistance" class="impact-content-section">
-          <span class="impact-tagline">For Individuals & Families</span>
-          <h2>You're Not Alone — We're Here to Help</h2>
-          <p>
-            Many people face urgent travel challenges — from medical appointments and family emergencies to
-            rural access issues and financial hardship. You’re not alone. Travel gaps affect millions of people
-            every year, and aviation support can make the impossible possible.
-          </p>
-          <ul>
-            <li>Support for medical travel and essential appointments.</li>
-            <li>Help reaching family members during emergencies.</li>
-            <li>Connections to volunteer pilots when distance becomes a barrier.</li>
-            <li>Referrals to nonprofit partners who can support your needs.</li>
-            <li>Completely free — no cost to individuals or families.</li>
-          </ul>
-          <p>
-            If you or someone you know needs assistance, you can reach out confidentially below.
-          </p>
-          <div class="impact-actions">
-            <button class="impact-button secondary" onclick="openAssistanceForm()">
-              Request Assistance
-            </button>
-          </div>
-        </section>
+
       </main>
 
       <!-- RIGHT: Toggle Menu -->
@@ -665,10 +856,6 @@
           <small>Overview & quick actions</small>
         </button>
 
-        <button class="impact-toggle" data-section="assistance" onclick="setImpactView('assistance')">
-          <span class="label">Request Assistance</span>
-          <small>Support for individuals & families</small>
-        </button>
 
         <button class="impact-toggle" data-section="airports" onclick="setImpactView('airports')">
           <span class="label">Airports</span>
@@ -693,86 +880,65 @@
     </div>
   </div>
 
-  <!-- Modals -->
-<!-- Assistance Request Modal -->
-<div id="assistance-modal" class="modal-backdrop" onclick="backdropClick(event, 'assistance-modal')">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="assistance-modal-title">
-
-    <div class="modal-header">
-      <button class="modal-close" onclick="closeModal('assistance-modal')" aria-label="Close form">&times;</button>
+<!-- What We Need -->
+  <section id="what-we-need" class="what-we-need" aria-label="What we need">
+    <div class="what-we-need-header">
+      <div>
+        <h2>What We Need Right Now:</h2>
+      </div>
     </div>
 
-    <div class="modal-body">
-      <div class="form-embed-wrapper">
-        <iframe 
-          src="https://docs.google.com/forms/d/e/1FAIpQLSf7AVdZdjKrBAMlo9ZND-ai6LevS3ij1ekSYamPi97535DMAA/viewform?embedded=true"
-          frameborder="0"
-          allowfullscreen>
-        </iframe>
+    <div class="need-grid">
+      <div class="need-card">
+        <div class="need-top">
+          <div class="need-icon">✈️</div>
+          <div>
+            <strong>Pilot Testers</strong>
+            <span>Seeking 25 humanitarian pilots to review our volunteer pilot portal</span>
+          </div>
+        </div>
       </div>
 
-      <p class="form-note">
-        This form is secure. It may take a moment to load.
-      </p>
-    </div>
-
-  </div>
-</div>
-
-
-<!-- Nonprofit & VPO Contact Modal -->
-<div id="nonprofit-modal" class="modal-backdrop" onclick="backdropClick(event, 'nonprofit-modal')">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="nonprofit-modal-title">
-
-    <div class="modal-header">
-      <button class="modal-close" onclick="closeModal('nonprofit-modal')" aria-label="Close form">&times;</button>
-    </div>
-
-    <div class="modal-body">
-      <div class="form-embed-wrapper">
-        <iframe 
-          src="https://docs.google.com/forms/d/e/1FAIpQLSfcV8dGxbK-9EuWQH161YM_50w4yjT_zXYD0arfz9R-gGq8Ow/viewform?embedded=true"
-          frameborder="0"
-          allowfullscreen>
-        </iframe>
+      <div class="need-card">
+        <div class="need-top">
+          <div class="need-icon">🧭</div>
+          <div>
+            <strong>Volunteers</strong>
+            <span>to coordinate missions across the country from the comfort of your home</span>
+          </div>
+        </div>
       </div>
 
-      <p class="form-note">
-        This form is secure. It may take a moment to load.
-      </p>
-    </div>
-
-  </div>
-</div>
-
-
-
-  <!-- Pilot Pre-Registration Modal -->
-<div id="pilot-modal" class="modal-backdrop" onclick="backdropClick(event, 'pilot-modal')">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pilot-modal-title">
-
-    <div class="modal-header">
-      <button class="modal-close" onclick="closeModal('pilot-modal')" aria-label="Close pilot form">&times;</button>
-    </div>
-
-      <div class="form-embed-wrapper">
-        <iframe 
-          src="https://docs.google.com/forms/d/e/1FAIpQLSf0I3yBwd4E8MgDMuQDbOIzoYg4StGGXRvTPub6O01cZnGFGA/viewform?embedded=true"
-          frameborder="0"
-          marginheight="0"
-          marginwidth="0"
-          allowfullscreen>
-        </iframe>
+      <div class="need-card">
+        <div class="need-top">
+          <div class="need-icon">🤝</div>
+          <div>
+            <strong>Business Partners</strong>
+            <span>and sponsors to help fund growth and provide access to your local airport</span>
+          </div>
+        </div>
       </div>
 
-      <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;">
-        This form is secure. It may take a moment to load.
-      </p>
+      <div class="need-card">
+        <div class="need-top">
+          <div class="need-icon">🏛️</div>
+          <div>
+            <strong>Airport Leaders</strong>
+            <span>who want dashboards, reports, and a wider audience</span>
+          </div>
+        </div>
+      </div>
     </div>
-
-  </div>
+    <div class="what-we-need-cta">
+  <a
+    href="mailto:connect@aerialtributeproject.org?subject=I'm%20Interested%20in%20Helping"
+    class="impact-button primary impact-btn-link"
+  >
+    Let us know you're interested!
+  </a>
 </div>
 
+  </section>
 
   <!-- Airport Manager Modal -->
   <div id="airport-modal" class="modal-backdrop" onclick="backdropClick(event, 'airport-modal')">
@@ -881,10 +1047,6 @@
     });
 
     // Button handlers (use modals now)
-    function openAssistanceForm() {
-      openModal('assistance-modal');
-    }
-
     function openNonprofitForm() {
       openModal('nonprofit-modal');
     }
@@ -899,6 +1061,19 @@
 
     function contactAirportTeam() {
       window.location.href = 'mailto:connect@aerialtributeproject.org?subject=Airport%20Manager%20Contact';
+    }
+
+    
+    // Smooth scroll for the hero CTA (keeps the anchor for accessibility)
+    const heroHelpBtn = document.getElementById('hero-help-btn');
+    if (heroHelpBtn) {
+      heroHelpBtn.addEventListener('click', function (e) {
+        const target = document.getElementById('what-we-need');
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
     }
 
     document.addEventListener('DOMContentLoaded', function() {
