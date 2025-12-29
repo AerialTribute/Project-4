@@ -68,13 +68,14 @@ nav ul li a:hover {
 }
 
 .donate-btn {
-  background: #e0ecff;
+  background: #ffecec;       /* light red */
   padding: 0.4rem 1rem;
   border-radius: 20px;
   color: #d10000;
   font-weight: bold;
   border: 1px solid #d10000;
 }
+
 
 /* Mobile Menu Toggle (hidden on desktop) */
 .menu-toggle {
@@ -241,9 +242,10 @@ footer a {
     padding: 0.5rem 0;
   }
 
+@media (max-width: 768px) {
   .donate-btn {
-    background: #e5f0ff;
-    color: red;
+    background: #ffecec;     /* same light red */
+    color: #d10000;
     font-weight: bold;
     border-radius: 999px;
     padding: 0.5rem 1rem;
@@ -251,6 +253,7 @@ footer a {
     display: inline-block;
     width: 100%;
   }
+}
 
   .hero {
     height: auto;
