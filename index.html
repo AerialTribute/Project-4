@@ -4,11 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>The Aerial Tribute Project</title>
-  
-  <link rel="preload" as="image" href="images/Plane.jpg">
-  
   <link rel="stylesheet" href="CSS/style.css" />
 
+  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-B09D986QX1"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -59,13 +57,15 @@
 
 <body>
 
+  <!-- Header + Navigation -->
   <header>
-    <div class="nav-container">
-      <div class="brand">
-        <img src="images/logo.jpg" alt="The Aerial Tribute Project Logo" class="logo">
-        <span class="brand-title">The Aerial Tribute Project</span>
-      </div>
+<div class="nav-container">
+  <div class="brand">
+    <img src="images/logo.jpg" alt="The Aerial Tribute Project Logo" class="logo">
+    <span class="brand-title">The Aerial Tribute Project</span>
+  </div>
 
+      <!-- Dropdown Toggle for Mobile -->
       <div class="menu-toggle" onclick="toggleMenu()">
         <span>Menu</span>
         <span id="caret">▾</span>
@@ -78,6 +78,7 @@
           <li><a href="OurImpact.html">Our Impact</a></li>
           <li><a href="about.html">About Us</a></li>
 
+          <!-- Portal/Login (hosted on Firebase) -->
           <li>
             <a href="https://aerialtributeproject25.web.app/login.html" class="nav-login">
               Login
@@ -90,26 +91,29 @@
     </div>
   </header>
 
+  <!-- Hero Section -->
   <section class="hero">
-    <img src="images/Plane.jpg" alt="Aerial view from plane" class="hero-bg">
-
     <div class="hero-content">
-      <h1>Encouraging Humanitarian Aviation Through</h1>
+<h1>Encouraging Humanitarian Aviation Through</h1>
 
-      <div class="hero-pillars">
-        Scholarships • Volunteer Mission Coordination • Community Engagement
-      </div>
+<div class="hero-pillars">
+  Scholarships • Volunteer Mission Coordination • Community Engagement
+</div>
 
-      <div class="announcement">
-        <p>Scholarship Application Window:</p>
-        <p><strong>January 1 – April 30</strong></p>
-        <p>
-          Check back to see if your flight school is a part of our program and apply on the <a href="scholarships.html">Scholarships</a> page.
-        </p>
-      </div>
+
+<div class="announcement">
+  <p>Scholarship Application Window:</p>
+  <p><strong>January 1 – April 30</strong></p>
+  <p>
+    Check back to see if your flight school is a part of our program and apply on the <a href="scholarships.html">Scholarships</a> page.
+  
+  </p>
+</div>
+
     </div>
   </section>
 
+  <!-- Features Section -->
   <section class="features">
     <a href="scholarships.html" class="feature">
       <img src="images/scholarship-icon.png" alt="Scholarship Icon">
@@ -125,7 +129,8 @@
     </a>
   </section>
 
-   <footer>
+   <!-- Footer -->
+  <footer>
     <p>© 2025 The Aerial Tribute Project • Tax-Exempt 501(c)(3)</p>
     <p>Contact: <a href="mailto:connect@aerialtributeproject.org">connect@aerialtributeproject.org</a> | MA</p>
     <div class="social-icons">
@@ -138,6 +143,7 @@
     </div>
   </footer>
 
+  <!-- Dropdown JavaScript -->
   <script>
     function toggleMenu() {
       const menu = document.getElementById('mobileNav');
@@ -146,15 +152,14 @@
       caret.textContent = menu.classList.contains('open') ? '▴' : '▾';
     }
   </script>
-  
-  <script>
-    const currentPage = location.pathname.split("/").pop();
-    document.querySelectorAll("nav a").forEach(link => {
-      if (link.getAttribute("href") === currentPage) {
-        link.classList.add("active");
-      }
-    });
-  </script>
+<script>
+  const currentPage = location.pathname.split("/").pop();
+  document.querySelectorAll("nav a").forEach(link => {
+    if (link.getAttribute("href") === currentPage) {
+      link.classList.add("active");
+    }
+  });
+</script>
 
 </body>
 </html>
