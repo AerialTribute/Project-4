@@ -5,83 +5,101 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Donate | The Aerial Tribute Project</title>
   <link rel="stylesheet" href="CSS/style.css" />
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-B09D986QX1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-B09D986QX1');
-</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B09D986QX1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-B09D986QX1');
+  </script>
 
   <style>
+    /* --- Auth Link Styles --- */
     .login-link {
-  font-weight: 600;
-  color: #1a73e8;
-}
+      font-weight: 600;
+      color: #1a73e8;
+    }
+    .login-link:hover {
+      color: #0b58c8;
+    }
 
-.login-link:hover {
-  color: #0b58c8;
-}
+    /* --- Page Layout Improvements --- */
     .donate-hero {
-      background: #f6f6f6;
-      padding: 5rem 2rem;
+      background: #f8f9fa; /* Lighter, cleaner gray */
+      padding: 2.5rem 1rem; /* CONDENSED: Reduced from 5rem */
       color: #333;
       text-align: center;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .donate-hero h1 {
       font-size: 2rem;
-      font-weight: bold;
-      text-shadow: 1px 1px 1px #fff;
+      font-weight: 800;
+      margin: 0;
+      letter-spacing: -0.5px;
     }
 
     .donate-container {
-      max-width: 960px;
-      margin: 2rem auto;
-      padding: 1rem;
-    }
-
-    .donate-message {
-      text-align: center;
-      margin-bottom: 2rem;
-      font-size: 1.2rem;
-      line-height: 1.6;
-    }
-
-    .givebutter-widget {
-      display: block;
+      max-width: 800px;
       margin: 0 auto;
-      max-width: 100%;
-    }
-
-    .fallback-link {
+      padding: 1.5rem 1rem; /* CONDENSED: Tighter spacing around content */
       text-align: center;
-      margin-top: 2rem;
     }
 
-    .fallback-link a {
-      color: #007bff;
-      text-decoration: underline;
+    .donate-intro-text {
+      font-size: 1.05rem;
+      line-height: 1.5;
+      color: #555;
+      max-width: 700px;
+      margin: 0 auto 1.5rem auto; /* CONDENSED: Less gap before form */
+    }
+
+    /* --- Iframe Styling --- */
+    .givebutter-iframe {
+      width: 100%;
+      height: 750px; 
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      background: #fff;
+    }
+
+    /* --- Fallback Link --- */
+    .fallback-link {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 10px 20px;
+      background: #00a651;
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
       font-weight: bold;
+      font-size: 0.9rem;
+      transition: transform 0.2s;
+    }
+    .fallback-link:hover {
+      transform: translateY(-2px);
     }
 
-    @media (max-width: 768px) {
-      .donate-hero {
-        font-size: 1.6rem;
-        padding: 3rem 1rem;
-      }
+    /* --- FIX: PREVENT BLUE LINE ON DONATE BUTTON --- */
+    /* This forces the button to ignore the global 'active' underline style */
+    nav ul li a.donate-btn.active {
+      color: #d10000 !important;       /* Keep text Red */
+      border-bottom: none !important;  /* Remove Blue Line */
+      padding-bottom: 0.4rem !important; /* Restore original padding */
     }
   </style>
 </head>
+
 <body>
 
-  <!-- Header Navigation -->
   <header>
-<div class="nav-container">
-  <div class="brand">
-    <img src="images/logo.jpg" alt="The Aerial Tribute Project Logo" class="logo">
-    <span class="brand-title">The Aerial Tribute Project</span>
-  </div>
+    <div class="nav-container">
+      <div class="brand">
+        <img src="images/logo.jpg" alt="The Aerial Tribute Project Logo" class="logo">
+        <span class="brand-title">The Aerial Tribute Project</span>
+      </div>
 
-      <!-- Dropdown Toggle for Mobile -->
       <div class="menu-toggle" onclick="toggleMenu()">
         <span>Menu</span>
         <span id="caret">▾</span>
@@ -94,7 +112,6 @@
           <li><a href="OurImpact.html">Our Impact</a></li>
           <li><a href="about.html">About Us</a></li>
 
-          <!-- Portal/Login (hosted on Firebase) -->
           <li>
             <a href="https://aerialtributeproject25.web.app/login.html" class="nav-login">
               Login
@@ -107,35 +124,33 @@
     </div>
   </header>
 
-  <!-- Hero -->
-  <div class="donate-hero">
-    Your Support Fuels Humanitarian Aviation
-  </div>
-
-  <!-- Main Content -->
-  <main class="donate-container">
-    <div class="donate-message">
-      Every dollar you contribute goes directly toward scholarships, mission logistics, and expanding access to community aviation. Thank you for your support!
+  <main>
+    <div class="donate-hero">
+      <h1>Support the Mission</h1>
     </div>
 
-    <!-- Givebutter Embed -->
-  <div
-      class="givebutter-widget"
-      data-campaign="ispcEx" 
-      data-widget="donation-form"
-      style="max-width:100%;"
-    ></div>
-
-    <!-- Fallback Link -->
-    <div class="fallback-link">
-      <p>
-        Having trouble viewing the form?
-        <a href="https://givebutter.com/ispcEx" target="_blank">Click here to donate directly.</a>
+    <div class="donate-container">
+      <p class="donate-intro-text">
+        Your contribution directly funds flight training scholarships for individuals dedicated to serving their communities. 
+        Because we are a 100% volunteer organization, every dollar goes toward the mission.
       </p>
+
+      <iframe 
+        src="https://givebutter.com/embed/c/ispcEx" 
+        class="givebutter-iframe" 
+        frameborder="0" 
+        scrolling="yes" 
+        loading="lazy"
+        allow="payment">
+      </iframe>
+
+      <br>
+      <a class="fallback-link" href="https://givebutter.com/ispcEx" target="_blank">
+        Donate directly on Givebutter
+      </a>
     </div>
   </main>
 
-  <!-- Footer -->
   <footer>
     <p>© 2025 The Aerial Tribute Project • Tax-Exempt 501(c)(3)</p>
     <p>Contact: <a href="mailto:connect@aerialtributeproject.org">connect@aerialtributeproject.org</a> | MA</p>
@@ -149,27 +164,6 @@
     </div>
   </footer>
 
-  <!-- Givebutter Script -->
-  <script src="https://givebutter.com/embed-widget.js" defer></script>
-
-  <!-- Manual Trigger Fallback (if Givebutter doesn't auto-load) -->
-  <script>
-    window.addEventListener('DOMContentLoaded', function () {
-      if (window.Givebutter && typeof window.Givebutter.init === 'function') {
-        window.Givebutter.init();
-      }
-    });
-  </script>
-
-  <!-- Dropdown JavaScript -->
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById('mobileNav');
-      const caret = document.getElementById('caret');
-      menu.classList.toggle('open');
-      caret.textContent = menu.classList.contains('open') ? '▴' : '▾';
-    }
-  </script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -198,7 +192,6 @@
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             const token = await user.getIdTokenResult();
-
             // Only show dashboard if admin
             if (token.claims.admin) {
                 if (loginLink) loginLink.style.display = "none";
@@ -223,15 +216,37 @@
                 });
         });
     }
-</script>
-<script>
-  const currentPage = location.pathname.split("/").pop();
-  document.querySelectorAll("nav a").forEach(link => {
-    if (link.getAttribute("href") === currentPage) {
-      link.classList.add("active");
+  </script>
+
+  <script>
+    const currentPage = location.pathname.split("/").pop();
+    document.querySelectorAll("nav a").forEach(link => {
+      // Logic: If link matches current page, add 'active' class
+      if (link.getAttribute("href") === currentPage) link.classList.add("active");
+    });
+
+    function toggleMenu() {
+      const nav = document.getElementById("mobileNav");
+      const caret = document.getElementById("caret");
+      if (!nav) return;
+      
+      nav.classList.toggle("open");
+      
+      if (caret) caret.textContent = nav.classList.contains("open") ? "▴" : "▾";
     }
-  });
-</script>
+    
+    document.addEventListener("click", (e) => {
+      const nav = document.getElementById("mobileNav");
+      const toggle = document.querySelector(".menu-toggle");
+      if (!nav || !toggle) return;
+      
+      if (!nav.contains(e.target) && !toggle.contains(e.target) && nav.classList.contains("open")) {
+        nav.classList.remove("open");
+        const caret = document.getElementById("caret");
+        if(caret) caret.textContent = "▾";
+      }
+    });
+  </script>
 
 </body>
 </html>
