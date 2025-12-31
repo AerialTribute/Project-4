@@ -23,70 +23,101 @@
       color: #0b58c8;
     }
 
-    /* --- Page Layout Improvements --- */
-    .donate-hero {
-      background: #f8f9fa; /* Lighter, cleaner gray */
-      padding: 2.5rem 1rem; /* CONDENSED: Reduced from 5rem */
-      color: #333;
-      text-align: center;
-      border-bottom: 1px solid #e9ecef;
-    }
-    
-    .donate-hero h1 {
-      font-size: 2rem;
-      font-weight: 800;
-      margin: 0;
-      letter-spacing: -0.5px;
+    /* --- NEW: Immersive Background Wrapper --- */
+    .donate-background-wrapper {
+      position: relative;
+      /* The image is set as the background here */
+      background-image: url('images/northampton.jpg');
+      background-size: cover;
+      background-position: center center;
+      padding: 4rem 1.5rem; /* Ample spacing */
+      overflow: hidden;
     }
 
-    .donate-container {
+    /* --- The "Subtle" Overlay --- */
+    .donate-background-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      /* Heavy white wash (85% opacity) + slight blur for readability */
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(.5px); 
+      z-index: 1;
+    }
+
+    /* --- Content Container (Sits on top of overlay) --- */
+    .donate-content-container {
+      position: relative;
+      z-index: 2; /* Ensures content is above the overlay */
       max-width: 800px;
       margin: 0 auto;
-      padding: 1.5rem 1rem; /* CONDENSED: Tighter spacing around content */
       text-align: center;
+    }
+    
+    .donate-hero-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      color: #222;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.5);
     }
 
     .donate-intro-text {
-      font-size: 1.05rem;
-      line-height: 1.5;
-      color: #555;
+      font-size: 1.15rem;
+      line-height: 1.6;
+      color: #333; /* Slightly darker text for contrast */
       max-width: 700px;
-      margin: 0 auto 1.5rem auto; /* CONDENSED: Less gap before form */
+      margin: 0 auto 2.5rem auto;
+      font-weight: 500;
     }
 
     /* --- Iframe Styling --- */
     .givebutter-iframe {
       width: 100%;
       height: 750px; 
-      border: 1px solid #e0e0e0;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      border: none; /* Removed border for cleaner look against background */
+      border-radius: 16px; /* Softer corners */
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15); /* Stronger shadow to make it pop */
       background: #fff;
     }
 
     /* --- Fallback Link --- */
     .fallback-link {
       display: inline-block;
-      margin-top: 1.5rem;
-      padding: 10px 20px;
+      margin-top: 2rem;
+      padding: 12px 24px;
       background: #00a651;
       color: white;
       text-decoration: none;
       border-radius: 30px;
       font-weight: bold;
-      font-size: 0.9rem;
-      transition: transform 0.2s;
+      font-size: 1rem;
+      transition: transform 0.2s, background 0.2s;
+      box-shadow: 0 4px 10px rgba(0, 166, 81, 0.3);
     }
     .fallback-link:hover {
       transform: translateY(-2px);
+      background: #008f45;
     }
 
     /* --- FIX: PREVENT BLUE LINE ON DONATE BUTTON --- */
-    /* This forces the button to ignore the global 'active' underline style */
     nav ul li a.donate-btn.active {
-      color: #d10000 !important;       /* Keep text Red */
-      border-bottom: none !important;  /* Remove Blue Line */
-      padding-bottom: 0.4rem !important; /* Restore original padding */
+      color: #d10000 !important;       
+      border-bottom: none !important;  
+      padding-bottom: 0.4rem !important; 
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .donate-background-wrapper {
+        padding: 3rem 1rem;
+      }
+      .donate-hero-title {
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
@@ -125,29 +156,30 @@
   </header>
 
   <main>
-    <div class="donate-hero">
-      <h1>Support the Mission</h1>
-    </div>
+    <div class="donate-background-wrapper">
+      
+      <div class="donate-content-container">
+        <h1 class="donate-hero-title">Support the Mission</h1>
+        
+        <p class="donate-intro-text">
+          Your contribution directly funds flight training scholarships and tools for individuals dedicated to serving their communities. 
+          Because we are a 100% volunteer organization, every dollar goes toward the mission.
+        </p>
 
-    <div class="donate-container">
-      <p class="donate-intro-text">
-        Your contribution directly funds flight training scholarships for individuals dedicated to serving their communities. 
-        Because we are a 100% volunteer organization, every dollar goes toward the mission.
-      </p>
+        <iframe 
+          src="https://givebutter.com/embed/c/ispcEx" 
+          class="givebutter-iframe" 
+          frameborder="0" 
+          scrolling="yes" 
+          loading="lazy"
+          allow="payment">
+        </iframe>
 
-      <iframe 
-        src="https://givebutter.com/embed/c/ispcEx" 
-        class="givebutter-iframe" 
-        frameborder="0" 
-        scrolling="yes" 
-        loading="lazy"
-        allow="payment">
-      </iframe>
-
-      <br>
-      <a class="fallback-link" href="https://givebutter.com/ispcEx" target="_blank">
-        Donate directly on Givebutter
-      </a>
+        <br>
+        <a class="fallback-link" href="https://givebutter.com/ispcEx" target="_blank">
+          Donate directly on Givebutter
+        </a>
+      </div>
     </div>
   </main>
 
