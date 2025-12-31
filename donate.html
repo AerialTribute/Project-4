@@ -47,6 +47,15 @@
       font-weight: bold;
       font-size: 0.9rem;
     }
+    /* New Iframe Styling */
+    .givebutter-iframe {
+      width: 100%;
+      min-height: 700px; /* Tall enough to show the form */
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      margin-top: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
   </style>
 </head>
 
@@ -94,7 +103,13 @@
         Because we are a 100% volunteer organization, every dollar goes toward the mission.
       </p>
 
-      <givebutter-widget id="Lv1VOj"></givebutter-widget>
+      <iframe 
+        src="https://givebutter.com/embed/c/Lv1VOj" 
+        class="givebutter-iframe" 
+        frameborder="0" 
+        scrolling="yes" 
+        allow="payment">
+      </iframe>
 
       <br>
       <a class="fallback-link" href="https://givebutter.com/ispcEx" target="_blank">
@@ -181,7 +196,6 @@
       const caret = document.getElementById("caret");
       if (!nav) return;
       
-      // FIXED: Use "open" to match style.css
       nav.classList.toggle("open");
       
       if (caret) caret.textContent = nav.classList.contains("open") ? "▴" : "▾";
@@ -192,7 +206,6 @@
       const toggle = document.querySelector(".menu-toggle");
       if (!nav || !toggle) return;
       
-      // FIXED: Use "open" here as well
       if (!nav.contains(e.target) && !toggle.contains(e.target) && nav.classList.contains("open")) {
         nav.classList.remove("open");
         const caret = document.getElementById("caret");
@@ -201,6 +214,5 @@
     });
   </script>
 
-  <script src="https://givebutter.com/js/widget.js" defer></script>
 </body>
 </html>
