@@ -26,8 +26,6 @@ body {
   height: 55px;
 }
 
-
-
 /* Brand (Logo + Title) */
 .brand {
   display: flex;
@@ -50,7 +48,9 @@ nav ul li a.active {
   font-weight: 600;
   border-bottom: 2px solid #007BFF;
   padding-bottom: 4px;
-}nav ul {
+}
+
+nav ul {
   display: flex;
   list-style: none;
   gap: 1.5rem;
@@ -76,7 +76,6 @@ nav ul li a:hover {
   border: 1px solid #d10000;
 }
 
-
 /* Mobile Menu Toggle (hidden on desktop) */
 .menu-toggle {
   display: none;
@@ -89,18 +88,27 @@ nav ul li a:hover {
   border-bottom: 1px solid #eee;
 }
 
-/* Hero */
+/* ========== HERO SECTION (UPDATED) ========== */
 .hero {
-  background-image: url('../images/Plane.jpg');
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
+  /* Removed background-image properties since it's now in HTML */
   height: 450px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   position: relative;
+  overflow: hidden; /* Ensures the image stays within the box */
+}
+
+/* New class for the HTML image */
+.hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Makes the image cover the area without stretching */
+  z-index: -1;       /* Pushes the image behind the text */
 }
 
 .hero-content {
@@ -109,6 +117,9 @@ nav ul li a:hover {
   border-radius: 10px;
   color: white;
   max-width: 600px;
+  /* Ensure content sits on top of the image */
+  position: relative; 
+  z-index: 1; 
 }
 
 .hero h1 {
@@ -219,7 +230,6 @@ footer a {
     padding: 1rem;
   }
 
-  
   .brand {
     margin-bottom: 0.5rem;
   }
@@ -227,7 +237,8 @@ footer a {
   .brand-title {
     font-size: 1.05rem;
   }
-.menu-toggle {
+
+  .menu-toggle {
     display: flex;
     width: 100%;
   }
@@ -242,7 +253,6 @@ footer a {
     padding: 0.5rem 0;
   }
 
-@media (max-width: 768px) {
   .donate-btn {
     background: #ffecec;     /* same light red */
     color: #d10000;
@@ -253,12 +263,12 @@ footer a {
     display: inline-block;
     width: 100%;
   }
-}
 
   .hero {
     height: auto;
     padding: 2rem 1rem;
     text-align: center;
+    min-height: 350px; /* Ensures image shows enough on mobile */
   }
 
   .hero-content {
@@ -314,6 +324,33 @@ footer a {
     width: 28px;
     height: 28px;
   }
+  
+  .winner-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .winner-card {
+    width: 90%;
+  }
+
+  .winners-section h2 {
+    font-size: 1.5rem;
+  }
+  
+  .carousel-track {
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+
+  .carousel-track img {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .carousel-btn {
+    font-size: 1.5rem;
+  }
 }
 
 /* 🎓 Scholarship Winner Section */
@@ -361,22 +398,6 @@ footer a {
   margin-top: 0;
   font-size: 1.4rem;
   color: #fff;
-}
-
-/* 📱 Mobile View */
-@media (max-width: 768px) {
-  .winner-cards {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .winner-card {
-    width: 90%;
-  }
-
-  .winners-section h2 {
-    font-size: 1.5rem;
-  }
 }
 
 .scholarship-section {
@@ -435,20 +456,4 @@ footer a {
 
 .carousel-btn.next {
   right: 0.5rem;
-}
-
-@media (max-width: 768px) {
-  .carousel-track {
-    gap: 1rem;
-    padding: 0 1rem;
-  }
-
-  .carousel-track img {
-    width: 80%;
-    margin: 0 auto;
-  }
-
-  .carousel-btn {
-    font-size: 1.5rem;
-  }
 }
