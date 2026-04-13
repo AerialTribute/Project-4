@@ -79,12 +79,19 @@
       margin: 0;
     }
 
-    .belief-card {
+    .belief-card,
+    .story-card,
+    .video-card,
+    .team-card,
+    .highlights-card {
       background: #ffffff;
       border-radius: 18px;
-      padding: 2rem;
       box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
       border: 1px solid rgba(15, 23, 42, 0.06);
+    }
+
+    .belief-card {
+      padding: 2rem;
       max-width: 900px;
       margin: 0 auto;
       text-align: center;
@@ -104,22 +111,11 @@
       align-items: stretch;
     }
 
-    .story-card,
-    .video-card,
-    .team-card,
-    .highlights-card {
-      background: #ffffff;
-      border-radius: 18px;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-      border: 1px solid rgba(15, 23, 42, 0.06);
-    }
-
     .story-card {
       padding: 2rem;
     }
 
-    .story-card h3,
-    .highlights-card h3 {
+    .story-card h3 {
       margin-top: 0;
       margin-bottom: 1rem;
       color: #14213d;
@@ -154,24 +150,40 @@
       margin-top: 2rem;
     }
 
+    .highlights-card h3 {
+      margin: 0 0 1.5rem 0;
+      text-align: center;
+      color: #14213d;
+      font-size: 1.4rem;
+    }
+
     .highlights-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
       gap: 1rem;
+      flex-wrap: wrap;
+      margin: 0 auto;
     }
 
     .highlight-item {
+      width: 320px;
+      min-height: 170px;
       background: #f8fafc;
       border-radius: 14px;
-      padding: 1.25rem;
+      padding: 1.5rem 1.25rem;
       text-align: center;
       border: 1px solid #e5e7eb;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .highlight-item strong {
       display: block;
       color: #14213d;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
       font-size: 1rem;
     }
 
@@ -289,13 +301,17 @@
 
     @media (max-width: 900px) {
       .story-grid,
-      .team-grid,
-      .highlights-grid {
+      .team-grid {
         grid-template-columns: 1fr;
       }
 
       .video-card iframe {
         min-height: 300px;
+      }
+
+      .highlight-item {
+        width: 100%;
+        max-width: 420px;
       }
     }
   </style>
@@ -356,6 +372,7 @@
       </div>
     </section>
 
+    <section class="about-section">
       <div class="story-grid">
         <div class="story-card">
           <h3>Our Story</h3>
@@ -434,9 +451,7 @@
           <h3>Jay Kinney</h3>
           <div class="team-role">Secretary</div>
           <p>
-            Jay is a 20+ year Air National Guard veteran who provided years of logistics support to many airframes including the A-10's and 
-            F-15's based out of Barnes Air National Guard Bases. A passionate history buff, Jay is inspired by aviators like
-            the Red Tails and Amelia Earhart who used their wings to change the lives of others.
+            Jay is a 20+ year Air National Guard veteran who provided years of logistics support to many airframes including the A-10s and F-15s based out of Barnes Air National Guard Base. A passionate history buff, Jay is inspired by aviators like the Red Tails and Amelia Earhart who used their wings to change the lives of others.
           </p>
         </div>
       </div>
